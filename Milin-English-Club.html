@@ -212,6 +212,7 @@ button{font:inherit;color:inherit;border:none;background:none;cursor:pointer;tex
     </div>
     <div class="spacer"></div>
     <div class="speed" id="speedBox"></div>
+    <button class="pill" data-act="langtog" id="langPill" title="สลับโหมดอังกฤษล้วน / มีคำแปลไทย">🌐 <b>EN</b></button>
     <button class="pill" data-act="testvoice">🎙️ <b id="voicePill">ครูผู้หญิง</b></button>
     <div class="stars">⭐ <span id="starCount">0</span></div>
     <button class="iconbtn" data-act="settings">⚙️</button>
@@ -969,12 +970,12 @@ const Voice = {
 /* ═════════════════════════════════════════════════════════════════════
    5. APP CORE
    ═════════════════════════════════════════════════════════════════════ */
-const SAVE_KEY='milin.club.v2';
+const SAVE_KEY='milin.club.v3';   /* v3: English-first — ค่าเริ่มต้นปิดคำแปลไทย */
 const SPEEDS=[{k:.55,ic:'🐢',n:'ช้ามาก'},{k:.72,ic:'🐇',n:'ช้า'},{k:.85,ic:'🚶',n:'ปกติ'},{k:1.0,ic:'⚡',n:'เร็ว'}];
 
 const S=Object.assign({
   screen:'home', stars:0,
-  kidName:'Milin', showThai:true, rate:.72, voiceURI:'',
+  kidName:'Milin', showThai:false, rate:.72, voiceURI:'',
   famIdx:0, wordIdx:0,
   wallIdx:0, wallKey:'',
   chantIdx:0, chantLine:-1,
@@ -995,9 +996,14 @@ const S=Object.assign({
 
 function load(){
   try{
-    const d=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');
-    return {stars:d.stars|0, kidName:d.kidName||'Milin', showThai:d.showThai!==false,
-            rate:d.rate||.72, voiceURI:d.voiceURI||''};
+    const d=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
+    if(d) return {stars:d.stars|0, kidName:d.kidName||'Milin', showThai:d.showThai===true,
+                  rate:d.rate||.72, voiceURI:d.voiceURI||''};
+    /* ย้ายจาก v2: เก็บดาว/ชื่อ/ความเร็วเดิมไว้ แต่เริ่มใหม่เป็นโหมดอังกฤษล้วน */
+    const old=JSON.parse(localStorage.getItem('milin.club.v2')||'null');
+    if(old) return {stars:old.stars|0, kidName:old.kidName||'Milin', showThai:false,
+                    rate:old.rate||.72, voiceURI:old.voiceURI||''};
+    return {};
   }catch(e){ return {}; }
 }
 function save(){
@@ -1053,6 +1059,8 @@ function render(){
   $('#scrSub').textContent = t[1];
   $('#homeBtn').style.visibility = S.screen==='home' ? 'hidden' : 'visible';
   $('#starCount').textContent = S.stars;
+  const lp=$('#langPill');
+  if(lp) lp.innerHTML = S.showThai ? '🌐 <b>EN+ไทย</b>' : '🌐 <b>EN</b>';
   paintSpeed();
   $('#stage').innerHTML = (VIEWS[S.screen]||VIEWS.home)();
 }
@@ -1065,6 +1073,7 @@ ACT.home     = ()=>go('home');
 ACT.open     = d=>go(d.k);
 ACT.speed    = d=>{ S.rate=+d.k; save(); paintSpeed(); Voice.say('Listen. '+ (S.kidName||'Milin')); };
 ACT.testvoice= ()=>Voice.say('Hello '+S.kidName+'. I am your phonics teacher. Let us read together.');
+ACT.langtog  = ()=>{ S.showThai=!S.showThai; save(); render(); };
 ACT.say      = d=>Voice.say(d.t, d.r?+d.r:undefined);
 ACT.phonics  = d=>Voice.phonics(d.w, d.p?d.p.split('|'):null);
 
@@ -1081,7 +1090,7 @@ VIEWS.home = ()=>`
     <div class="cat float">🐱</div>
     <div>
       <h2>สวัสดี <em>${esc(S.kidName)}</em> วันนี้จะเล่นเกมไหนดี?</h2>
-      <p>ทุกเกมออกเสียงแบบโฟนิกส์โดยครูผู้หญิง · ปรับความเร็วเสียงได้ที่ปุ่ม 🐢🐇🚶⚡ ด้านบน</p>
+      <p>ทุกเกมออกเสียงแบบโฟนิกส์โดยครูผู้หญิง · ปรับความเร็ว 🐢🐇🚶⚡ ด้านบน · โหมดอังกฤษล้วน — แตะ 🌐 เมื่ออยากเห็นคำแปลไทย</p>
     </div>
   </div>
   <div class="grid">
@@ -1114,13 +1123,13 @@ VIEWS.phonics = ()=>{
       <div style="font-size:76px;line-height:1" class="bob">${w.emoji}</div>
       <div class="wordbox">
         <button class="part" style="background:${C('orange-t')};color:${C('orange-d')}"
-          data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}${S.showThai&&thSnd(w.on)?' “'+esc(thSnd(w.on))+'”':''}</small></button>
+          data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}</small></button>
         <div class="op">+</div>
         <button class="part" style="background:${C('teal-t')};color:${C('teal-d')}"
-          data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(ri)}<small>${esc(p2[0])}${S.showThai&&thSnd(ri)?' “'+esc(thSnd(ri))+'”':''}</small></button>
+          data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(ri)}<small>${esc(p2[0])}</small></button>
         <div class="op">=</div>
         <button class="part" style="background:${tint};color:${dark}"
-          data-act="say" data-t="${esc(w.w)}" data-r="0.78">${esc(w.w)}<small>blend · ผสมเสียง</small></button>
+          data-act="say" data-t="${esc(w.w)}" data-r="0.78">${esc(w.w)}<small>blend</small></button>
       </div>
       <div style="font-size:21px;font-weight:800;color:var(--ink2)">${esc(th(w.th))}</div>
       <div class="row g12">
@@ -1348,7 +1357,7 @@ VIEWS.missing = ()=>{
         const bd=picked?(isRight?C('teal'):(S.misPick===o?C('pink'):C('line'))):C('line');
         return `<button class="opt ${S.misPick===o&&!isRight?'shake':''}" data-act="mpick" data-o="${esc(o)}"
           style="min-width:158px;justify-content:center;background:${bg};border-color:${bd};font-size:36px">
-          ${esc(o)} <span style="font-size:15px;color:var(--ink3)">${esc(ipaOf(o))}${S.showThai&&thSnd(o)?' “'+esc(thSnd(o))+'”':''}</span>
+          ${esc(o)} <span style="font-size:15px;color:var(--ink3)">${esc(ipaOf(o))}</span>
           ${picked&&isRight?'✅':(S.misPick===o?'❌':'')}</button>`;
       }).join('')}
     </div>
@@ -2038,10 +2047,10 @@ VIEWS.race = ()=>{
         <div class="th" style="font-size:18px;font-weight:800;color:var(--ink2)">${esc(th(it.th))}</div>
         <div class="row g8">
           <button class="part" style="background:${C('orange-t')};color:${C('orange-d')};font-size:28px;padding:9px 15px"
-            data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(it.parts[0])}<small>${esc(p1[0])}${S.showThai&&thSnd(it.parts[0])?' “'+esc(thSnd(it.parts[0]))+'”':''}</small></button>
+            data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(it.parts[0])}<small>${esc(p1[0])}</small></button>
           <div class="op" style="font-size:24px">+</div>
           <button class="part" style="background:${C('teal-t')};color:${C('teal-d')};font-size:28px;padding:9px 15px"
-            data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(it.parts[1])}<small>${esc(p2[0])}${S.showThai&&thSnd(it.parts[1])?' “'+esc(thSnd(it.parts[1]))+'”':''}</small></button>
+            data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(it.parts[1])}<small>${esc(p2[0])}</small></button>
         </div>
         ${btnSlow(it.w, it.parts.join('|'), 'ghost sm')}
       </div>
