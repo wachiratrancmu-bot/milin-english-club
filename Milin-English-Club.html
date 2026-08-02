@@ -822,9 +822,9 @@ const PHON = {
   q:['/kw/','kwuh','queen'],r:['/r/','ruh','rat'],   s:['/s/','suh','sad'],   t:['/t/','tuh','ten'],
   v:['/v/','vuh','van'],   w:['/w/','wuh','wet'],    x:['/ks/','ex','box'],   y:['/j/','yuh','yam'],
   z:['/z/','zuh','zip'],   T:['/t/','tuh','Ted'],
-  /* สระเสียงสั้น */
-  a:['/æ/','aah','cat'],   e:['/e/','ehh','bed'],    i:['/ɪ/','ihh','pig'],
-  o:['/ɒ/','aw','dog'],    u:['/ʌ/','uhh','mug'],
+  /* สระเสียงสั้น — คำตัวอย่างขึ้นต้นด้วยสระนั้น เพื่อตรึงเสียงให้ถูก (eh-eh-egg) */
+  a:['/æ/','aah','at'],    e:['/e/','ehh','egg'],    i:['/ɪ/','ihh','in'],
+  o:['/ɒ/','aw','on'],     u:['/ʌ/','uhh','up'],
   /* ทวิอักษร / เสียงควบ */
   sh:['/ʃ/','shh','ship'], ch:['/tʃ/','chuh','chick'], th:['/θ/','thh','teeth'],
   ck:['/k/','kuh','duck'], ng:['/ŋ/','ng','sing'],
@@ -1076,6 +1076,18 @@ ACT.testvoice= ()=>Voice.say('Hello '+S.kidName+'. I am your phonics teacher. Le
 ACT.langtog  = ()=>{ S.showThai=!S.showThai; save(); render(); };
 ACT.say      = d=>Voice.say(d.t, d.r?+d.r:undefined);
 ACT.phonics  = d=>Voice.phonics(d.w, d.p?d.p.split('|'):null);
+/* สอนเสียงแบบห้องเรียนโฟนิกส์: เสียง–เสียง–คำตัวอย่าง (เช่น "eh … eh … egg!")
+   คำตัวอย่างท้ายเสียงช่วยตรึงเสียงให้ถูก โดยเฉพาะสระที่ TTS ออกเสียงโดดๆ ไม่ชัด */
+ACT.sound    = d=>{
+  const say=sayOf(d.k), ex=exOf(d.k);
+  const slow=Math.max(.3, S.rate-.3);
+  if(ex) Voice.sequence([
+    {text:say, rate:slow, gap:Math.round(300/S.rate)},
+    {text:say, rate:slow, gap:Math.round(300/S.rate)},
+    {text:ex,  rate:Math.max(.4, S.rate-.06), gap:0}
+  ]);
+  else Voice.say(say, .5);
+};
 
 /* ปุ่มมาตรฐาน: ฟังทีละเสียง / ฟังคำเต็ม  — ใช้ซ้ำได้ทุกเกม */
 const btnSlow = (w,p,cls)=>`<button class="btn ${cls||''}" data-act="phonics" data-w="${esc(w)}" data-p="${esc(p||'')}">🐢 ฟังทีละเสียง</button>`;
@@ -1122,8 +1134,11 @@ VIEWS.phonics = ()=>{
     <div class="card col f1" style="align-items:center;justify-content:center;gap:14px;border-color:${tint}">
       <div style="font-size:76px;line-height:1" class="bob">${w.emoji}</div>
       <div class="wordbox">
-        <button class="part" style="background:${C('orange-t')};color:${C('orange-d')}"
-          data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}</small></button>
+        ${/^[aeiou]$/i.test(w.on)
+          ? `<button class="part" style="background:${C('orange-t')};color:${C('orange-d')}"
+              data-act="sound" data-k="${esc(w.on)}">${esc(w.on)}<small>${esc(p1[0])}</small></button>`
+          : `<button class="part" style="background:${C('orange-t')};color:${C('orange-d')}"
+              data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}</small></button>`}
         <div class="op">+</div>
         <button class="part" style="background:${C('teal-t')};color:${C('teal-d')}"
           data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(ri)}<small>${esc(p2[0])}</small></button>
@@ -1205,7 +1220,7 @@ VIEWS.wall = ()=>{
       </div>
       ${S.showThai&&thTip(sel)?`<div class="soft tc" style="padding:9px 14px;width:100%;font-size:15.5px;font-weight:700;color:var(--ink2)">💡 ${esc(thTip(sel))}</div>`:''}
       <button class="btn lg" style="background:${col};box-shadow:0 5px 0 ${dark}"
-        data-act="say" data-t="${esc(p[1])}" data-r="0.5">🔊 ฟังเสียงนี้</button>
+        data-act="sound" data-k="${esc(sel)}">🔊 ฟังเสียงนี้</button>
       ${p[2]?`<div class="soft tc" style="padding:10px 18px;width:100%">
         <div class="hint">ตัวอย่างคำ</div>
         <button style="font-size:32px;font-weight:900;color:${dark}" data-act="phonics"
@@ -1215,7 +1230,7 @@ VIEWS.wall = ()=>{
   </div>`;
 };
 ACT.wallgrp=d=>{ S.wallIdx=+d.i; S.wallKey=''; render(); };
-ACT.wallkey=d=>{ S.wallKey=d.k; render(); Voice.say(sayOf(d.k),0.5); };
+ACT.wallkey=d=>{ S.wallKey=d.k; render(); ACT.sound({k:d.k}); };
 
 /* ---------- 6.3 RHYMING CHANT ---------- */
 VIEWS.chant = ()=>{
