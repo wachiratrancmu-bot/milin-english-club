@@ -814,16 +814,16 @@ const TITLES = {
    หลักการออกเสียง: onset → rime → blend → คำเต็ม
    ═════════════════════════════════════════════════════════════════════ */
 const PHON = {
-  /* พยัญชนะต้น */
-  b:['/b/','buh','bat'],   c:['/k/','kuh','cat'],    d:['/d/','duh','dog'],   f:['/f/','fff','fan'],
+  /* พยัญชนะต้น — คำเลียนเสียงอิงตารางโฟนิกส์ไทย (เบอะ เคอะ เดอะ ฟึ …) ให้ TTS อ่านได้ชัด */
+  b:['/b/','buh','bat'],   c:['/k/','kuh','cat'],    d:['/d/','duh','dog'],   f:['/f/','fuh','fan'],
   g:['/g/','guh','geese'], h:['/h/','huh','hat'],    j:['/dʒ/','juh','jam'],  k:['/k/','kuh','kite'],
-  l:['/l/','lll','leg'],   m:['/m/','mmm','map'],    n:['/n/','nnn','net'],   p:['/p/','puh','pen'],
-  q:['/kw/','kwuh','queen'],r:['/r/','rrr','rat'],   s:['/s/','sss','sad'],   t:['/t/','tuh','ten'],
-  v:['/v/','vvv','van'],   w:['/w/','wuh','wet'],    x:['/ks/','ks','box'],   y:['/j/','yuh','yam'],
-  z:['/z/','zzz','zip'],   T:['/t/','tuh','Ted'],
+  l:['/l/','luh','leg'],   m:['/m/','mum','map'],    n:['/n/','un','net'],    p:['/p/','puh','pen'],
+  q:['/kw/','kwuh','queen'],r:['/r/','ruh','rat'],   s:['/s/','suh','sad'],   t:['/t/','tuh','ten'],
+  v:['/v/','vuh','van'],   w:['/w/','wuh','wet'],    x:['/ks/','ex','box'],   y:['/j/','yuh','yam'],
+  z:['/z/','zuh','zip'],   T:['/t/','tuh','Ted'],
   /* สระเสียงสั้น */
   a:['/æ/','aah','cat'],   e:['/e/','ehh','bed'],    i:['/ɪ/','ihh','pig'],
-  o:['/ɒ/','ohh','dog'],   u:['/ʌ/','uhh','mug'],
+  o:['/ɒ/','aw','dog'],    u:['/ʌ/','uhh','mug'],
   /* ทวิอักษร / เสียงควบ */
   sh:['/ʃ/','shh','ship'], ch:['/tʃ/','chuh','chick'], th:['/θ/','thh','teeth'],
   ck:['/k/','kuh','duck'], ng:['/ŋ/','ng','sing'],
@@ -842,10 +842,42 @@ const PHON = {
   eeth:['/iːθ/','eeth','teeth'], eese:['/iːs/','eess','geese'],
   indow:['/ɪndoʊ/','indoh','window'], irl:['/ɜːl/','erl','girl']
 };
+/* ---- คำอ่านไทย + วิธีออกเสียง (ตามตารางโฟนิกส์สำหรับเด็กไทย) ----
+   key -> [คำอ่านไทย, วิธีออกเสียง (ถ้ามี)] */
+const TH_SOUND = {
+  /* พยัญชนะ a-z */
+  a:['แอะ',''], b:['เบอะ',''], c:['เคอะ',''], d:['เดอะ',''], e:['เอะ',''],
+  f:['ฟึ','ออกเสียงลอดไรฟัน ฟันบนแตะริมฝีปากล่าง'],
+  g:['เกอะ',''], h:['ฮะ','เป่าลมออกจากปาก เหมือนหัวเราะเบา ๆ ฮ่ะ'],
+  i:['อิ',''], j:['เจอะ','เผยอปากเล็กน้อย'], k:['เคอะ',''],
+  l:['เลอะ','ลิ้นแตะเพดานปาก'], m:['มึม','ปิดปากเวลาออกเสียง'],
+  n:['อึน',''], o:['เอาะ',''], p:['เพอะ',''], q:['เควอะ',''],
+  r:['อะเรอ','พูดเร็ว ๆ ลิ้นไม่แตะอะไรเลย'], s:['สึ',''], t:['ทึ',''],
+  u:['อะ',''], v:['เวอะ','ฟันบนแตะริมฝีปากล่าง'], w:['เวอะ','ทำปากปกติ'],
+  x:['เอะคะสึ','ออกเสียงเร็ว ๆ'], y:['เยะ',''], z:['ซึ','คล้าย S แต่เสียงสั่นกว่า'],
+  T:['ทึ',''],
+  /* ทวิอักษร / เสียงควบ */
+  sh:['ชึ','จีบปากยื่นเล็กน้อย เป่าลม'], ch:['ฉึ','กดลิ้นแล้วดีดลมออก'],
+  th:['ธึ','แลบปลายลิ้นแตะฟันบน แล้วเป่าลม'], ck:['เคอะ',''],
+  ng:['อึง','เสียงขึ้นจมูก'], fr:['ฟรึ',''], tr:['ทรึ',''], gr:['กรึ',''],
+  bl:['บลึ',''], cl:['คลึ',''], st:['สทึ',''],
+  /* เสียงท้ายคำ (rime) */
+  ad:['แอด',''], am:['แอม',''], ap:['แอ็พ',''], ag:['แอก',''], an:['แอน',''], at:['แอ็ท',''],
+  ed:['เอด',''], eg:['เอก',''], en:['เอน',''], et:['เอ็ท',''],
+  in:['อิน',''], ig:['อิก',''], ip:['อิพ',''], it:['อิท',''],
+  og:['อ็อก',''], op:['อ็อพ',''], ot:['อ็อท',''],
+  ug:['อัก',''], us:['อัส',''], ut:['อัท',''], uck:['อัค',''],
+  ook:['อุค',''], ock:['อ็อค',''], oke:['โอค',''],
+  oll:['ออล',''], amp:['แอมพ์',''], oon:['อูน',''], eaf:['อีฟ',''],
+  arn:['อาร์น',''], ouse:['เอาส์',''], eeth:['อีธ',''], eese:['อีส',''],
+  indow:['อินโดว์',''], irl:['เกิร์ล','']
+};
 function phon(p){ return PHON[p] || PHON[String(p).toLowerCase()] || ['', p, '']; }
 const ipaOf = p => phon(p)[0];
 const sayOf = p => phon(p)[1];
 const exOf  = p => phon(p)[2];
+const thSnd = p => (TH_SOUND[p] || TH_SOUND[String(p).toLowerCase()] || ['',''])[0];
+const thTip = p => (TH_SOUND[p] || TH_SOUND[String(p).toLowerCase()] || ['',''])[1];
 /* แยกคำเป็นชิ้นเสียง — ไม่ระบุ = แยกทีละตัวอักษร */
 function pieces(word, given){
   const src = (given && given.length) ? given : String(word).split('');
@@ -1082,13 +1114,13 @@ VIEWS.phonics = ()=>{
       <div style="font-size:76px;line-height:1" class="bob">${w.emoji}</div>
       <div class="wordbox">
         <button class="part" style="background:${C('orange-t')};color:${C('orange-d')}"
-          data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}</small></button>
+          data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}${S.showThai&&thSnd(w.on)?' “'+esc(thSnd(w.on))+'”':''}</small></button>
         <div class="op">+</div>
         <button class="part" style="background:${C('teal-t')};color:${C('teal-d')}"
-          data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(ri)}<small>${esc(p2[0])}</small></button>
+          data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(ri)}<small>${esc(p2[0])}${S.showThai&&thSnd(ri)?' “'+esc(thSnd(ri))+'”':''}</small></button>
         <div class="op">=</div>
         <button class="part" style="background:${tint};color:${dark}"
-          data-act="say" data-t="${esc(w.w)}" data-r="0.78">${esc(w.w)}<small>blend</small></button>
+          data-act="say" data-t="${esc(w.w)}" data-r="0.78">${esc(w.w)}<small>blend · ผสมเสียง</small></button>
       </div>
       <div style="font-size:21px;font-weight:800;color:var(--ink2)">${esc(th(w.th))}</div>
       <div class="row g12">
@@ -1147,22 +1179,27 @@ VIEWS.wall = ()=>{
         ${grp.keys.map(k=>{
           const on=k===sel, ph=phon(k);
           return `<button data-act="wallkey" data-k="${esc(k)}"
-            style="border-radius:18px;padding:11px 4px;border:3px solid ${on?col:tint};background:${on?tint:'#FFFCF5'};
+            style="border-radius:18px;padding:9px 4px;border:3px solid ${on?col:tint};background:${on?tint:'#FFFCF5'};
                    display:flex;flex-direction:column;align-items:center;gap:1px">
-            <span style="font-size:28px;font-weight:900;color:${on?dark:'var(--ink)'};line-height:1.05">${esc(k)}</span>
+            <span style="font-size:27px;font-weight:900;color:${on?dark:'var(--ink)'};line-height:1.05">${esc(k)}</span>
             <span style="font-size:12px;font-weight:800;color:var(--ink3)">${esc(ph[0])}</span>
+            ${S.showThai?`<span style="font-size:12.5px;font-weight:800;color:${on?dark:'var(--ink2)'}">${esc(thSnd(k))}</span>`:''}
           </button>`;
         }).join('')}
       </div>
     </div>
-    <div class="card col" style="width:340px;flex:0 0 auto;align-items:center;justify-content:center;gap:14px;border-color:${tint}">
-      <div style="font-size:86px;font-weight:900;color:${dark};line-height:1">${esc(sel)}</div>
-      <div style="font-size:26px;font-weight:800;color:var(--ink2)">${esc(p[0])}</div>
+    <div class="card col" style="width:340px;flex:0 0 auto;align-items:center;justify-content:center;gap:11px;border-color:${tint}">
+      <div style="font-size:78px;font-weight:900;color:${dark};line-height:1">${esc(sel)}</div>
+      <div class="row g10">
+        <span style="font-size:24px;font-weight:800;color:var(--ink2)">${esc(p[0])}</span>
+        ${S.showThai&&thSnd(sel)?`<span style="font-size:26px;font-weight:900;color:${dark}">อ่านว่า “${esc(thSnd(sel))}”</span>`:''}
+      </div>
+      ${S.showThai&&thTip(sel)?`<div class="soft tc" style="padding:9px 14px;width:100%;font-size:15.5px;font-weight:700;color:var(--ink2)">💡 ${esc(thTip(sel))}</div>`:''}
       <button class="btn lg" style="background:${col};box-shadow:0 5px 0 ${dark}"
         data-act="say" data-t="${esc(p[1])}" data-r="0.5">🔊 ฟังเสียงนี้</button>
-      ${p[2]?`<div class="soft tc" style="padding:12px 18px;width:100%">
+      ${p[2]?`<div class="soft tc" style="padding:10px 18px;width:100%">
         <div class="hint">ตัวอย่างคำ</div>
-        <button style="font-size:34px;font-weight:900;color:${dark}" data-act="phonics"
+        <button style="font-size:32px;font-weight:900;color:${dark}" data-act="phonics"
           data-w="${esc(p[2])}" data-p="">${esc(p[2])}</button>
         <div class="hint">แตะคำเพื่อฟังทีละเสียง</div></div>`:''}
     </div>
@@ -1311,7 +1348,7 @@ VIEWS.missing = ()=>{
         const bd=picked?(isRight?C('teal'):(S.misPick===o?C('pink'):C('line'))):C('line');
         return `<button class="opt ${S.misPick===o&&!isRight?'shake':''}" data-act="mpick" data-o="${esc(o)}"
           style="min-width:158px;justify-content:center;background:${bg};border-color:${bd};font-size:36px">
-          ${esc(o)} <span style="font-size:15px;color:var(--ink3)">${esc(ipaOf(o))}</span>
+          ${esc(o)} <span style="font-size:15px;color:var(--ink3)">${esc(ipaOf(o))}${S.showThai&&thSnd(o)?' “'+esc(thSnd(o))+'”':''}</span>
           ${picked&&isRight?'✅':(S.misPick===o?'❌':'')}</button>`;
       }).join('')}
     </div>
@@ -2001,10 +2038,10 @@ VIEWS.race = ()=>{
         <div class="th" style="font-size:18px;font-weight:800;color:var(--ink2)">${esc(th(it.th))}</div>
         <div class="row g8">
           <button class="part" style="background:${C('orange-t')};color:${C('orange-d')};font-size:28px;padding:9px 15px"
-            data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(it.parts[0])}<small>${esc(p1[0])}</small></button>
+            data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(it.parts[0])}<small>${esc(p1[0])}${S.showThai&&thSnd(it.parts[0])?' “'+esc(thSnd(it.parts[0]))+'”':''}</small></button>
           <div class="op" style="font-size:24px">+</div>
           <button class="part" style="background:${C('teal-t')};color:${C('teal-d')};font-size:28px;padding:9px 15px"
-            data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(it.parts[1])}<small>${esc(p2[0])}</small></button>
+            data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(it.parts[1])}<small>${esc(p2[0])}${S.showThai&&thSnd(it.parts[1])?' “'+esc(thSnd(it.parts[1]))+'”':''}</small></button>
         </div>
         ${btnSlow(it.w, it.parts.join('|'), 'ghost sm')}
       </div>
