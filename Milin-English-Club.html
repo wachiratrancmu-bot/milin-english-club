@@ -1,0 +1,2159 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Milin English Club">
+<meta name="theme-color" content="#FFF1DE">
+<title>Milin English Club</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════════
+  MILIN ENGLISH CLUB — เกมฝึกภาษาอังกฤษ 15 เกม (iPad แนวนอน)
+  ไฟล์เดียวจบ · ไม่ต้องต่อเน็ต · อัปโหลดขึ้นเว็บได้เลย
+  โครง: 1 CSS · 2 CONTENT · 3 PHONICS · 4 VOICE · 5 CORE · 6 GAMES · 7 BOOT
+  ═══════════════════════════════════════════════════════════════════════
+-->
+<style>
+/* ═════════ 1. CSS ═════════ */
+:root{
+  --cream:#FFF6E9; --ink:#3B2E26; --ink2:#7C6553; --ink3:#AB9683;
+  --line:#EFE0CC; --card:#FFFFFF; --shadow:#E3CDB2;
+
+  --orange:#F2622F; --orange-t:#FFE2D3; --orange-d:#C4441A;
+  --teal:#12A08A;   --teal-t:#CDF2EA;   --teal-d:#0A7A68;
+  --blue:#3B7BEA;   --blue-t:#D8E5FF;   --blue-d:#2557B8;
+  --purple:#9B54DE; --purple-t:#EBDCFC; --purple-d:#7737B8;
+  --gold:#E39100;   --gold-t:#FFEDC7;   --gold-d:#B36F00;
+  --pink:#E5407A;   --pink-t:#FFDCE7;   --pink-d:#B72656;
+  --cyan:#1AA7C6;   --cyan-t:#D2F0F8;   --cyan-d:#0E7F99;
+  --lime:#6FA82A;   --lime-t:#E4F4CC;   --lime-d:#527F16;
+  --grape:#6A5AE0;  --grape-t:#E1DDFF;  --grape-d:#4B3CC0;
+  --coral:#EF5D8E;  --coral-t:#FFDEEA;  --coral-d:#C23A69;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+body{
+  font-family:"SF Pro Rounded","Noto Sans Thai","Sukhumvit Set",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  color:var(--ink);background:var(--cream);
+  -webkit-user-select:none;user-select:none;-webkit-font-smoothing:antialiased;
+}
+button{font:inherit;color:inherit;border:none;background:none;cursor:pointer;text-align:inherit}
+/* พื้นหลังลายจุดนุ่มๆ */
+#bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(circle at 8% 6%,  rgba(242,98,47,.16) 0, transparent 26%),
+    radial-gradient(circle at 94% 10%, rgba(59,123,234,.15) 0, transparent 24%),
+    radial-gradient(circle at 88% 92%, rgba(18,160,138,.15) 0, transparent 26%),
+    radial-gradient(circle at 12% 90%, rgba(229,64,122,.13) 0, transparent 24%),
+    linear-gradient(170deg,#FFF9EF 0%,#FFF4E4 45%,#FFF0F2 100%);
+}
+/* เวทีขนาดคงที่ 1194×834 (iPad แนวนอน) แล้วย่อ/ขยายให้พอดีจอที่เปิด
+   → หน้าตาเหมือนกันทุกเครื่อง ทั้งบน iPad, คอม และตอนอัปโหลดขึ้นเว็บ */
+#fit{position:fixed;inset:0;z-index:1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#app{width:1194px;height:834px;flex:0 0 auto;transform-origin:center center;
+  display:flex;flex-direction:column;position:relative}
+
+/* ---------- top bar ---------- */
+.topbar{flex:0 0 auto;display:flex;align-items:center;gap:12px;padding:12px 24px 6px}
+.iconbtn{width:56px;height:56px;border-radius:20px;background:#fff;box-shadow:0 5px 0 var(--shadow);
+  display:flex;align-items:center;justify-content:center;font-size:26px;flex:0 0 auto;transition:transform .1s}
+.iconbtn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--shadow)}
+.titles{display:flex;flex-direction:column;min-width:0}
+.t1{font-size:31px;font-weight:900;letter-spacing:-.3px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t2{font-size:16px;font-weight:600;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.spacer{flex:1 1 auto}
+.pill{display:flex;align-items:center;gap:8px;background:#fff;border-radius:18px;padding:9px 15px;
+  box-shadow:0 4px 0 var(--shadow);font-size:15px;font-weight:600;color:var(--ink2);white-space:nowrap}
+.pill b{color:var(--ink);font-weight:800;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+.stars{display:flex;align-items:center;gap:7px;background:#fff;border-radius:18px;padding:9px 17px;
+  box-shadow:0 4px 0 var(--shadow);font-size:21px;font-weight:900;color:var(--gold)}
+/* ปุ่มปรับความเร็วเสียง — เห็นตลอดทุกหน้าจอ */
+.speed{display:flex;align-items:center;gap:0;background:#fff;border-radius:18px;padding:5px;box-shadow:0 4px 0 var(--shadow)}
+.speed b{font-size:13px;font-weight:800;color:var(--ink3);padding:0 8px 0 6px;letter-spacing:.2px}
+.speed button{padding:7px 12px;border-radius:14px;font-size:16px;font-weight:800;color:var(--ink2);transition:transform .08s}
+.speed button.on{background:var(--cyan);color:#fff}
+.speed button:active{transform:scale(.93)}
+
+.stage{flex:1 1 auto;min-height:0;padding:6px 24px 18px;display:flex;flex-direction:column}
+
+/* ---------- building blocks ---------- */
+.card{background:var(--card);border-radius:28px;border:3px solid var(--line);padding:18px;
+  box-shadow:0 6px 0 rgba(227,205,178,.5)}
+.soft{background:#FFFCF5;border-radius:22px;border:3px solid var(--line)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:20px;
+  padding:14px 24px;font-size:19px;font-weight:800;color:#fff;background:var(--orange);
+  box-shadow:0 5px 0 var(--orange-d);transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--orange-d)}
+.btn.sm{padding:10px 17px;font-size:16px;border-radius:16px}
+.btn.lg{padding:18px 34px;font-size:23px;border-radius:24px}
+.btn.ghost{background:#fff;color:var(--ink2);box-shadow:0 5px 0 var(--shadow)}
+.btn.ghost:active{box-shadow:0 1px 0 var(--shadow)}
+.chip{border-radius:16px;padding:9px 16px;font-size:16px;font-weight:800;background:#fff;color:var(--ink2);
+  border:3px solid var(--line);transition:transform .08s;white-space:nowrap}
+.chip:active{transform:scale(.95)}
+.chip.on{color:#fff}
+
+/* ---------- home grid ---------- */
+.hero{display:flex;align-items:center;gap:16px;padding:0 4px 10px;flex:0 0 auto}
+.hero .cat{font-size:50px;line-height:1}
+.hero h2{font-size:25px;font-weight:900;line-height:1.2}
+.hero h2 em{font-style:normal;color:var(--orange)}
+.hero p{font-size:15.5px;font-weight:600;color:var(--ink2);margin-top:1px}
+.grid{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(3,1fr);
+  gap:13px;overflow:hidden}
+.gcard{position:relative;border-radius:24px;background:#fff;border:3px solid var(--line);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:10px 8px 14px;
+  overflow:hidden;transition:transform .1s;min-height:0}
+.gcard:active{transform:translateY(5px)}
+.gcard .disc{width:60px;height:60px;border-radius:22px;display:flex;align-items:center;justify-content:center;
+  font-size:32px;margin-bottom:5px;box-shadow:0 4px 0 rgba(0,0,0,.14)}
+.gcard .en{font-size:18.5px;font-weight:900;line-height:1.1;letter-spacing:-.2px}
+.gcard .th{font-size:14.5px;font-weight:800;color:var(--ink2);line-height:1.2}
+.gcard .bar{position:absolute;left:0;right:0;bottom:0;height:7px}
+.gcard .n{position:absolute;top:9px;right:11px;font-size:11.5px;font-weight:800;color:#fff;
+  padding:3px 8px;border-radius:9px;opacity:.92}
+
+/* ---------- word pieces ---------- */
+.wordbox{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.part{border-radius:20px;padding:12px 20px;font-weight:900;line-height:1;
+  display:flex;flex-direction:column;align-items:center;gap:5px;transition:transform .1s;font-size:46px}
+.part:active{transform:scale(.94)}
+.part small{font-size:14px;font-weight:800;opacity:.72;letter-spacing:.3px}
+.op{font-size:32px;font-weight:900;color:var(--ink3)}
+.tile{width:72px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+  font-size:38px;font-weight:900;transition:transform .1s}
+.tile:active{transform:scale(.93)}
+.slot{width:72px;height:76px;border-radius:20px;border:3px dashed var(--line);display:flex;
+  align-items:center;justify-content:center;font-size:38px;font-weight:900}
+
+/* ---------- lists / options ---------- */
+.rowlist{display:flex;flex-direction:column;gap:9px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.opt{display:flex;align-items:center;gap:12px;border-radius:20px;border:3px solid var(--line);
+  background:#FFFCF5;padding:13px 17px;font-size:20px;font-weight:800;transition:transform .08s}
+.opt:active{transform:scale(.985)}
+.opt .badge{width:34px;height:34px;border-radius:12px;background:#E2D2BE;color:#fff;display:flex;
+  align-items:center;justify-content:center;font-size:17px;font-weight:900;flex:0 0 auto}
+.opt .th{font-size:14.5px;color:var(--ink3);font-weight:700}
+.msg{font-size:18px;font-weight:800;min-height:26px}
+
+/* ---------- story ---------- */
+.story{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  font-size:26px;line-height:1.8;padding:4px 4px;font-weight:600}
+.sline{border-radius:14px;padding:3px 8px;margin-bottom:2px}
+.sline.on{background:var(--gold-t)}
+.w{border-radius:9px;padding:1px 3px;display:inline-block}
+.w.hasdef{border-bottom:3px solid #F3C9A8}
+.w.on{background:var(--orange-t)}
+
+/* ---------- scene ---------- */
+.scene{position:relative;flex:1 1 auto;min-height:0;border-radius:24px;overflow:hidden;border:3px solid var(--line)}
+.obj{position:absolute;line-height:1;transition:filter .2s}
+.obj:active{filter:brightness(1.15)}
+
+/* ---------- race ---------- */
+.lane{position:relative;height:100%;border-radius:16px;background:#FFFCF5;border:3px solid var(--line);overflow:hidden}
+.lane .road{position:absolute;left:0;right:0;top:50%;height:5px;transform:translateY(-50%);
+  background:repeating-linear-gradient(90deg,#EFE0CC 0 20px,transparent 20px 40px)}
+.car{position:absolute;top:50%;transform:translate(-50%,-50%);font-size:34px;transition:left .5s cubic-bezier(.34,1.3,.64,1)}
+.lanename{position:absolute;left:12px;top:5px;font-size:13px;font-weight:900}
+.flag{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:22px;opacity:.5}
+
+/* ---------- animations ---------- */
+@keyframes pop{0%{transform:scale(.7);opacity:0}60%{transform:scale(1.09)}100%{transform:scale(1);opacity:1}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-8px) rotate(2deg)}}
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 0 rgba(255,255,255,0))}50%{filter:drop-shadow(0 0 14px rgba(255,214,0,.9))}}
+.pop{animation:pop .4s}.bob{animation:bob 1.7s ease-in-out infinite}
+.shake{animation:shake .5s}.float{animation:float 3.4s ease-in-out infinite}
+.glow{animation:glow 1.4s ease-in-out infinite}
+
+/* ---------- modal ---------- */
+.sheet{position:fixed;inset:0;background:rgba(59,46,38,.45);display:flex;align-items:center;justify-content:center;z-index:50}
+.sheetbox{width:min(720px,92vw);max-height:88vh;overflow-y:auto;background:var(--cream);border-radius:32px;
+  padding:26px;box-shadow:0 22px 55px rgba(59,46,38,.3)}
+.field{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.field label{width:172px;font-size:17px;font-weight:800;color:var(--ink2);flex:0 0 auto}
+.field input[type=text],.field select{flex:1;font:inherit;font-size:17px;font-weight:700;padding:11px 14px;
+  border-radius:15px;border:3px solid var(--line);background:#fff;color:var(--ink);min-width:0}
+.field input[type=range]{flex:1;accent-color:var(--orange)}
+.switch{width:64px;height:34px;border-radius:17px;background:#E2D2BE;position:relative;transition:background .2s;flex:0 0 auto}
+.switch.on{background:var(--teal)}
+.switch i{position:absolute;top:3px;left:3px;width:28px;height:28px;border-radius:14px;background:#fff;transition:left .2s}
+.switch.on i{left:33px}
+
+/* ---------- helpers ---------- */
+.scrollx{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:3px;flex:0 0 auto}
+.scrollx::-webkit-scrollbar,.rowlist::-webkit-scrollbar,.story::-webkit-scrollbar,
+.sheetbox::-webkit-scrollbar,.wallbox::-webkit-scrollbar{height:6px;width:6px}
+.scrollx::-webkit-scrollbar-thumb,.rowlist::-webkit-scrollbar-thumb,.story::-webkit-scrollbar-thumb,
+.sheetbox::-webkit-scrollbar-thumb,.wallbox::-webkit-scrollbar-thumb{background:#E2D2BE;border-radius:3px}
+.hint{font-size:15px;font-weight:600;color:var(--ink3)}
+.center{display:flex;align-items:center;justify-content:center}
+.col{display:flex;flex-direction:column}
+.row{display:flex;align-items:center}
+.wrap{flex-wrap:wrap}
+.g6{gap:6px}.g8{gap:8px}.g10{gap:10px}.g12{gap:12px}.g16{gap:16px}
+.f1{flex:1 1 auto;min-height:0;min-width:0}
+.f0{flex:0 0 auto}
+.tc{text-align:center}
+</style>
+</head>
+<body>
+<div id="bg"></div>
+<div id="fit">
+<div id="app">
+  <div class="topbar">
+    <button class="iconbtn" data-act="home" id="homeBtn">🏠</button>
+    <div class="titles">
+      <div class="t1" id="scrTitle">Milin English Club</div>
+      <div class="t2" id="scrSub">ห้องเรียนภาษาอังกฤษแสนสนุก</div>
+    </div>
+    <div class="spacer"></div>
+    <div class="speed" id="speedBox"></div>
+    <button class="pill" data-act="testvoice">🎙️ <b id="voicePill">ครูผู้หญิง</b></button>
+    <div class="stars">⭐ <span id="starCount">0</span></div>
+    <button class="iconbtn" data-act="settings">⚙️</button>
+  </div>
+  <div class="stage" id="stage"></div>
+</div>
+</div>
+<div id="modal"></div>
+
+<script>
+"use strict";
+/* ═════════════════════════════════════════════════════════════════════
+   2. CONTENT — เนื้อหาทั้งหมดจากชีทของน้องมิลิน (39 ใบ)
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* ---- 2.1 ตระกูลคำ (Word Families) ---- */
+const FAMILIES = [
+  { key:'ad', label:'-ad', unit:'Unit 1', color:'orange', words:[
+    {w:'sad', on:'s', th:'เศร้า, เสียใจ', emoji:'😢', sent:'The girl is sad.',        sentTh:'เด็กผู้หญิงเศร้า'},
+    {w:'dad', on:'d', th:'พ่อ',            emoji:'👨‍👧', sent:'I will tell my dad!',   sentTh:'ฉันจะไปบอกพ่อ'},
+    {w:'bad', on:'b', th:'ไม่ดี, ซน',      emoji:'😠', sent:"You're so bad!",          sentTh:'เธอซนมากเลย'},
+    {w:'mad', on:'m', th:'โกรธ',           emoji:'😤', sent:"I'm so mad!",             sentTh:'ฉันโกรธมาก'}
+  ]},
+  { key:'am', label:'-am', unit:'Unit 1', color:'teal', words:[
+    {w:'yam', on:'y', th:'มันเทศ',    emoji:'🍠', sent:'Where is the yam?',      sentTh:'มันเทศอยู่ไหน'},
+    {w:'jam', on:'j', th:'แยม',       emoji:'🍓', sent:'Who put jam on my cap?', sentTh:'ใครเอาแยมมาป้ายหมวกฉัน'},
+    {w:'dam', on:'d', th:'เขื่อน',    emoji:'🌊', sent:'The dam holds water.',   sentTh:'เขื่อนกักน้ำเอาไว้'},
+    {w:'ram', on:'r', th:'แกะตัวผู้', emoji:'🐏', sent:'The ram has a cookie.',  sentTh:'แกะตัวผู้มีคุกกี้'}
+  ]},
+  { key:'ap', label:'-ap', unit:'Unit 1', color:'blue', words:[
+    {w:'cap', on:'c', th:'หมวกแก๊ป', emoji:'🧢', sent:'Jam on my cap!',                sentTh:'แยมเปื้อนหมวกฉัน'},
+    {w:'map', on:'m', th:'แผนที่',   emoji:'🗺️', sent:'On the map? No, on the desk!',  sentTh:'บนแผนที่เหรอ? ไม่ใช่ บนโต๊ะ!'},
+    {w:'nap', on:'n', th:'งีบหลับ',  emoji:'😴', sent:'The ram naps under the desk.',  sentTh:'แกะงีบหลับใต้โต๊ะ'},
+    {w:'tap', on:'t', th:'ก๊อกน้ำ',  emoji:'🚰', sent:'Turn off the tap.',             sentTh:'ปิดก๊อกน้ำด้วย'}
+  ]},
+  { key:'ag', label:'-ag', unit:'Unit 2', color:'purple', words:[
+    {w:'bag', on:'b', th:'กระเป๋า',       emoji:'🎒', sent:'A man has a can in his bag.', sentTh:'ผู้ชายมีกระป๋องอยู่ในกระเป๋า'},
+    {w:'wag', on:'w', th:'กระดิก (หาง)',  emoji:'🐕', sent:'The dog can wag its tail.',   sentTh:'สุนัขกระดิกหางได้'},
+    {w:'tag', on:'t', th:'ป้าย, วิ่งไล่จับ', emoji:'🏷️', sent:'Tag! You are it!',       sentTh:'แต๊ะ! ตาเธอเป็นคนไล่'},
+    {w:'rag', on:'r', th:'ผ้าขี้ริ้ว',    emoji:'🧽', sent:'Clean it with a rag.',        sentTh:'เช็ดด้วยผ้าขี้ริ้ว'}
+  ]},
+  { key:'an', label:'-an', unit:'Unit 2', color:'gold', words:[
+    {w:'man', on:'m', th:'ผู้ชาย',   emoji:'👨', sent:'The man looks at the rat.', sentTh:'ผู้ชายมองไปที่หนู'},
+    {w:'can', on:'c', th:'กระป๋อง',  emoji:'🥫', sent:'A rat sits in the can.',    sentTh:'หนูนั่งอยู่ในกระป๋อง'},
+    {w:'van', on:'v', th:'รถตู้',    emoji:'🚐', sent:'The van is green.',         sentTh:'รถตู้สีเขียว'},
+    {w:'fan', on:'f', th:'พัดลม',    emoji:'🌀', sent:'Turn on the fan.',          sentTh:'เปิดพัดลมหน่อย'}
+  ]},
+  { key:'at', label:'-at', unit:'Unit 2 · SRA', color:'pink', words:[
+    {w:'cat', on:'c', th:'แมว',          emoji:'🐱', sent:'The cat was hungry.',     sentTh:'แมวตัวนั้นหิว'},
+    {w:'bat', on:'b', th:'ค้างคาว, ไม้ตี', emoji:'🦇', sent:'The bat is black.',      sentTh:'ค้างคาวสีดำ'},
+    {w:'rat', on:'r', th:'หนู',          emoji:'🐀', sent:'The rat is fat.',         sentTh:'หนูตัวอ้วน'},
+    {w:'mat', on:'m', th:'เสื่อ',        emoji:'🧶', sent:'The cat slept on a mat.', sentTh:'แมวนอนบนเสื่อ'},
+    {w:'fat', on:'f', th:'อ้วน',         emoji:'🐖', sent:'The rat is fat.',         sentTh:'หนูตัวอ้วน'},
+    {w:'sat', on:'s', th:'นั่ง (อดีตของ sit)', emoji:'🪑', sent:'Malik and Jeffrey sat under a tree.', sentTh:'มาลิกกับเจฟฟรีย์นั่งใต้ต้นไม้'},
+    {w:'hat', on:'h', th:'หมวก',         emoji:'🎩', sent:'I have a red hat.',       sentTh:'ฉันมีหมวกสีแดง'}
+  ]},
+  { key:'ed', label:'-ed', unit:'Unit 3', color:'orange', words:[
+    {w:'bed', on:'b', th:'เตียงนอน', emoji:'🛏️', sent:'Baby chicks are on the bed.', sentTh:'ลูกเจี๊ยบอยู่บนเตียง'},
+    {w:'red', on:'r', th:'สีแดง',    emoji:'🟥', sent:'Red hen has ten eggs.',       sentTh:'แม่ไก่สีแดงมีไข่สิบฟอง'},
+    {w:'wed', on:'w', th:'แต่งงาน',  emoji:'💒', sent:'They will wed in June.',      sentTh:'พวกเขาจะแต่งงานเดือนมิถุนายน'},
+    {w:'Ted', on:'T', th:'เท็ด (ชื่อคน)', emoji:'🧑', sent:'Ted is my friend.',      sentTh:'เท็ดเป็นเพื่อนของฉัน'}
+  ]},
+  { key:'eg', label:'-eg', unit:'Unit 3', color:'lime', words:[
+    {w:'peg', on:'p', th:'ไม้หนีบ, หมุด', emoji:'🪵', sent:'Hang it on the peg.',       sentTh:'แขวนไว้กับไม้หนีบ'},
+    {w:'egg', on:'e', th:'ไข่',           emoji:'🥚', sent:'The little eggs have legs!', sentTh:'ไข่ใบน้อยมีขาแล้ว!'},
+    {w:'leg', on:'l', th:'ขา',            emoji:'🦵', sent:'The little eggs have legs!', sentTh:'ไข่ใบน้อยมีขาแล้ว!'},
+    {w:'beg', on:'b', th:'ขอร้อง',        emoji:'🙏', sent:'The hen begs.',              sentTh:'แม่ไก่อ้อนวอน'}
+  ]},
+  { key:'en', label:'-en', unit:'Unit 3', color:'cyan', words:[
+    {w:'hen', on:'h', th:'แม่ไก่',       emoji:'🐔', sent:'The wet hen goes to the jet.', sentTh:'แม่ไก่เปียกเดินไปที่เครื่องบิน'},
+    {w:'pen', on:'p', th:'ปากกา',        emoji:'🖊️', sent:'This is my pen.',             sentTh:'นี่คือปากกาของฉัน'},
+    {w:'men', on:'m', th:'ผู้ชายหลายคน', emoji:'👬', sent:'The men are here.',            sentTh:'ผู้ชายพวกนั้นอยู่ที่นี่'},
+    {w:'ten', on:'t', th:'สิบ',          emoji:'🔟', sent:'She has ten little brown eggs.', sentTh:'แม่ไก่มีไข่สีน้ำตาลสิบฟอง'}
+  ]},
+  { key:'et', label:'-et', unit:'Unit 3', color:'blue', words:[
+    {w:'wet', on:'w', th:'เปียก',          emoji:'💧', sent:'No wet pets!',          sentTh:'ห้ามสัตว์เลี้ยงตัวเปียก!'},
+    {w:'jet', on:'j', th:'เครื่องบินเจ็ต', emoji:'✈️', sent:'Get on the jet.',        sentTh:'ขึ้นเครื่องบินได้เลย'},
+    {w:'pet', on:'p', th:'สัตว์เลี้ยง',    emoji:'🐈', sent:'My pet is a cat.',      sentTh:'สัตว์เลี้ยงของฉันคือแมว'},
+    {w:'net', on:'n', th:'ตาข่าย, สวิง',   emoji:'🥅', sent:'Get a net! Get a net!', sentTh:'เอาสวิงมา! เอาสวิงมา!'}
+  ]},
+  { key:'ook', label:'-ook', unit:'SRA · Boris', color:'teal', words:[
+    {w:'book', on:'b', th:'หนังสือ',             emoji:'📕', sent:'The boy will read a book.',           sentTh:'เด็กชายจะอ่านหนังสือ'},
+    {w:'look', on:'l', th:'มอง, ดู',             emoji:'👀', sent:'The children like to look at books.', sentTh:'เด็กๆ ชอบดูหนังสือ'},
+    {w:'cook', on:'c', th:'พ่อครัว, ทำอาหาร',    emoji:'👩‍🍳', sent:'My mom is a good cook.',            sentTh:'แม่ของฉันทำอาหารเก่ง'},
+    {w:'took', on:'t', th:'หยิบ (อดีตของ take)', emoji:'✋', sent:'Boris took a swim in the pond.',       sentTh:'บอริสลงไปว่ายน้ำในบ่อ'},
+    {w:'hook', on:'h', th:'ตะขอ',                emoji:'🪝', sent:'Hang the bag on the hook.',           sentTh:'แขวนกระเป๋าไว้ที่ตะขอ'}
+  ]},
+  { key:'in', label:'-in', unit:'Twinkl Phase 2', color:'grape', words:[
+    {w:'pin', on:'p', th:'เข็มหมุด', emoji:'📌', sent:'Do not touch the pin.', sentTh:'อย่าจับเข็มหมุด'},
+    {w:'win', on:'w', th:'ชนะ',      emoji:'🏆', sent:'I want to win!',        sentTh:'ฉันอยากชนะ!'},
+    {w:'bin', on:'b', th:'ถังขยะ',   emoji:'🗑️', sent:'Put it in the bin.',   sentTh:'ทิ้งลงถังขยะ'},
+    {w:'fin', on:'f', th:'ครีบปลา',  emoji:'🐟', sent:'A fish has a fin.',     sentTh:'ปลามีครีบ'}
+  ]},
+  { key:'ig', label:'-ig', unit:'Phonics', color:'coral', words:[
+    {w:'pig', on:'p', th:'หมู',    emoji:'🐷', sent:'Boris was a pig.',   sentTh:'บอริสเป็นหมู'},
+    {w:'big', on:'b', th:'ใหญ่',   emoji:'🐘', sent:'It is a big tree.',  sentTh:'มันเป็นต้นไม้ใหญ่'},
+    {w:'dig', on:'d', th:'ขุด',    emoji:'⛏️', sent:'Dogs like to dig.',  sentTh:'หมาชอบขุดดิน'},
+    {w:'wig', on:'w', th:'วิกผม',  emoji:'💇', sent:'She has a red wig.', sentTh:'เธอใส่วิกผมสีแดง'}
+  ]},
+  { key:'og', label:'-og', unit:'Phonics', color:'lime', words:[
+    {w:'dog',  on:'d',  th:'สุนัข', emoji:'🐶', sent:'The dog can wag its tail.', sentTh:'สุนัขกระดิกหางได้'},
+    {w:'frog', on:'fr', th:'กบ',    emoji:'🐸', sent:'Four frogs are in the pond.', sentTh:'กบสี่ตัวอยู่ในบ่อ'},
+    {w:'log',  on:'l',  th:'ท่อนไม้', emoji:'🪵', sent:'Sit on the log.',        sentTh:'นั่งบนท่อนไม้'},
+    {w:'jog',  on:'j',  th:'วิ่งเหยาะๆ', emoji:'🏃', sent:'We jog in the park.', sentTh:'เราวิ่งเหยาะๆ ในสวน'}
+  ]},
+  { key:'ot', label:'-ot', unit:'Phonics', color:'orange', words:[
+    {w:'hot', on:'h', th:'ร้อน',   emoji:'🔥', sent:'The soup is hot.',    sentTh:'ซุปร้อน'},
+    {w:'pot', on:'p', th:'หม้อ',   emoji:'🍲', sent:'Mom has a big pot.',  sentTh:'แม่มีหม้อใบใหญ่'},
+    {w:'dot', on:'d', th:'จุด',    emoji:'⚫', sent:'Draw a little dot.',  sentTh:'วาดจุดเล็กๆ'},
+    {w:'not', on:'n', th:'ไม่',    emoji:'🚫', sent:'Boris could not read.', sentTh:'บอริสอ่านไม่ได้'}
+  ]},
+  { key:'ug', label:'-ug', unit:'Twinkl Phase 2', color:'purple', words:[
+    {w:'mug', on:'m', th:'แก้วมีหู', emoji:'☕', sent:'A mug of warm milk.', sentTh:'นมอุ่นหนึ่งแก้ว'},
+    {w:'bug', on:'b', th:'แมลง',    emoji:'🐛', sent:'A bug is on the leaf.', sentTh:'แมลงอยู่บนใบไม้'},
+    {w:'rug', on:'r', th:'พรม',     emoji:'🧵', sent:'The cat sits on the rug.', sentTh:'แมวนั่งบนพรม'},
+    {w:'hug', on:'h', th:'กอด',     emoji:'🤗', sent:'Give me a hug.',       sentTh:'มากอดหน่อย'}
+  ]},
+  { key:'ut', label:'-ut', unit:'Twinkl Phase 2', color:'cyan', words:[
+    {w:'hut', on:'h', th:'กระท่อม', emoji:'🛖', sent:'A hut in the field.', sentTh:'กระท่อมกลางทุ่ง'},
+    {w:'cut', on:'c', th:'ตัด',     emoji:'✂️', sent:'Cut it with scissors.', sentTh:'ตัดด้วยกรรไกร'},
+    {w:'nut', on:'n', th:'ถั่ว',    emoji:'🥜', sent:'The squirrel has a nut.', sentTh:'กระรอกมีถั่ว'},
+    {w:'but', on:'b', th:'แต่',     emoji:'↩️', sent:'But Boris was not like most pigs.', sentTh:'แต่บอริสไม่เหมือนหมูตัวอื่น'}
+  ]},
+  { key:'uck', label:'-uck', unit:'Phonics', color:'gold', words:[
+    {w:'duck',  on:'d',  th:'เป็ด',      emoji:'🦆', sent:'The duck has a duckling.', sentTh:'เป็ดมีลูกเป็ด'},
+    {w:'truck', on:'tr', th:'รถบรรทุก',  emoji:'🚚', sent:'The truck is big.',        sentTh:'รถบรรทุกคันใหญ่'},
+    {w:'luck',  on:'l',  th:'โชค',       emoji:'🍀', sent:'Good luck!',               sentTh:'โชคดีนะ!'}
+  ]},
+  { key:'more', label:'คำอื่นๆ', unit:'Test · Twinkl', color:'grape', words:[
+    {w:'bus',    on:'b',  ri:'us',    th:'รถบัส',        emoji:'🚌', sent:'The bus is yellow.',        sentTh:'รถบัสสีเหลือง'},
+    {w:'doll',   on:'d',  ri:'oll',   th:'ตุ๊กตา',       emoji:'🪆', sent:'The doll is in the toy box.', sentTh:'ตุ๊กตาอยู่ในกล่องของเล่น'},
+    {w:'ship',   on:'sh', ri:'ip',    th:'เรือใหญ่',     emoji:'🚢', sent:'The ship is on the sea.',   sentTh:'เรืออยู่กลางทะเล'},
+    {w:'lamp',   on:'l',  ri:'amp',   th:'โคมไฟ',       emoji:'💡', sent:'Turn on the lamp.',         sentTh:'เปิดโคมไฟ'},
+    {w:'moon',   on:'m',  ri:'oon',   th:'ดวงจันทร์',   emoji:'🌙', sent:'The moon is bright.',       sentTh:'พระจันทร์สว่าง'},
+    {w:'leaf',   on:'l',  ri:'eaf',   th:'ใบไม้',       emoji:'🍃', sent:'A green leaf.',             sentTh:'ใบไม้สีเขียว'},
+    {w:'barn',   on:'b',  ri:'arn',   th:'โรงนา',       emoji:'🏚️', sent:'The pig lives in a barn.',  sentTh:'หมูอยู่ในโรงนา'},
+    {w:'mouse',  on:'m',  ri:'ouse',  th:'หนูตัวเล็ก',  emoji:'🐭', sent:'A little mouse.',           sentTh:'หนูตัวน้อย'},
+    {w:'teeth',  on:'t',  ri:'eeth',  th:'ฟัน',         emoji:'🦷', sent:'Brush your teeth.',         sentTh:'แปรงฟันด้วยนะ'},
+    {w:'geese',  on:'g',  ri:'eese',  th:'ห่าน',        emoji:'🦢', sent:'Two geese swim.',           sentTh:'ห่านสองตัวว่ายน้ำ'},
+    {w:'window', on:'w',  ri:'indow', th:'หน้าต่าง',    emoji:'🪟', sent:'Open the window.',          sentTh:'เปิดหน้าต่าง'},
+    {w:'girl',   on:'g',  ri:'irl',   th:'เด็กผู้หญิง', emoji:'👧', sent:'The girl is sad.',          sentTh:'เด็กผู้หญิงเศร้า'}
+  ]}
+];
+
+/* ---- 2.2 เรื่องอ่าน (7 เรื่อง) ---- */
+const STORIES = [
+  { key:'cat', title:'The Hungry Cat', th:'แมวหิว', emoji:'🐱', color:'orange', src:'SRA Reading Laboratory 1a · Power Builder 8',
+    lines:['Jeffrey chased Malik around a big tree.','"Tag!" said Jeffrey. "You are it!"',
+      '"I need to rest for a minute," said Malik.','The boys sat down. A stray cat walked by.',
+      'The cat sat next to them. "It looks hungry," said Malik.','Malik went inside his house. He got some cat food.',
+      '"Here you go, kitty," said Malik.','The hungry cat ate the food. Then it purred and purred.'],
+    q:[
+      {q:'What is this story about?', th:'เรื่องนี้เกี่ยวกับอะไร?', o:['Boys who like to play','Boys who find a hungry cat'], a:1, why:'เด็กสองคนเจอแมวหิวแล้วช่วยมัน'},
+      {q:'What game do the boys play?', th:'เด็กๆ เล่นเกมอะไร?', o:['They play tag.','They play hide-and-seek.'], a:0, why:'เจฟฟรีย์พูดว่า "Tag! You are it!" = เล่นวิ่งไล่จับ'},
+      {q:'Where does Malik get cat food?', th:'มาลิกเอาอาหารแมวมาจากไหน?', o:['From his house','From the store'], a:0, why:'Malik went inside his house.'},
+      {q:'Why do you think the cat purrs?', th:'ทำไมแมวถึงส่งเสียงคราง?', o:['Because it is mad','Because it is happy'], a:1, why:'แมวครางเวลามีความสุข'},
+      {q:'What will Jeffrey and Malik do with the cat?', th:'สองคนนี้จะทำอะไรกับแมว?', o:['They will help it.','They will leave it alone.'], a:0, why:'พวกเขาใจดี จะช่วยดูแลแมว'}
+    ]},
+  { key:'boris', title:'Boris', th:'บอริส หมูไปโรงเรียน', emoji:'🐷', color:'pink', src:'SRA Reading Laboratory 1a',
+    lines:['Boris was a pig. He lived on a farm.','Boris had a good life. He liked to eat and sleep.',
+      'Best of all, he liked to go to school.','Most pigs do not go to school, but Boris was not like most pigs.',
+      'He went to school.','Boris could not read or write. But he could play during recess.',
+      'Boris liked recess, and he liked school.'],
+    q:[
+      {q:'What is this story about?', th:'เรื่องนี้เกี่ยวกับอะไร?', o:['A pig that goes to school','Children who play with pigs'], a:0, why:'เป็นเรื่องของหมูที่ไปโรงเรียน'},
+      {q:'How is Boris like other pigs?', th:'บอริสเหมือนหมูตัวอื่นตรงไหน?', o:['He plays with the children.','He lives on a farm.'], a:1, why:'หมูทั่วไปอยู่ในฟาร์ม บอริสก็อยู่ฟาร์ม'},
+      {q:'How is Boris like children?', th:'บอริสเหมือนเด็กๆ ตรงไหน?', o:['He likes to play at recess.','He likes to read books.'], a:0, why:'บอริสชอบเล่นตอนพักเหมือนเด็กๆ'},
+      {q:'How is Boris not like most pigs?', th:'บอริสต่างจากหมูตัวอื่นตรงไหน?', o:['He likes to sleep.','He goes to school.'], a:1, why:'หมูส่วนใหญ่ไม่ไปโรงเรียน แต่บอริสไป'},
+      {q:'Why does Boris go to school?', th:'ทำไมบอริสถึงไปโรงเรียน?', o:['Because he likes to read','Because he likes to have fun'], a:1, why:'เขาอ่านเขียนไม่ได้ แต่ชอบเล่นตอนพัก'}
+    ]},
+  { key:'ram', title:'The Ram and the Jam', th:'แกะกับแยม', emoji:'🐏', color:'gold', src:'Phonics Unit 1 · sight words: has, where, on, no, and',
+    lines:['The ram has a cookie.','Where is the jam? Where is the yam?','On the map? No, on the desk!',
+      'The ram has a yam and jam.','The ram naps under the desk.'],
+    q:[
+      {q:'What does the ram have first?', th:'ตอนแรกแกะมีอะไร?', o:['A cookie','A map'], a:0, why:'The ram has a cookie.'},
+      {q:'Where are the jam and the yam?', th:'แยมกับมันเทศอยู่ที่ไหน?', o:['On the map','On the desk'], a:1, why:'No, on the desk!'},
+      {q:'What does the ram do at the end?', th:'ตอนจบแกะทำอะไร?', o:['It naps under the desk.','It goes to school.'], a:0, why:'The ram naps under the desk.'}
+    ]},
+  { key:'ratbag', title:'A Rat in the Bag', th:'หนูในกระเป๋า', emoji:'🐀', color:'purple', src:'Phonics Unit 2 · sight words: a, has, his, is, at',
+    lines:['A man has a can in his bag.','A rat sits in the can.','The rat is fat.','The man looks at the rat.'],
+    q:[
+      {q:'What is in the bag?', th:'ในกระเป๋ามีอะไร?', o:['A can','A cap'], a:0, why:'A man has a can in his bag.'},
+      {q:'Who sits in the can?', th:'ใครนั่งอยู่ในกระป๋อง?', o:['A cat','A rat'], a:1, why:'A rat sits in the can.'},
+      {q:'How is the rat?', th:'หนูตัวนี้เป็นอย่างไร?', o:['It is fat.','It is sad.'], a:0, why:'The rat is fat.'}
+    ]},
+  { key:'hen', title:'The Wet Hen', th:'แม่ไก่เปียกขึ้นเครื่องบิน', emoji:'🐔', color:'cyan', src:'Phonics Unit 3 · sight words: goes, to, she, OK, get',
+    lines:['The wet hen goes to the jet.','"No wet pets!"','The hen begs. She has an egg.','"OK, Hen. Get on the jet."'],
+    q:[
+      {q:'Where does the hen go?', th:'แม่ไก่ไปที่ไหน?', o:['To the jet','To the bed'], a:0, why:'The wet hen goes to the jet.'},
+      {q:'What does the hen have?', th:'แม่ไก่มีอะไร?', o:['A pen','An egg'], a:1, why:'She has an egg.'},
+      {q:'Can the hen get on the jet?', th:'แม่ไก่ได้ขึ้นเครื่องบินไหม?', o:['Yes, she can.','No, she cannot.'], a:0, why:'"OK, Hen. Get on the jet."'}
+    ]},
+  { key:'rainy', title:'A Rainy Saturday', th:'วันเสาร์ฝนตก', emoji:'🌧️', color:'blue', src:'Reading Comprehension',
+    lines:['It rains all morning on Saturday.','Nina cannot ride her bicycle outside.',
+      'She stays at home and makes a puzzle with her brother.','In the afternoon, they drink warm milk and read comics.',
+      'Nina says the rainy day is still fun.'],
+    q:[
+      {q:'When does it rain?', th:'ฝนตกเมื่อไหร่?', o:['On Monday morning','On Saturday morning'], a:1, why:'It rains all morning on Saturday.'},
+      {q:'What can Nina not do?', th:'นีน่าทำอะไรไม่ได้?', o:['Ride her bicycle outside','Go to school'], a:0, why:'Nina cannot ride her bicycle outside.'},
+      {q:'Who makes a puzzle with Nina?', th:'ใครต่อจิ๊กซอว์กับนีน่า?', o:['Her sister','Her brother'], a:1, why:'…makes a puzzle with her brother.'},
+      {q:'What do they drink in the afternoon?', th:'ตอนบ่ายพวกเขาดื่มอะไร?', o:['Warm milk','Juice'], a:0, why:'They drink warm milk.'},
+      {q:'How does Nina feel about the rainy day?', th:'นีน่ารู้สึกอย่างไรกับวันฝนตก?', o:['It is still fun.','It is boring.'], a:0, why:'Nina says the rainy day is still fun.'}
+    ]},
+  { key:'ben', title:"Ben's Vegetable Garden", th:'สวนผักของเบน', emoji:'🥒', color:'lime', src:'Reading Comprehension',
+    lines:['Ben has a small garden behind his house.','He waters the plants every morning before school.',
+      'Today he sees two red tomatoes and a long cucumber.','He picks the vegetables and puts them in a basket.',
+      'His mother uses them to make salad for dinner.'],
+    q:[
+      {q:"Where is Ben's garden?", th:'สวนของเบนอยู่ที่ไหน?', o:['Behind his house','In the park'], a:0, why:'Ben has a small garden behind his house.'},
+      {q:'When does Ben water the plants?', th:'เบนรดน้ำต้นไม้ตอนไหน?', o:['Every night','Every morning before school'], a:1, why:'…every morning before school.'},
+      {q:'What does Ben see today?', th:'วันนี้เบนเห็นอะไร?', o:['Carrots and onions','Two red tomatoes and a long cucumber'], a:1, why:'Today he sees two red tomatoes and a long cucumber.'},
+      {q:'Where does he put the vegetables?', th:'เขาใส่ผักไว้ที่ไหน?', o:['In a basket','On the table'], a:0, why:'…puts them in a basket.'},
+      {q:'What does his mother make for dinner?', th:'แม่ทำอะไรเป็นอาหารเย็น?', o:['Soup','Salad'], a:1, why:'…make salad for dinner.'}
+    ]}
+];
+
+/* ---- 2.3 พจนานุกรมคำในเรื่อง ---- */
+const DICT = {
+  a:'หนึ่ง (คำนำหน้านาม)', the:'คำนำหน้านาม (ที่เจาะจง)', an:'หนึ่ง (หน้าเสียงสระ)',
+  jeffrey:'เจฟฟรีย์ (ชื่อ)', malik:'มาลิก (ชื่อ)', boris:'บอริส (ชื่อ)', nina:'นีน่า (ชื่อ)', ben:'เบน (ชื่อ)', ted:'เท็ด (ชื่อ)',
+  chased:'ไล่ตาม', around:'รอบๆ', big:'ใหญ่', small:'เล็ก', tree:'ต้นไม้', tag:'เกมวิ่งไล่จับ', said:'พูดว่า', says:'พูดว่า',
+  you:'คุณ, เธอ', are:'เป็น, อยู่, คือ', is:'เป็น, อยู่, คือ', was:'เป็น (อดีต)', were:'เป็น (อดีต หลายคน)',
+  it:'มัน', its:'ของมัน', need:'ต้องการ', rest:'พักผ่อน', for:'เป็นเวลา, สำหรับ', minute:'นาที',
+  boys:'เด็กผู้ชาย (หลายคน)', boy:'เด็กผู้ชาย', girl:'เด็กผู้หญิง', sat:'นั่ง (อดีตของ sit)', sits:'นั่ง', down:'ลง',
+  stray:'จรจัด', cat:'แมว', walked:'เดิน (อดีต)', by:'ผ่านไป', next:'ถัดไป, ข้างๆ', to:'ไปยัง', them:'พวกเขา',
+  looks:'ดูเหมือน, มองดู', look:'มอง, ดู', hungry:'หิว', went:'ไป (อดีตของ go)', goes:'ไป', go:'ไป', inside:'ข้างใน',
+  his:'ของเขา', her:'ของเธอ', house:'บ้าน', home:'บ้าน', he:'เขา (ผู้ชาย)', she:'เธอ (ผู้หญิง)', they:'พวกเขา',
+  got:'ได้มา, หยิบมา', get:'ได้รับ, เอา', some:'บ้าง, จำนวนหนึ่ง', food:'อาหาร', here:'ที่นี่, นี่ไง',
+  kitty:'เจ้าเหมียว', ate:'กิน (อดีตของ eat)', eat:'กิน', then:'จากนั้น', purred:'ครางเสียงคร่อกๆ', and:'และ', i:'ฉัน',
+  pig:'หมู', pigs:'หมู (หลายตัว)', lived:'อาศัยอยู่ (อดีต)', lives:'อาศัยอยู่', on:'บน', farm:'ฟาร์ม',
+  had:'มี (อดีต)', has:'มี', have:'มี', good:'ดี', life:'ชีวิต', liked:'ชอบ (อดีต)', likes:'ชอบ', like:'ชอบ, เหมือน',
+  sleep:'นอนหลับ', best:'ดีที่สุด', of:'ของ', all:'ทั้งหมด', school:'โรงเรียน', most:'ส่วนใหญ่', do:'ทำ', not:'ไม่',
+  but:'แต่', could:'สามารถ (อดีต)', can:'สามารถ, กระป๋อง', cannot:'ทำไม่ได้', read:'อ่าน', or:'หรือ', write:'เขียน',
+  play:'เล่น', played:'เล่น (อดีต)', during:'ระหว่าง', recess:'เวลาพัก', ram:'แกะตัวผู้', cookie:'คุกกี้',
+  where:'ที่ไหน', jam:'แยม', yam:'มันเทศ', map:'แผนที่', no:'ไม่', desk:'โต๊ะเรียน', naps:'งีบหลับ', under:'ใต้',
+  man:'ผู้ชาย', bag:'กระเป๋า', rat:'หนู', fat:'อ้วน', at:'ที่', wet:'เปียก', hen:'แม่ไก่', jet:'เครื่องบินเจ็ต',
+  pets:'สัตว์เลี้ยง (หลายตัว)', pet:'สัตว์เลี้ยง', begs:'อ้อนวอน', egg:'ไข่', eggs:'ไข่ (หลายฟอง)', ok:'ตกลง',
+  rains:'ฝนตก', rain:'ฝน', rainy:'ที่มีฝนตก', morning:'ตอนเช้า', saturday:'วันเสาร์', ride:'ขี่', bicycle:'จักรยาน',
+  outside:'ข้างนอก', stays:'อยู่, พัก', makes:'ทำ', make:'ทำ', puzzle:'จิ๊กซอว์', with:'กับ', brother:'พี่ชาย/น้องชาย',
+  sister:'พี่สาว/น้องสาว', afternoon:'ตอนบ่าย', drink:'ดื่ม', warm:'อุ่น', milk:'นม', comics:'หนังสือการ์ตูน',
+  still:'ยังคง', fun:'สนุก', day:'วัน', garden:'สวน', behind:'ข้างหลัง', waters:'รดน้ำ', water:'น้ำ, รดน้ำ',
+  plants:'ต้นไม้ (หลายต้น)', every:'ทุกๆ', before:'ก่อน', today:'วันนี้', sees:'เห็น', see:'เห็น', two:'สอง',
+  red:'สีแดง', tomatoes:'มะเขือเทศ', long:'ยาว', cucumber:'แตงกวา', picks:'เก็บ, เด็ด', puts:'ใส่, วาง',
+  in:'ใน', basket:'ตะกร้า', mother:'แม่', uses:'ใช้', salad:'สลัด', dinner:'อาหารเย็น', vegetables:'ผัก'
+};
+/* ---- 2.4 บทร้องคล้องจอง ---- */
+const CHANTS = [
+  { key:'jam', title:'Who Put Jam on My Cap?', th:'ใครเอาแยมมาป้ายหมวกฉัน', emoji:'🍓', color:'pink', unit:'Unit 1 · -ad -am -ap',
+    lines:[
+      {en:'Who put jam on my cap?',      th:'ใครเอาแยมมาป้ายหมวกฉัน', key:['jam','cap']},
+      {en:'Who put jam on my cap?',      th:'ใครเอาแยมมาป้ายหมวกฉัน', key:['jam','cap']},
+      {en:"You're so bad! I'm so mad!",  th:'เธอซนมาก! ฉันโกรธมาก!',  key:['bad','mad']},
+      {en:'I will tell my dad!',         th:'ฉันจะไปฟ้องพ่อ!',         key:['dad']},
+      {en:'Who put jam on my yam?',      th:'ใครเอาแยมมาป้ายมันเทศฉัน', key:['jam','yam']},
+      {en:'Who put jam on my yam?',      th:'ใครเอาแยมมาป้ายมันเทศฉัน', key:['jam','yam']},
+      {en:"You're so bad! I'm so sad!",  th:'เธอซนมาก! ฉันเสียใจมาก!', key:['bad','sad']},
+      {en:'I will tell my dad!',         th:'ฉันจะไปฟ้องพ่อ!',         key:['dad']}
+    ]},
+  { key:'rat', title:'Rat in My Bag!', th:'หนูอยู่ในกระเป๋าฉัน', emoji:'🐀', color:'purple', unit:'Unit 2 · -ag -an -at',
+    lines:[
+      {en:'Rat in my bag! Rat in my bag!', th:'หนูอยู่ในกระเป๋า! หนูอยู่ในกระเป๋า!', key:['Rat','bag']},
+      {en:"I don't want a rat in my bag!", th:'ฉันไม่อยากให้มีหนูในกระเป๋า!',        key:['rat','bag']},
+      {en:'Please, cat! Catch that rat!',  th:'ขอร้องล่ะแมว! จับหนูตัวนั้นที!',      key:['cat','rat']},
+      {en:'Please, cat! Catch that rat!',  th:'ขอร้องล่ะแมว! จับหนูตัวนั้นที!',      key:['cat','rat']},
+      {en:'Rat in my cap! Rat in my cap!', th:'หนูอยู่ในหมวก! หนูอยู่ในหมวก!',      key:['Rat','cap']},
+      {en:"I don't want a rat in my cap!", th:'ฉันไม่อยากให้มีหนูในหมวก!',          key:['rat','cap']},
+      {en:'Please, cat! Catch that rat!',  th:'ขอร้องล่ะแมว! จับหนูตัวนั้นที!',      key:['cat','rat']},
+      {en:'Please, cat! Catch that rat!',  th:'ขอร้องล่ะแมว! จับหนูตัวนั้นที!',      key:['cat','rat']}
+    ]},
+  { key:'hen', title:'Red Hen', th:'แม่ไก่สีแดง', emoji:'🐔', color:'cyan', unit:'Unit 3 · -ed -eg -en -et',
+    lines:[
+      {en:'Red hen, she has ten little brown eggs.', th:'แม่ไก่สีแดงมีไข่สีน้ำตาลใบเล็กสิบฟอง', key:['Red','hen','ten','eggs']},
+      {en:'She goes to sleep!',          th:'แล้วเธอก็หลับไป!',           key:[]},
+      {en:'Then peep, peep, peep!',      th:'แล้วก็ เจี๊ยบ เจี๊ยบ เจี๊ยบ!', key:[]},
+      {en:'The little eggs have legs!',  th:'ไข่ใบน้อยมีขาแล้ว!',         key:['eggs','legs']},
+      {en:'Baby chicks are on the bed.', th:'ลูกเจี๊ยบอยู่บนเตียง',       key:['bed']},
+      {en:'Chicks are on the chair!',    th:'ลูกเจี๊ยบอยู่บนเก้าอี้!',    key:[]},
+      {en:'Get a net! Get a net!',       th:'เอาสวิงมา! เอาสวิงมา!',      key:['net']},
+      {en:'Baby chicks are everywhere!', th:'ลูกเจี๊ยบอยู่เต็มไปหมด!',    key:[]}
+    ]}
+];
+
+/* ---- 2.5 Sight Words ---- */
+const SIGHT = [
+  {w:'has',th:'มี',set:'Unit 1'},{w:'where',th:'ที่ไหน',set:'Unit 1'},{w:'on',th:'บน',set:'Unit 1'},
+  {w:'no',th:'ไม่',set:'Unit 1'},{w:'and',th:'และ',set:'Unit 1'},
+  {w:'a',th:'หนึ่ง (คำนำหน้านาม)',set:'Unit 2'},{w:'his',th:'ของเขา',set:'Unit 2'},
+  {w:'is',th:'เป็น, อยู่, คือ',set:'Unit 2'},{w:'at',th:'ที่',set:'Unit 2'},
+  {w:'goes',th:'ไป',set:'Unit 3'},{w:'to',th:'ไปยัง',set:'Unit 3'},{w:'she',th:'เธอ',set:'Unit 3'},
+  {w:'OK',th:'ตกลง',set:'Unit 3'},{w:'get',th:'ได้รับ, เอา',set:'Unit 3'},
+  {w:'the',th:'คำนำหน้านาม',set:'Test'},{w:'this',th:'อันนี้',set:'Test'},{w:'thick',th:'หนา',set:'Test'},
+  {w:'of',th:'ของ',set:'Test'},{w:'over',th:'เหนือ, ข้าม',set:'Test'},{w:'or',th:'หรือ',set:'Test'},
+  {w:'fun',th:'สนุก',set:'Test'},{w:'from',th:'จาก',set:'Test'},{w:'fresh',th:'สด',set:'Test'},
+  {w:'had',th:'มี (อดีต)',set:'Test'},{w:'have',th:'มี',set:'Test'},{w:'when',th:'เมื่อไหร่',set:'Test'},
+  {w:'where',th:'ที่ไหน',set:'Test'},{w:'which',th:'อันไหน',set:'Test'},
+  {w:'throw',th:'ขว้าง, โยน',set:'Test'},{w:'through',th:'ผ่าน, ทะลุ',set:'Test'},{w:'thing',th:'สิ่งของ',set:'Test'}
+];
+
+/* ---- 2.6 คำสำหรับเกมสลับตัวอักษร ---- */
+const SCRAMBLE = [
+  {w:'cat',th:'แมว',emoji:'🐱'},{w:'sad',th:'เศร้า',emoji:'😢'},{w:'jam',th:'แยม',emoji:'🍓'},
+  {w:'cap',th:'หมวกแก๊ป',emoji:'🧢'},{w:'map',th:'แผนที่',emoji:'🗺️'},{w:'bag',th:'กระเป๋า',emoji:'🎒'},
+  {w:'van',th:'รถตู้',emoji:'🚐'},{w:'rat',th:'หนู',emoji:'🐀'},{w:'bed',th:'เตียงนอน',emoji:'🛏️'},
+  {w:'leg',th:'ขา',emoji:'🦵'},{w:'hen',th:'แม่ไก่',emoji:'🐔'},{w:'jet',th:'เครื่องบิน',emoji:'✈️'},
+  {w:'net',th:'สวิง',emoji:'🥅'},{w:'pen',th:'ปากกา',emoji:'🖊️'},{w:'ten',th:'สิบ',emoji:'🔟'},
+  {w:'pin',th:'เข็มหมุด',emoji:'📌'},{w:'bus',th:'รถบัส',emoji:'🚌'},{w:'hut',th:'กระท่อม',emoji:'🛖'},
+  {w:'mug',th:'แก้วมีหู',emoji:'☕'},{w:'dog',th:'สุนัข',emoji:'🐶'},{w:'doll',th:'ตุ๊กตา',emoji:'🪆'},
+  {w:'book',th:'หนังสือ',emoji:'📕'},{w:'look',th:'มอง',emoji:'👀'},{w:'frog',th:'กบ',emoji:'🐸'},
+  {w:'duck',th:'เป็ด',emoji:'🦆'},{w:'ship',th:'เรือใหญ่',emoji:'🚢'},
+  {w:'kitten',th:'ลูกแมว',emoji:'🐈'},{w:'puppy',th:'ลูกสุนัข',emoji:'🐕'}
+];
+
+/* ---- 2.7 เกมโยง (Match & Link) ---- */
+const MATCH = {
+  animal:{ label:'🐾 สัตว์กับลูกของมัน', pairs:[
+    {l:'cat',icon:'🐱',r:'kitten',th:'ลูกแมว'},{l:'dog',icon:'🐶',r:'puppy',th:'ลูกสุนัข'},
+    {l:'hen',icon:'🐔',r:'chick',th:'ลูกเจี๊ยบ'},{l:'duck',icon:'🦆',r:'duckling',th:'ลูกเป็ด'},
+    {l:'frog',icon:'🐸',r:'tadpole',th:'ลูกอ๊อด'}
+  ]},
+  sentence:{ label:'🔗 ต่อประโยคให้สมบูรณ์', pairs:[
+    {l:'The boys',icon:'👦',r:'played tag.',th:'เด็กๆ เล่นวิ่งไล่จับ'},
+    {l:'A stray cat',icon:'🐈',r:'walked by.',th:'แมวจรจัดเดินผ่านมา'},
+    {l:'Malik got',icon:'🥫',r:'some cat food.',th:'มาลิกไปเอาอาหารแมวมา'},
+    {l:'The hungry cat',icon:'😺',r:'ate the food.',th:'แมวหิวกินอาหาร'},
+    {l:'Then it',icon:'💗',r:'purred and purred.',th:'แล้วมันก็ครางเสียงคร่อกๆ'}
+  ]},
+  syn:{ label:'🪄 คำที่แปลเหมือนกัน', pairs:[
+    {l:'little',icon:'🐜',r:'small',th:'เล็ก'},{l:'happy',icon:'😄',r:'glad',th:'ดีใจ'},
+    {l:'grin',icon:'😁',r:'smile',th:'ยิ้ม'},{l:'jump',icon:'🦘',r:'hop',th:'กระโดด'},
+    {l:'big',icon:'🐘',r:'large',th:'ใหญ่'}
+  ]},
+  number:{ label:'🔢 จำนวนกับคำอ่าน', pairs:[
+    {l:'1 🦎',icon:'1️⃣',r:'one newt',th:'ซาลาแมนเดอร์เล็ก 1 ตัว'},
+    {l:'2 🐸',icon:'2️⃣',r:'two toads',th:'คางคก 2 ตัว'},
+    {l:'3 🦎',icon:'3️⃣',r:'three salamanders',th:'ซาลาแมนเดอร์ 3 ตัว'},
+    {l:'4 🐸',icon:'4️⃣',r:'four frogs',th:'กบ 4 ตัว'},
+    {l:'10 🥚',icon:'🔟',r:'ten eggs',th:'ไข่ 10 ฟอง'}
+  ]}
+};
+
+/* ---- 2.8 เกมแปล ---- */
+const TRANSLATE = [
+  {q:'hungry',p:'คำนี้แปลว่าอะไร?',o:['หิว','ง่วง','เหนื่อย','ดีใจ'],a:0},
+  {q:'tree',p:'คำนี้แปลว่าอะไร?',o:['ดอกไม้','ต้นไม้','ใบไม้','ภูเขา'],a:1},
+  {q:'kitten',p:'คำนี้แปลว่าอะไร?',o:['ลูกหมา','ลูกเป็ด','ลูกแมว','ลูกไก่'],a:2},
+  {q:'small',p:'คำนี้แปลว่าอะไร?',o:['ใหญ่','สูง','ยาว','เล็ก'],a:3},
+  {q:'glad',p:'คำนี้แปลว่าอะไร?',o:['ดีใจ','โกรธ','กลัว','เศร้า'],a:0},
+  {q:'wet',p:'คำนี้แปลว่าอะไร?',o:['ร้อน','เปียก','แห้ง','เย็น'],a:1},
+  {q:'egg',p:'คำนี้แปลว่าอะไร?',o:['นม','ขนมปัง','ไข่','เนย'],a:2},
+  {q:'basket',p:'คำนี้แปลว่าอะไร?',o:['จาน','ถ้วย','ช้อน','ตะกร้า'],a:3},
+  {q:'recess',p:'คำนี้แปลว่าอะไร?',o:['เวลาพัก','การบ้าน','ห้องเรียน','ครู'],a:0},
+  {q:'garden',p:'คำนี้แปลว่าอะไร?',o:['ครัว','สวน','ห้องน้ำ','โรงรถ'],a:1},
+  {q:'scissors',p:'คำนี้แปลว่าอะไร?',o:['ดินสอ','ยางลบ','กรรไกร','กาว'],a:2},
+  {q:'eraser',p:'คำนี้แปลว่าอะไร?',o:['กระดาษ','หนังสือ','ดินสอ','ยางลบ'],a:3},
+  {q:'The cat was hungry.',p:'ประโยคนี้แปลว่าอะไร?',o:['แมวกำลังนอน','แมวตัวนั้นหิว','แมววิ่งเร็ว','แมวสีขาว'],a:1},
+  {q:'The boys sat down.',p:'ประโยคนี้แปลว่าอะไร?',o:['เด็กๆ วิ่งไป','เด็กๆ ยืนขึ้น','เด็กๆ นั่งลง','เด็กๆ กลับบ้าน'],a:2},
+  {q:'He got some cat food.',p:'ประโยคนี้แปลว่าอะไร?',o:['เขาซื้อแมวมา','เขาให้น้ำแมว','เขาเล่นกับแมว','เขาไปเอาอาหารแมวมา'],a:3},
+  {q:'The rat is fat.',p:'ประโยคนี้แปลว่าอะไร?',o:['หนูตัวอ้วน','หนูตัวผอม','หนูวิ่งเร็ว','หนูหลับอยู่'],a:0},
+  {q:'The ram naps under the desk.',p:'ประโยคนี้แปลว่าอะไร?',o:['แกะกินคุกกี้','แกะงีบหลับใต้โต๊ะ','แกะวิ่งรอบโต๊ะ','แกะนั่งบนโต๊ะ'],a:1},
+  {q:'She has ten little brown eggs.',p:'ประโยคนี้แปลว่าอะไร?',o:['เธอมีลูกเจี๊ยบสิบตัว','เธอมีเตียงสิบเตียง','เธอมีไข่สีน้ำตาลใบเล็กสิบฟอง','เธอมีปากกาสิบด้าม'],a:2},
+  {q:'It rains all morning on Saturday.',p:'ประโยคนี้แปลว่าอะไร?',o:['วันเสาร์แดดออกทั้งวัน','วันอาทิตย์ฝนตก','วันเสาร์ตอนบ่ายฝนตก','วันเสาร์ฝนตกทั้งเช้า'],a:3},
+  {q:'He waters the plants every morning.',p:'ประโยคนี้แปลว่าอะไร?',o:['เขารดน้ำต้นไม้ทุกเช้า','เขาเก็บผักทุกเช้า','เขาไปโรงเรียนทุกเช้า','เขาดื่มนมทุกเช้า'],a:0},
+  {q:'Boris could not read or write.',p:'ประโยคนี้แปลว่าอะไร?',o:['บอริสอ่านหนังสือเก่ง','บอริสอ่านและเขียนไม่ได้','บอริสชอบเขียนหนังสือ','บอริสไม่ไปโรงเรียน'],a:1},
+  {q:'The wet hen goes to the jet.',p:'ประโยคนี้แปลว่าอะไร?',o:['แม่ไก่นอนบนเตียง','แม่ไก่กินไข่','แม่ไก่เปียกเดินไปที่เครื่องบิน','แม่ไก่วิ่งหนีแมว'],a:2}
+];
+
+/* ---- 2.9 ฉากหาคำศัพท์ 3 ฉาก ---- */
+const SCENES = [
+  { key:'class', label:'🏫 ห้องเรียน', title:'Going to School', src:'Scholastic · Categories',
+    bg:'linear-gradient(180deg,#E8F3FF 0%,#FFF7E8 100%)',
+    items:[
+      {w:'pencil',th:'ดินสอ',icon:'✏️',x:26,y:74,size:54,rot:-12},
+      {w:'scissors',th:'กรรไกร',icon:'✂️',x:41,y:79,size:52,rot:10},
+      {w:'book',th:'หนังสือ',icon:'📖',x:33,y:66,size:56,rot:0},
+      {w:'paper',th:'กระดาษ',icon:'📄',x:74,y:62,size:52,rot:5},
+      {w:'glue',th:'กาว',icon:'🧴',x:21,y:24,size:48,rot:0},
+      {w:'eraser',th:'ยางลบ',icon:'🩹',x:62,y:44,size:46,rot:-8},
+      {w:'fish',th:'ปลา',icon:'🐠',x:36,y:22,size:50,rot:0},
+      {w:'chair',th:'เก้าอี้',icon:'🪑',x:12,y:52,size:52,rot:0},
+      {w:'clock',th:'นาฬิกา',icon:'🕐',x:87,y:16,size:48,rot:0},
+      {w:'cat',th:'แมว (บนกระดาน)',icon:'🐱',x:60,y:17,size:52,rot:0},
+      {w:'bear',th:'ตุ๊กตาหมี',icon:'🧸',x:88,y:76,size:50,rot:0},
+      {w:'window',th:'หน้าต่าง',icon:'🪟',x:50,y:16,size:48,rot:0}
+    ]},
+  { key:'pond', label:'🐸 บ่อน้ำ', title:'A Pond Picture', src:'Scholastic · Number words',
+    bg:'linear-gradient(180deg,#DDF5E6 0%,#D4EEFF 100%)',
+    items:[
+      {w:'frog',th:'กบ',icon:'🐸',x:20,y:70,size:56,rot:0},
+      {w:'toad',th:'คางคก',icon:'🐸',x:63,y:81,size:50,rot:8},
+      {w:'newt',th:'ซาลาแมนเดอร์เล็ก',icon:'🦎',x:82,y:62,size:52,rot:-10},
+      {w:'salamander',th:'ซาลาแมนเดอร์',icon:'🦎',x:32,y:30,size:56,rot:6},
+      {w:'grass',th:'หญ้า',icon:'🌾',x:70,y:34,size:50,rot:0},
+      {w:'water',th:'น้ำ',icon:'💧',x:47,y:52,size:48,rot:0},
+      {w:'rock',th:'ก้อนหิน',icon:'🪨',x:15,y:88,size:48,rot:0},
+      {w:'leaf',th:'ใบไม้',icon:'🍃',x:88,y:26,size:48,rot:14},
+      {w:'sun',th:'ดวงอาทิตย์',icon:'☀️',x:10,y:14,size:52,rot:0},
+      {w:'fish',th:'ปลา',icon:'🐟',x:56,y:64,size:48,rot:0},
+      {w:'egg',th:'ไข่',icon:'🥚',x:40,y:88,size:44,rot:0},
+      {w:'tree',th:'ต้นไม้',icon:'🌳',x:93,y:80,size:52,rot:0}
+    ]},
+  { key:'room', label:'🛋️ ห้องนั่งเล่น', title:'Browsing on the Internet', src:'Hidden Pictures',
+    bg:'linear-gradient(180deg,#FFEFE0 0%,#F3E7FF 100%)',
+    items:[
+      {w:'camera',th:'กล้องถ่ายรูป',icon:'📷',x:16,y:22,size:50,rot:-8},
+      {w:'crown',th:'มงกุฎ',icon:'👑',x:74,y:20,size:50,rot:6},
+      {w:'ring',th:'แหวน',icon:'💍',x:47,y:16,size:44,rot:0},
+      {w:'ruler',th:'ไม้บรรทัด',icon:'📏',x:88,y:38,size:50,rot:20},
+      {w:'comb',th:'หวี',icon:'🪮',x:30,y:44,size:46,rot:-14},
+      {w:'toothbrush',th:'แปรงสีฟัน',icon:'🪥',x:62,y:40,size:48,rot:12},
+      {w:'hammer',th:'ค้อน',icon:'🔨',x:12,y:60,size:50,rot:-20},
+      {w:'torch',th:'ไฟฉาย',icon:'🔦',x:85,y:64,size:48,rot:8},
+      {w:'pizza',th:'พิซซ่าหนึ่งชิ้น',icon:'🍕',x:26,y:82,size:50,rot:0},
+      {w:'doughnut',th:'โดนัท',icon:'🍩',x:45,y:86,size:50,rot:0},
+      {w:'cheese',th:'ชีส',icon:'🧀',x:62,y:80,size:48,rot:-6},
+      {w:'squirrel',th:'กระรอก',icon:'🐿️',x:76,y:88,size:50,rot:0},
+      {w:'worm',th:'หนอน',icon:'🪱',x:38,y:60,size:44,rot:0},
+      {w:'snake',th:'งู',icon:'🐍',x:53,y:60,size:48,rot:0},
+      {w:'flowerpot',th:'กระถางต้นไม้',icon:'🪴',x:6,y:86,size:50,rot:0},
+      {w:'muffin',th:'มัฟฟิน',icon:'🧁',x:94,y:86,size:48,rot:0}
+    ]}
+];
+
+/* ---- 2.10 เกมแข่งรถ ---- */
+const RACE_WORDS = [
+  {w:'cat',parts:['c','at'],th:'แมว',near:['cap','cut']},
+  {w:'bat',parts:['b','at'],th:'ค้างคาว',near:['bad','bet']},
+  {w:'map',parts:['m','ap'],th:'แผนที่',near:['mop','mat']},
+  {w:'jam',parts:['j','am'],th:'แยม',near:['jab','gem']},
+  {w:'sad',parts:['s','ad'],th:'เศร้า',near:['sat','said']},
+  {w:'bag',parts:['b','ag'],th:'กระเป๋า',near:['bug','back']},
+  {w:'van',parts:['v','an'],th:'รถตู้',near:['fan','ban']},
+  {w:'rat',parts:['r','at'],th:'หนู',near:['rag','rot']},
+  {w:'bed',parts:['b','ed'],th:'เตียงนอน',near:['bad','bird']},
+  {w:'leg',parts:['l','eg'],th:'ขา',near:['log','lag']},
+  {w:'hen',parts:['h','en'],th:'แม่ไก่',near:['hand','hen']},
+  {w:'ten',parts:['t','en'],th:'สิบ',near:['tan','tin']},
+  {w:'net',parts:['n','et'],th:'สวิง',near:['not','nut']},
+  {w:'jet',parts:['j','et'],th:'เครื่องบิน',near:['jut','get']},
+  {w:'pig',parts:['p','ig'],th:'หมู',near:['peg','big']},
+  {w:'mug',parts:['m','ug'],th:'แก้วมีหู',near:['mag','mud']},
+  {w:'book',parts:['b','ook'],th:'หนังสือ',near:['boot','back']},
+  {w:'cook',parts:['c','ook'],th:'ทำอาหาร',near:['coke','kick']},
+  {w:'look',parts:['l','ook'],th:'มอง',near:['lock','like']},
+  {w:'duck',parts:['d','uck'],th:'เป็ด',near:['dock','dark']}
+];
+const RIVALS = [
+  {name:'Kitty 🐱',car:'🚗',color:'#F2622F',speed:6.0},
+  {name:'Puppy 🐶',car:'🚙',color:'#12A08A',speed:5.4},
+  {name:'Ducky 🦆',car:'🏎️',color:'#3B7BEA',speed:6.6}
+];
+
+/* ---- 2.11 เติมเสียงที่หาย ---- */
+const MISSING = [
+  {w:'cat',blank:'onset',th:'แมว',emoji:'🐱',opts:['c','b','m']},
+  {w:'ship',blank:'onset',th:'เรือใหญ่',emoji:'🚢',opts:['sh','ch','th']},
+  {w:'dog',blank:'onset',th:'สุนัข',emoji:'🐶',opts:['d','b','g']},
+  {w:'lamp',blank:'onset',th:'โคมไฟ',emoji:'💡',opts:['l','r','n']},
+  {w:'window',blank:'onset',th:'หน้าต่าง',emoji:'🪟',opts:['w','v','m']},
+  {w:'geese',blank:'onset',th:'ห่าน',emoji:'🦢',opts:['g','j','k']},
+  {w:'fan',blank:'onset',th:'พัดลม',emoji:'🌀',opts:['f','v','th']},
+  {w:'pig',blank:'onset',th:'หมู',emoji:'🐷',opts:['p','b','d']},
+  {w:'teeth',blank:'rime',th:'ฟัน',emoji:'🦷',opts:['th','sh','ch']},
+  {w:'truck',blank:'rime',th:'รถบรรทุก',emoji:'🚚',opts:['ck','ch','sh']},
+  {w:'hat',blank:'rime',th:'หมวก',emoji:'🎩',opts:['at','et','ot']},
+  {w:'hen',blank:'rime',th:'แม่ไก่',emoji:'🐔',opts:['en','an','in']},
+  {w:'bed',blank:'rime',th:'เตียงนอน',emoji:'🛏️',opts:['ed','ad','od']},
+  {w:'jet',blank:'rime',th:'เครื่องบิน',emoji:'✈️',opts:['et','at','ut']},
+  {w:'bag',blank:'rime',th:'กระเป๋า',emoji:'🎒',opts:['ag','eg','ig']},
+  {w:'cap',blank:'rime',th:'หมวกแก๊ป',emoji:'🧢',opts:['ap','ip','op']},
+  {w:'book',blank:'rime',th:'หนังสือ',emoji:'📕',opts:['ook','ock','oke']},
+  {w:'mug',blank:'rime',th:'แก้วมีหู',emoji:'☕',opts:['ug','ag','og']}
+];
+
+/* ---- 2.12 เลือกคำที่ตรงกับภาพ (Circle and Write / Picture-Word Match) ---- */
+const CIRCLE = [
+  {w:'jam',emoji:'🍓',th:'แยม',opts:['dam','jam']},
+  {w:'nap',emoji:'😴',th:'งีบหลับ',opts:['nap','tap']},
+  {w:'sad',emoji:'😢',th:'เศร้า',opts:['sad','dad']},
+  {w:'bat',emoji:'🏏',th:'ไม้ตี',opts:['bat','fat']},
+  {w:'van',emoji:'🚐',th:'รถตู้',opts:['fan','van']},
+  {w:'wag',emoji:'🐕',th:'กระดิกหาง',opts:['wag','rag']},
+  {w:'leg',emoji:'🦵',th:'ขา',opts:['leg','peg']},
+  {w:'pen',emoji:'🖊️',th:'ปากกา',opts:['ten','pen']},
+  {w:'jet',emoji:'✈️',th:'เครื่องบินเจ็ต',opts:['jet','net']},
+  {w:'hen',emoji:'🐔',th:'แม่ไก่',opts:['hen','bed','cat']},
+  {w:'wed',emoji:'💒',th:'แต่งงาน',opts:['ten','wed','door']},
+  {w:'egg',emoji:'🥚',th:'ไข่',opts:['net','egg','pen']},
+  {w:'rat',emoji:'🐀',th:'หนู',opts:['man','rat','fan']},
+  {w:'can',emoji:'🥫',th:'กระป๋อง',opts:['can','man','rag']},
+  {w:'leaf',emoji:'🍃',th:'ใบไม้',opts:['life','leaf','leak']},
+  {w:'barn',emoji:'🏚️',th:'โรงนา',opts:['ball','barn','bull']},
+  {w:'moon',emoji:'🌙',th:'ดวงจันทร์',opts:['main','mine','moon']},
+  {w:'boy',emoji:'👦',th:'เด็กผู้ชาย',opts:['box','boy','boil']},
+  {w:'mouse',emoji:'🐭',th:'หนูตัวเล็ก',opts:['mice','mound','mouse']},
+  {w:'girl',emoji:'👧',th:'เด็กผู้หญิง',opts:['girl','gift','giraffe']}
+];
+
+/* ---- 2.13 แยกกลุ่มคำ (Word Sort) ---- */
+const SORTS = [
+  { key:'baby', label:'🐣 ตัวโต หรือ ตัวลูก?', bins:[
+      {k:'adult',label:'Adults',th:'พ่อแม่ (ตัวโต)',icon:'🐔',color:'orange'},
+      {k:'baby', label:'Babies',th:'ลูกสัตว์',       icon:'🐥',color:'teal'}],
+    items:[{w:'cat',bin:'adult',th:'แมว'},{w:'kitten',bin:'baby',th:'ลูกแมว'},
+      {w:'dog',bin:'adult',th:'สุนัข'},{w:'puppy',bin:'baby',th:'ลูกสุนัข'},
+      {w:'hen',bin:'adult',th:'แม่ไก่'},{w:'chick',bin:'baby',th:'ลูกเจี๊ยบ'},
+      {w:'duck',bin:'adult',th:'เป็ด'},{w:'duckling',bin:'baby',th:'ลูกเป็ด'},
+      {w:'frog',bin:'adult',th:'กบ'},{w:'tadpole',bin:'baby',th:'ลูกอ๊อด'}]},
+  { key:'fam', label:'🔤 -at / -en / -ook', bins:[
+      {k:'at',label:'-at',th:'ตระกูล -at',icon:'🐱',color:'pink'},
+      {k:'en',label:'-en',th:'ตระกูล -en',icon:'🐔',color:'cyan'},
+      {k:'ook',label:'-ook',th:'ตระกูล -ook',icon:'📕',color:'teal'}],
+    items:[{w:'cat',bin:'at',th:'แมว'},{w:'bat',bin:'at',th:'ค้างคาว'},{w:'hat',bin:'at',th:'หมวก'},
+      {w:'hen',bin:'en',th:'แม่ไก่'},{w:'pen',bin:'en',th:'ปากกา'},{w:'ten',bin:'en',th:'สิบ'},
+      {w:'book',bin:'ook',th:'หนังสือ'},{w:'look',bin:'ook',th:'มอง'},{w:'cook',bin:'ook',th:'ทำอาหาร'}]},
+  { key:'school', label:'🏫 ของใช้ในห้องเรียน หรือ สัตว์?', bins:[
+      {k:'thing',label:'School things',th:'ของใช้ในห้องเรียน',icon:'✏️',color:'blue'},
+      {k:'animal',label:'Animals',th:'สัตว์',icon:'🐸',color:'lime'}],
+    items:[{w:'pencil',bin:'thing',th:'ดินสอ'},{w:'scissors',bin:'thing',th:'กรรไกร'},
+      {w:'book',bin:'thing',th:'หนังสือ'},{w:'glue',bin:'thing',th:'กาว'},{w:'eraser',bin:'thing',th:'ยางลบ'},
+      {w:'frog',bin:'animal',th:'กบ'},{w:'toad',bin:'animal',th:'คางคก'},
+      {w:'newt',bin:'animal',th:'ซาลาแมนเดอร์เล็ก'},{w:'mouse',bin:'animal',th:'หนู'},{w:'goose',bin:'animal',th:'ห่าน'}]}
+];
+
+/* ---- 2.14 Yes or No (Focus on Skills) ---- */
+const YESNO = {
+  q:'Does this tell why a cat is a good pet?',
+  th:'ประโยคนี้บอกเหตุผลว่าทำไมแมวถึงเป็นสัตว์เลี้ยงที่ดีหรือไม่?',
+  items:[
+    {s:'Cats are friendly.',                 th:'แมวเป็นมิตร',            a:true,  why:'เป็นมิตร = เหตุผลที่ดี ✅'},
+    {s:'Cats sometimes fight with each other.', th:'บางครั้งแมวก็กัดกันเอง', a:false, why:'กัดกัน ไม่ใช่ข้อดี ❌'},
+    {s:'Cats are clean.',                    th:'แมวสะอาด',               a:true,  why:'สะอาด = ข้อดีของสัตว์เลี้ยง ✅'},
+    {s:'Cats play with you.',                th:'แมวเล่นกับเราได้',       a:true,  why:'เล่นด้วยได้ = ข้อดี ✅'},
+    {s:'Cats sleep all day.',                th:'แมวนอนทั้งวัน',          a:false, why:'นอนทั้งวัน ไม่ได้บอกว่าดี ❌'},
+    {s:'Cats purr when they are happy.',     th:'แมวครางเวลามีความสุข',   a:true,  why:'ครางเวลามีความสุข = น่ารัก ✅'},
+    {s:'Cats scratch the sofa.',             th:'แมวข่วนโซฟา',            a:false, why:'ข่วนของ ไม่ใช่ข้อดี ❌'},
+    {s:'Cats keep you warm.',                th:'แมวช่วยให้เราอบอุ่น',    a:true,  why:'อยู่ด้วยแล้วอุ่น = ข้อดี ✅'}
+  ]
+};
+
+/* ---- 2.15 Read and Colour: Classroom ---- */
+const PAINTS = [
+  {w:'red',   th:'สีแดง',      hex:'#EF3E36'},
+  {w:'blue',  th:'สีน้ำเงิน',  hex:'#3B7BEA'},
+  {w:'green', th:'สีเขียว',    hex:'#5FBB46'},
+  {w:'yellow',th:'สีเหลือง',   hex:'#FFCB2E'},
+  {w:'orange',th:'สีส้ม',      hex:'#F5872B'},
+  {w:'pink',  th:'สีชมพู',     hex:'#F556A9'},
+  {w:'brown', th:'สีน้ำตาล',   hex:'#96613A'},
+  {w:'purple',th:'สีม่วง',     hex:'#9B54DE'}
+];
+const COLOUR_TASKS = [
+  {part:'chairs', en:'Colour the chairs blue.',            th:'ระบายเก้าอี้เป็นสีน้ำเงิน',      paint:'blue'},
+  {part:'table',  en:'Colour the table green.',            th:'ระบายโต๊ะเป็นสีเขียว',           paint:'green'},
+  {part:'teddy',  en:'Colour the teddy bear brown.',       th:'ระบายตุ๊กตาหมีเป็นสีน้ำตาล',     paint:'brown'},
+  {part:'letters',en:'Colour the letters a, b and c red.', th:'ระบายตัวอักษร a b c เป็นสีแดง',  paint:'red'},
+  {part:'books',  en:'Colour the books orange.',           th:'ระบายหนังสือเป็นสีส้ม',          paint:'orange'},
+  {part:'toybox', en:'Colour the toy box pink.',           th:'ระบายกล่องของเล่นเป็นสีชมพู',    paint:'pink'},
+  {part:'faces',  en:'Colour the faces yellow.',           th:'ระบายหน้ายิ้มเป็นสีเหลือง',      paint:'yellow'}
+];
+
+/* ---- 2.16 รายชื่อเกม 15 เกม ---- */
+const GAMES = [
+  {key:'phonics',  ic:'🔊', en:'Sound It Out',  th:'ฝึกออกเสียง',   c:'orange', n:'19 ตระกูล'},
+  {key:'wall',     ic:'🔠', en:'Sound Wall',    th:'ตารางเสียง',    c:'grape',  n:'ครบทุกเสียง'},
+  {key:'chant',    ic:'🎵', en:'Rhyming Chant', th:'ร้องคล้องจอง',  c:'pink',   n:'3 บท'},
+  {key:'scramble', ic:'🔤', en:'Word Scramble', th:'สลับคำ',        c:'teal',   n:'28 คำ'},
+  {key:'missing',  ic:'🧩', en:'Missing Sound', th:'เติมเสียงที่หาย', c:'gold', n:'18 ข้อ'},
+  {key:'circle',   ic:'🎯', en:'Circle the Word', th:'เลือกคำตรงภาพ', c:'coral', n:'20 ข้อ'},
+  {key:'match',    ic:'🔗', en:'Match & Link',  th:'โยงคำ',         c:'blue',   n:'4 ชุด'},
+  {key:'sort',     ic:'🗂️', en:'Word Sort',     th:'แยกกลุ่มคำ',    c:'lime',   n:'3 ชุด'},
+  {key:'read',     ic:'📖', en:'Read Along',    th:'ฝึกอ่าน',       c:'purple', n:'7 เรื่อง'},
+  {key:'yesno',    ic:'✅', en:'Yes or No',     th:'ใช่ หรือ ไม่ใช่', c:'teal',  n:'8 ข้อ'},
+  {key:'sight',    ic:'👀', en:'Sight Words',   th:'คำที่ต้องจำ',   c:'cyan',   n:'31 คำ'},
+  {key:'translate',ic:'🇹🇭', en:'Translate',    th:'ฝึกแปล',        c:'gold',   n:'22 ข้อ'},
+  {key:'colour',   ic:'🎨', en:'Read & Colour', th:'อ่านแล้วระบายสี', c:'coral', n:'7 คำสั่ง'},
+  {key:'find',     ic:'🔍', en:'Find & Say',    th:'หาคำศัพท์',     c:'pink',   n:'3 ฉาก'},
+  {key:'race',     ic:'🏎️', en:'Phonics Race',  th:'แข่งรถออกเสียง', c:'blue',  n:'20 คำ'}
+];
+const TITLES = {
+  home:['Milin English Club','ห้องเรียนภาษาอังกฤษแสนสนุก'],
+  phonics:['Sound It Out','ฝึกออกเสียงโฟนิกส์ · Word Families'],
+  wall:['Sound Wall','ตารางเสียงโฟนิกส์ — แตะฟังได้ทุกเสียง'],
+  chant:['Rhyming Chant','ร้องคล้องจองตามครู'],
+  scramble:['Word Scramble','สลับตัวอักษรให้เป็นคำ'],
+  missing:['Missing Sound','เติมเสียงที่หายไป'],
+  circle:['Circle the Word','ดูภาพ แล้วเลือกคำที่ถูกต้อง'],
+  match:['Match & Link','โยงคำ · ต่อประโยค · คำเหมือน · จำนวน'],
+  sort:['Word Sort','แยกคำเข้ากลุ่มให้ถูก'],
+  read:['Read Along','ฝึกอ่าน · ฝึกแปล · ตอบคำถาม'],
+  yesno:['Yes or No','อ่านประโยค แล้วตอบ Yes หรือ No'],
+  sight:['Sight Words','คำที่ต้องจำทั้งคำ'],
+  translate:['Translate Quiz','ฝึกแปลอังกฤษ → ไทย'],
+  colour:['Read & Colour','อ่านคำสั่งภาษาอังกฤษ แล้วระบายสี'],
+  find:['Find & Say','หาคำศัพท์ในภาพ'],
+  race:['Phonics Race','แข่งรถ · ออกเสียงถูก รถแซงเพื่อน']
+};
+/* ═════════════════════════════════════════════════════════════════════
+   3. PHONICS ENGINE
+   ตาราง: key -> [IPA, คำที่ให้ TTS อ่านเลียนเสียง, ตัวอย่างคำ]
+   หลักการออกเสียง: onset → rime → blend → คำเต็ม
+   ═════════════════════════════════════════════════════════════════════ */
+const PHON = {
+  /* พยัญชนะต้น */
+  b:['/b/','buh','bat'],   c:['/k/','kuh','cat'],    d:['/d/','duh','dog'],   f:['/f/','fff','fan'],
+  g:['/g/','guh','geese'], h:['/h/','huh','hat'],    j:['/dʒ/','juh','jam'],  k:['/k/','kuh','kite'],
+  l:['/l/','lll','leg'],   m:['/m/','mmm','map'],    n:['/n/','nnn','net'],   p:['/p/','puh','pen'],
+  q:['/kw/','kwuh','queen'],r:['/r/','rrr','rat'],   s:['/s/','sss','sad'],   t:['/t/','tuh','ten'],
+  v:['/v/','vvv','van'],   w:['/w/','wuh','wet'],    x:['/ks/','ks','box'],   y:['/j/','yuh','yam'],
+  z:['/z/','zzz','zip'],   T:['/t/','tuh','Ted'],
+  /* สระเสียงสั้น */
+  a:['/æ/','aah','cat'],   e:['/e/','ehh','bed'],    i:['/ɪ/','ihh','pig'],
+  o:['/ɒ/','ohh','dog'],   u:['/ʌ/','uhh','mug'],
+  /* ทวิอักษร / เสียงควบ */
+  sh:['/ʃ/','shh','ship'], ch:['/tʃ/','chuh','chick'], th:['/θ/','thh','teeth'],
+  ck:['/k/','kuh','duck'], ng:['/ŋ/','ng','sing'],
+  fr:['/fr/','fruh','frog'], tr:['/tr/','truh','truck'], gr:['/gr/','gruh','grass'],
+  bl:['/bl/','bluh','blue'], cl:['/kl/','kluh','clock'], st:['/st/','stuh','stop'],
+  /* rime — เสียงท้ายคำ */
+  ad:['/æd/','add','sad'],   am:['/æm/','am','jam'],   ap:['/æp/','ap','cap'],
+  ag:['/æg/','ag','bag'],    an:['/æn/','ann','man'],  at:['/æt/','at','cat'],
+  ed:['/ed/','ed','bed'],    eg:['/eg/','eg','leg'],   en:['/en/','en','hen'],  et:['/et/','et','jet'],
+  in:['/ɪn/','in','pin'],    ig:['/ɪg/','ig','pig'],   ip:['/ɪp/','ip','ship'], it:['/ɪt/','it','sit'],
+  og:['/ɒg/','og','dog'],    op:['/ɒp/','op','mop'],   ot:['/ɒt/','ot','hot'],
+  ug:['/ʌg/','ug','mug'],    us:['/ʌs/','uss','bus'],  ut:['/ʌt/','ut','hut'],  uck:['/ʌk/','uck','duck'],
+  ook:['/ʊk/','uuhk','book'],ock:['/ɒk/','ock','lock'],oke:['/oʊk/','oke','coke'],
+  oll:['/ɒl/','oll','doll'], amp:['/æmp/','amp','lamp'], oon:['/uːn/','oon','moon'],
+  eaf:['/iːf/','eef','leaf'],arn:['/ɑːn/','arn','barn'], ouse:['/aʊs/','owss','mouse'],
+  eeth:['/iːθ/','eeth','teeth'], eese:['/iːs/','eess','geese'],
+  indow:['/ɪndoʊ/','indoh','window'], irl:['/ɜːl/','erl','girl']
+};
+function phon(p){ return PHON[p] || PHON[String(p).toLowerCase()] || ['', p, '']; }
+const ipaOf = p => phon(p)[0];
+const sayOf = p => phon(p)[1];
+const exOf  = p => phon(p)[2];
+/* แยกคำเป็นชิ้นเสียง — ไม่ระบุ = แยกทีละตัวอักษร */
+function pieces(word, given){
+  const src = (given && given.length) ? given : String(word).split('');
+  return src.map(p => ({t:p, ipa:ipaOf(p), say:sayOf(p)}));
+}
+/* rime ของคำในตระกูล: ใช้ w.ri ถ้ามี ไม่งั้นใช้ key ของตระกูล */
+const rimeOf = (w, fam) => w.ri || fam.key;
+
+/* ตารางเสียงสำหรับหน้า Sound Wall */
+const WALL = [
+  {label:'พยัญชนะ · Consonants', th:'เสียงต้นของคำ', color:'orange',
+   keys:['b','c','d','f','g','h','j','k','l','m','n','p','q','r','s','t','v','w','x','y','z']},
+  {label:'สระเสียงสั้น · Short Vowels', th:'a e i o u', color:'pink',
+   keys:['a','e','i','o','u']},
+  {label:'ทวิอักษร · Digraphs', th:'2 ตัวอักษร 1 เสียง', color:'purple',
+   keys:['sh','ch','th','ck','ng']},
+  {label:'เสียงควบ · Blends', th:'2 เสียงติดกัน', color:'teal',
+   keys:['fr','tr','gr','bl','cl','st']},
+  {label:'เสียงท้ายคำ · Rimes', th:'ตระกูลคำที่เรียนแล้ว', color:'blue',
+   keys:['ad','am','ap','ag','an','at','ed','eg','en','et','in','ig','ip','og','ot','ug','ut','uck','ook']}
+];
+
+/* ═════════════════════════════════════════════════════════════════════
+   4. VOICE — ครูผู้หญิงเท่านั้น + ออกเสียงโฟนิกส์
+   ═════════════════════════════════════════════════════════════════════ */
+const FEMALE_HINTS = ['samantha','karen','moira','tessa','fiona','serena','allison','ava','susan','nicky',
+  'kate','martha','zira','aria','jenny','michelle','google us english','google uk english female','female','woman'];
+const MALE_RE = /male|david|daniel|alex|fred|george|james|mark|guy|arthur|oliver|rishi|tom|aaron|gordon|eddy|reed|rocko|grandpa|ryan/i;
+
+const Voice = {
+  list:[], picked:null,
+  refresh(){
+    try{ this.list = (window.speechSynthesis.getVoices()||[]).filter(v=>/^en(-|_)/i.test(v.lang||'')); }
+    catch(e){ this.list = []; }
+    if (S.voiceURI){
+      const forced = this.list.find(v=>v.voiceURI===S.voiceURI);
+      if (forced){ this.picked=forced; this.paint(); return; }
+    }
+    let pick=null;
+    for (const hint of FEMALE_HINTS){ pick=this.list.find(v=>(v.name||'').toLowerCase().includes(hint)); if(pick)break; }
+    if(!pick) pick=this.list.find(v=>!MALE_RE.test(v.name||''));
+    if(!pick) pick=this.list[0]||null;
+    this.picked=pick; this.paint();
+  },
+  paint(){
+    const el=document.getElementById('voicePill'); if(!el) return;
+    el.textContent = this.picked
+      ? 'ครู ' + this.picked.name.replace(/Microsoft |Google |Online.*|\(.*?\)/g,'').trim()
+      : 'ยังไม่มีเสียง';
+  },
+  utter(text, rate, pitch){
+    try{
+      const u=new SpeechSynthesisUtterance(String(text));
+      if(this.picked){ u.voice=this.picked; u.lang=this.picked.lang; } else u.lang='en-US';
+      u.rate  = rate!=null ? rate : S.rate;
+      u.pitch = pitch!=null ? pitch : 1.22;
+      window.speechSynthesis.speak(u);
+      return u;
+    }catch(e){ return null; }
+  },
+  stop(){ try{ window.speechSynthesis.cancel(); }catch(e){} },
+  say(text, rate){ this.stop(); return this.utter(text, rate!=null?rate*S.rate/0.85:undefined); },
+  /* พูดต่อกันเป็นลำดับ พร้อม callback ทีละชิ้น */
+  sequence(items, onStep, onDone){
+    this.stop();
+    let i=0;
+    const step=()=>{
+      if(i>=items.length){ if(onDone) onDone(); return; }
+      const it=items[i];
+      if(onStep) onStep(i,it);
+      const u=this.utter(it.text, it.rate);
+      if(!u){ i++; setTimeout(step,260); return; }
+      u.onend  =()=>{ i++; setTimeout(step, it.gap!=null?it.gap:180); };
+      u.onerror=()=>{ i++; setTimeout(step,200); };
+    };
+    step();
+  },
+  /* ★ หัวใจ: ออกเสียงโฟนิกส์  c … at … c-at … cat ★ */
+  phonics(word, parts, onStep, onDone){
+    const ps=pieces(word,parts);
+    const slow=Math.max(.3, S.rate-.30), mid=Math.max(.3, S.rate-.32), full=Math.max(.4, S.rate-.06);
+    const seq=ps.map(p=>({text:p.say, rate:slow, gap:Math.round(250/S.rate)}));
+    seq.push({text:ps.map(p=>p.say).join(' '), rate:mid, gap:Math.round(280/S.rate)});
+    seq.push({text:word, rate:full, gap:0});
+    this.sequence(seq,onStep,onDone);
+  }
+};
+
+/* ═════════════════════════════════════════════════════════════════════
+   5. APP CORE
+   ═════════════════════════════════════════════════════════════════════ */
+const SAVE_KEY='milin.club.v2';
+const SPEEDS=[{k:.55,ic:'🐢',n:'ช้ามาก'},{k:.72,ic:'🐇',n:'ช้า'},{k:.85,ic:'🚶',n:'ปกติ'},{k:1.0,ic:'⚡',n:'เร็ว'}];
+
+const S=Object.assign({
+  screen:'home', stars:0,
+  kidName:'Milin', showThai:true, rate:.72, voiceURI:'',
+  famIdx:0, wordIdx:0,
+  wallIdx:0, wallKey:'',
+  chantIdx:0, chantLine:-1,
+  scrIdx:0, scrTiles:[], scrPicked:[], scrMsg:'', scrOk:false, scrBad:false,
+  misIdx:0, misPick:null,
+  cirIdx:0, cirPick:null,
+  matMode:'animal', matLeft:[], matRight:[], matSel:null, matDone:{}, matBad:null,
+  sortIdx:0, sortQueue:[], sortDone:0, sortBad:false, sortMsg:'',
+  storyIdx:0, storyTab:'read', tipWord:null, qIdx:0, qPick:null, readLine:-1,
+  ynIdx:0, ynPick:null,
+  sightIdx:0, sightOpts:[], sightPick:null,
+  trIdx:0, trPick:null,
+  colTask:0, colPaint:'blue', colFill:{}, colMsg:'',
+  sceneIdx:0, findSel:null, findGot:{}, findMsg:'', findBad:null,
+  raceMode:'tap', raceIdx:0, racePos:[4,4,4,4], raceMsg:'', raceOk:null,
+  raceHeard:'', raceListening:false, raceOver:false, raceChoice:null
+}, load());
+
+function load(){
+  try{
+    const d=JSON.parse(localStorage.getItem(SAVE_KEY)||'{}');
+    return {stars:d.stars|0, kidName:d.kidName||'Milin', showThai:d.showThai!==false,
+            rate:d.rate||.72, voiceURI:d.voiceURI||''};
+  }catch(e){ return {}; }
+}
+function save(){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify({
+    stars:S.stars, kidName:S.kidName, showThai:S.showThai, rate:S.rate, voiceURI:S.voiceURI })); }catch(e){}
+}
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const C =n=>getComputedStyle(document.documentElement).getPropertyValue('--'+n).trim();
+const shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[b[i],b[j]]=[b[j],b[i]];}return b;};
+const th=s=>S.showThai?s:'';
+/* สลับตัวเลือกแบบคงที่ต่อข้อ (ไม่เด้งตอน re-render) แต่กระจายดี */
+function shuffleStable(arr, seed){
+  const b=arr.slice();
+  let t=(seed+1)>>>0;
+  t=Math.imul(t^(t>>>16),0x45D9F3B)>>>0; t=Math.imul(t^(t>>>16),0x45D9F3B)>>>0; t=(t^(t>>>16))>>>0;
+  const rnd=()=>{ t=(t+0x6D2B79F5)>>>0; let x=Math.imul(t^(t>>>15),1|t); x=(x+Math.imul(x^(x>>>7),61|x))^x;
+    return ((x^(x>>>14))>>>0)/4294967296; };
+  for(let i=b.length-1;i>0;i--){ const j=Math.floor(rnd()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; }
+  return b;
+}
+function star(n){
+  S.stars+=n; const e=$('#starCount');
+  if(e){ e.textContent=S.stars; const p=e.parentElement; p.classList.remove('pop'); void p.offsetWidth; p.classList.add('pop'); }
+  save();
+}
+function paintSpeed(){
+  $('#speedBox').innerHTML = '<b>เสียง</b>' + SPEEDS.map(s=>
+    `<button class="${Math.abs(S.rate-s.k)<.02?'on':''}" data-act="speed" data-k="${s.k}" title="${s.n}">${s.ic}</button>`).join('');
+}
+function go(screen){
+  Voice.stop();
+  S.screen=screen;
+  if(screen==='phonics'){ S.famIdx=0; S.wordIdx=0; }
+  if(screen==='wall'){ S.wallIdx=0; S.wallKey=''; }
+  if(screen==='scramble') loadScramble(0);
+  if(screen==='missing'){ S.misIdx=0; S.misPick=null; }
+  if(screen==='circle'){ S.cirIdx=0; S.cirPick=null; }
+  if(screen==='match') loadMatch(S.matMode);
+  if(screen==='sort') loadSort(0);
+  if(screen==='read'){ S.storyTab='read'; S.qIdx=0; S.qPick=null; S.tipWord=null; S.readLine=-1; }
+  if(screen==='yesno'){ S.ynIdx=0; S.ynPick=null; }
+  if(screen==='sight') loadSight(0);
+  if(screen==='colour') loadColour();
+  if(screen==='find'){ S.findSel=null; S.findGot={}; S.findMsg=''; }
+  if(screen==='race') resetRace();
+  render();
+}
+function render(){
+  const t=TITLES[S.screen]||TITLES.home;
+  $('#scrTitle').textContent = S.screen==='home' ? (S.kidName+' English Club') : t[0];
+  $('#scrSub').textContent = t[1];
+  $('#homeBtn').style.visibility = S.screen==='home' ? 'hidden' : 'visible';
+  $('#starCount').textContent = S.stars;
+  paintSpeed();
+  $('#stage').innerHTML = (VIEWS[S.screen]||VIEWS.home)();
+}
+document.addEventListener('click', e=>{
+  const t=e.target.closest('[data-act]'); if(!t) return;
+  const fn=ACT[t.dataset.act]; if(fn) fn(t.dataset, t, e);
+});
+const ACT={}, VIEWS={};
+ACT.home     = ()=>go('home');
+ACT.open     = d=>go(d.k);
+ACT.speed    = d=>{ S.rate=+d.k; save(); paintSpeed(); Voice.say('Listen. '+ (S.kidName||'Milin')); };
+ACT.testvoice= ()=>Voice.say('Hello '+S.kidName+'. I am your phonics teacher. Let us read together.');
+ACT.say      = d=>Voice.say(d.t, d.r?+d.r:undefined);
+ACT.phonics  = d=>Voice.phonics(d.w, d.p?d.p.split('|'):null);
+
+/* ปุ่มมาตรฐาน: ฟังทีละเสียง / ฟังคำเต็ม  — ใช้ซ้ำได้ทุกเกม */
+const btnSlow = (w,p,cls)=>`<button class="btn ${cls||''}" data-act="phonics" data-w="${esc(w)}" data-p="${esc(p||'')}">🐢 ฟังทีละเสียง</button>`;
+const btnWord = (w,cls)=>`<button class="btn ${cls||'ghost'}" data-act="say" data-t="${esc(w)}" data-r="0.78">🔊 ฟังคำเต็ม</button>`;
+/* ═════════════════════════════════════════════════════════════════════
+   6. GAMES
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* ---------- 6.0 HOME ---------- */
+VIEWS.home = ()=>`
+  <div class="hero">
+    <div class="cat float">🐱</div>
+    <div>
+      <h2>สวัสดี <em>${esc(S.kidName)}</em> วันนี้จะเล่นเกมไหนดี?</h2>
+      <p>ทุกเกมออกเสียงแบบโฟนิกส์โดยครูผู้หญิง · ปรับความเร็วเสียงได้ที่ปุ่ม 🐢🐇🚶⚡ ด้านบน</p>
+    </div>
+  </div>
+  <div class="grid">
+    ${GAMES.map(g=>`
+      <button class="gcard" data-act="open" data-k="${g.key}"
+        style="border-color:${C(g.c+'-t')};box-shadow:0 6px 0 ${C(g.c+'-t')}">
+        <span class="n" style="background:${C(g.c)}">${g.n}</span>
+        <div class="disc" style="background:${C(g.c)}">${g.ic}</div>
+        <div class="en" style="color:${C(g.c+'-d')}">${g.en}</div>
+        <div class="th">${g.th}</div>
+        <div class="bar" style="background:${C(g.c)}"></div>
+      </button>`).join('')}
+  </div>`;
+
+/* ---------- 6.1 SOUND IT OUT ---------- */
+VIEWS.phonics = ()=>{
+  const fam=FAMILIES[S.famIdx];
+  const w=fam.words[Math.min(S.wordIdx,fam.words.length-1)];
+  const col=C(fam.color), dark=C(fam.color+'-d'), tint=C(fam.color+'-t');
+  const ri=rimeOf(w,fam);
+  const p1=phon(w.on), p2=phon(ri);
+  return `
+  <div class="scrollx" style="margin-bottom:9px">
+    ${FAMILIES.map((f,i)=>`<button class="chip ${i===S.famIdx?'on':''}"
+      style="${i===S.famIdx?`background:${C(f.color)};border-color:${C(f.color)}`:`color:${C(f.color+'-d')};border-color:${C(f.color+'-t')}`}"
+      data-act="pfam" data-i="${i}">${f.label}</button>`).join('')}
+  </div>
+  <div class="row g16 f1" style="align-items:stretch">
+    <div class="card col f1" style="align-items:center;justify-content:center;gap:14px;border-color:${tint}">
+      <div style="font-size:76px;line-height:1" class="bob">${w.emoji}</div>
+      <div class="wordbox">
+        <button class="part" style="background:${C('orange-t')};color:${C('orange-d')}"
+          data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(w.on)}<small>${esc(p1[0])}</small></button>
+        <div class="op">+</div>
+        <button class="part" style="background:${C('teal-t')};color:${C('teal-d')}"
+          data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(ri)}<small>${esc(p2[0])}</small></button>
+        <div class="op">=</div>
+        <button class="part" style="background:${tint};color:${dark}"
+          data-act="say" data-t="${esc(w.w)}" data-r="0.78">${esc(w.w)}<small>blend</small></button>
+      </div>
+      <div style="font-size:21px;font-weight:800;color:var(--ink2)">${esc(th(w.th))}</div>
+      <div class="row g12">
+        ${btnSlow(w.w, w.on+'|'+ri)}
+        ${btnWord(w.w)}
+      </div>
+    </div>
+    <div class="col g10" style="width:400px;flex:0 0 auto">
+      <div class="card f1 col" style="gap:8px;overflow:hidden;padding:14px">
+        <div class="hint">${fam.label} · ${esc(fam.unit)} · แตะคำเพื่อฟังทีละเสียง</div>
+        <div class="rowlist f1">
+          ${fam.words.map((x,i)=>{
+            const on=i===S.wordIdx, xr=rimeOf(x,fam);
+            return `<button class="opt" data-act="pword" data-i="${i}"
+              style="${on?`background:${tint};border-color:${col}`:''}">
+              <span style="font-size:26px">${x.emoji}</span>
+              <span class="f1"><span style="font-size:24px;color:${on?dark:'var(--ink)'}">${esc(x.w)}</span>
+                <span class="th"> ${esc(th(x.th))}</span></span>
+              <span style="font-size:14px;color:var(--ink3)">${esc(ipaOf(x.on)+ipaOf(xr))}</span>
+            </button>`;
+          }).join('')}
+        </div>
+      </div>
+      <button class="soft" style="padding:13px 16px" data-act="say" data-t="${esc(w.sent)}" data-r="0.8">
+        <div style="font-size:19px;font-weight:800">🗣️ ${esc(w.sent)}</div>
+        <div class="th" style="margin-top:1px">${esc(th(w.sentTh))}</div>
+      </button>
+      <div class="row g10">
+        <button class="btn ghost sm f1 center" data-act="pprev">◀ ก่อนหน้า</button>
+        <button class="btn ghost sm f1 center" data-act="pnext">ถัดไป ▶</button>
+      </div>
+    </div>
+  </div>`;
+};
+ACT.pfam =d=>{ S.famIdx=+d.i; S.wordIdx=0; render(); const f=FAMILIES[S.famIdx]; Voice.say(sayOf(f.key),0.5); };
+ACT.pword=d=>{ S.wordIdx=+d.i; render(); const f=FAMILIES[S.famIdx],w=f.words[S.wordIdx];
+  Voice.phonics(w.w,[w.on,rimeOf(w,f)]); };
+ACT.pprev=()=>{ const n=FAMILIES[S.famIdx].words.length; S.wordIdx=(S.wordIdx-1+n)%n; render(); };
+ACT.pnext=()=>{ const n=FAMILIES[S.famIdx].words.length; S.wordIdx=(S.wordIdx+1)%n; render(); };
+
+/* ---------- 6.2 SOUND WALL (ตารางเสียงโฟนิกส์ครบชุด) ---------- */
+VIEWS.wall = ()=>{
+  const grp=WALL[S.wallIdx], col=C(grp.color), tint=C(grp.color+'-t'), dark=C(grp.color+'-d');
+  const sel=S.wallKey||grp.keys[0];
+  const p=phon(sel);
+  return `
+  <div class="scrollx" style="margin-bottom:9px">
+    ${WALL.map((g,i)=>`<button class="chip ${i===S.wallIdx?'on':''}"
+      style="${i===S.wallIdx?`background:${C(g.color)};border-color:${C(g.color)}`:`color:${C(g.color+'-d')};border-color:${C(g.color+'-t')}`}"
+      data-act="wallgrp" data-i="${i}">${esc(g.label)}</button>`).join('')}
+  </div>
+  <div class="row g16 f1" style="align-items:stretch">
+    <div class="card f1" style="border-color:${tint};overflow-y:auto;-webkit-overflow-scrolling:touch"
+      ><div class="hint" style="margin-bottom:8px">${esc(grp.th)} — แตะทีละช่องเพื่อฟังเสียงที่ถูกต้อง</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:9px">
+        ${grp.keys.map(k=>{
+          const on=k===sel, ph=phon(k);
+          return `<button data-act="wallkey" data-k="${esc(k)}"
+            style="border-radius:18px;padding:11px 4px;border:3px solid ${on?col:tint};background:${on?tint:'#FFFCF5'};
+                   display:flex;flex-direction:column;align-items:center;gap:1px">
+            <span style="font-size:28px;font-weight:900;color:${on?dark:'var(--ink)'};line-height:1.05">${esc(k)}</span>
+            <span style="font-size:12px;font-weight:800;color:var(--ink3)">${esc(ph[0])}</span>
+          </button>`;
+        }).join('')}
+      </div>
+    </div>
+    <div class="card col" style="width:340px;flex:0 0 auto;align-items:center;justify-content:center;gap:14px;border-color:${tint}">
+      <div style="font-size:86px;font-weight:900;color:${dark};line-height:1">${esc(sel)}</div>
+      <div style="font-size:26px;font-weight:800;color:var(--ink2)">${esc(p[0])}</div>
+      <button class="btn lg" style="background:${col};box-shadow:0 5px 0 ${dark}"
+        data-act="say" data-t="${esc(p[1])}" data-r="0.5">🔊 ฟังเสียงนี้</button>
+      ${p[2]?`<div class="soft tc" style="padding:12px 18px;width:100%">
+        <div class="hint">ตัวอย่างคำ</div>
+        <button style="font-size:34px;font-weight:900;color:${dark}" data-act="phonics"
+          data-w="${esc(p[2])}" data-p="">${esc(p[2])}</button>
+        <div class="hint">แตะคำเพื่อฟังทีละเสียง</div></div>`:''}
+    </div>
+  </div>`;
+};
+ACT.wallgrp=d=>{ S.wallIdx=+d.i; S.wallKey=''; render(); };
+ACT.wallkey=d=>{ S.wallKey=d.k; render(); Voice.say(sayOf(d.k),0.5); };
+
+/* ---------- 6.3 RHYMING CHANT ---------- */
+VIEWS.chant = ()=>{
+  const c=CHANTS[S.chantIdx], col=C(c.color), tint=C(c.color+'-t'), dark=C(c.color+'-d');
+  const mark=ln=>{
+    let out=esc(ln.en);
+    (ln.key||[]).forEach(k=>{ out=out.replace(new RegExp('\\b'+k+'\\b','g'),
+      `<b style="color:${col}">${k}</b>`); });
+    return out;
+  };
+  return `
+  <div class="row g8" style="margin-bottom:9px">
+    ${CHANTS.map((x,i)=>`<button class="chip ${i===S.chantIdx?'on':''}"
+      style="${i===S.chantIdx?`background:${C(x.color)};border-color:${C(x.color)}`:`color:${C(x.color+'-d')};border-color:${C(x.color+'-t')}`}"
+      data-act="cpick" data-i="${i}">${x.emoji} ${esc(x.th)}</button>`).join('')}
+    <div class="spacer"></div>
+    <button class="btn sm" style="background:${col};box-shadow:0 5px 0 ${dark}" data-act="csing">🎤 ร้องทั้งบท</button>
+    <button class="btn ghost sm" data-act="cstop">⏹ หยุด</button>
+  </div>
+  <div class="card f1 col" style="border-color:${tint};overflow:hidden">
+    <div class="row g12" style="margin-bottom:5px">
+      <div style="font-size:36px">${c.emoji}</div>
+      <div class="col f1">
+        <div style="font-size:25px;font-weight:900;color:${dark}">${esc(c.title)}</div>
+        <div class="hint">${esc(c.unit)} — แตะทีละบรรทัดเพื่อฟังเฉพาะบรรทัดนั้น · คำสีเข้มคือคำที่สัมผัสกัน</div>
+      </div>
+    </div>
+    <div class="rowlist f1">
+      ${c.lines.map((ln,i)=>`<button class="sline ${i===S.chantLine?'on':''}"
+        style="padding:8px 14px;border-radius:16px" data-act="cline" data-i="${i}">
+        <div style="font-size:26px;font-weight:700;line-height:1.32">${mark(ln)}</div>
+        <div class="th" style="font-size:15px;color:var(--ink3);font-weight:700">${esc(th(ln.th))}</div>
+      </button>`).join('')}
+    </div>
+  </div>`;
+};
+ACT.cpick=d=>{ S.chantIdx=+d.i; S.chantLine=-1; render(); };
+ACT.cline=d=>{ S.chantLine=+d.i; render(); Voice.say(CHANTS[S.chantIdx].lines[+d.i].en, 0.82); };
+ACT.cstop=()=>{ Voice.stop(); S.chantLine=-1; render(); };
+ACT.csing=()=>{
+  const c=CHANTS[S.chantIdx];
+  Voice.sequence(c.lines.map(l=>({text:l.en, rate:Math.max(.4,S.rate-.02), gap:Math.round(200/S.rate)})),
+    i=>{ S.chantLine=i; render(); },
+    ()=>{ S.chantLine=-1; star(2); render(); });
+};
+
+/* ---------- 6.4 WORD SCRAMBLE ---------- */
+function loadScramble(i){
+  const it=SCRAMBLE[i];
+  S.scrIdx=i; S.scrTiles=shuffle(it.w.split('').map((ch,k)=>({id:k,ch})));
+  S.scrPicked=[]; S.scrMsg=''; S.scrOk=false; S.scrBad=false;
+}
+VIEWS.scramble = ()=>{
+  const it=SCRAMBLE[S.scrIdx];
+  return `
+  <div class="row g10" style="margin-bottom:9px">
+    <div class="pill">ข้อ <b>&nbsp;${S.scrIdx+1} / ${SCRAMBLE.length}</b></div>
+    <div class="row g6 f1 wrap">
+      ${SCRAMBLE.map((_,i)=>`<span style="width:${i===S.scrIdx?24:11}px;height:11px;border-radius:6px;
+        background:${i===S.scrIdx?C('teal'):(i<S.scrIdx?C('teal-t'):'#EFE0CC')};display:inline-block"></span>`).join('')}
+    </div>
+  </div>
+  <div class="card f1 col ${S.scrBad?'shake':''}" style="align-items:center;justify-content:center;gap:18px;border-color:${C('teal-t')}">
+    <div style="font-size:78px;line-height:1" class="bob">${it.emoji}</div>
+    <div class="th" style="font-size:20px;font-weight:800;color:var(--ink2);min-height:25px">${esc(th(it.th))}</div>
+    <div class="row g10 wrap center">
+      ${it.w.split('').map((_,i)=>{
+        const id=S.scrPicked[i], filled=id!==undefined;
+        const ch=filled?S.scrTiles.find(t=>t.id===id).ch:'';
+        return `<button class="slot" data-act="sunpick" data-i="${i}" style="${
+          S.scrOk?`background:${C('teal-t')};border:3px solid ${C('teal')};color:${C('teal-d')}`
+                 :(filled?`background:${C('orange-t')};border:3px solid ${C('orange-t')};color:${C('orange-d')}`:'')}">${esc(ch)}</button>`;
+      }).join('')}
+    </div>
+    <div class="row g10 wrap center">
+      ${S.scrTiles.map(t=>{
+        const used=S.scrPicked.indexOf(t.id)>=0;
+        return `<button class="tile" data-act="spick" data-id="${t.id}"
+          style="background:${used?'#F3ECE3':C('orange-t')};color:${used?'#C6B7A6':C('orange-d')};
+                 box-shadow:0 5px 0 ${used?'#E5DBCE':'#F5C0A5'};opacity:${used?.45:1}">${esc(t.ch)}</button>`;
+      }).join('')}
+    </div>
+    <div class="msg" style="color:${S.scrOk?C('teal-d'):C('orange-d')}">${esc(S.scrMsg)}</div>
+    <div class="row g10">
+      ${btnSlow(it.w,'','ghost')}
+      <button class="btn ghost" data-act="sreset">↺ เริ่มใหม่</button>
+      <button class="btn" style="background:${C('teal')};box-shadow:0 5px 0 ${C('teal-d')}" data-act="snext">คำต่อไป ▶</button>
+    </div>
+  </div>`;
+};
+ACT.spick=d=>{
+  if(S.scrOk) return;
+  const id=+d.id;
+  if(S.scrPicked.indexOf(id)>=0) return;
+  S.scrPicked.push(id);
+  const word=SCRAMBLE[S.scrIdx].w;
+  if(S.scrPicked.length<word.length){ S.scrMsg=''; S.scrBad=false; render(); return; }
+  const built=S.scrPicked.map(i=>S.scrTiles.find(t=>t.id===i).ch).join('');
+  if(built===word){
+    S.scrOk=true; S.scrBad=false;
+    S.scrMsg='เก่งมาก! '+word+' = '+SCRAMBLE[S.scrIdx].th+' 🎉';
+    star(1); render(); Voice.phonics(word, word.split(''));
+  }else{
+    S.scrBad=true; S.scrMsg='ยังไม่ใช่นะ ลองอีกครั้ง 💪'; render();
+    setTimeout(()=>{ S.scrPicked=[]; S.scrBad=false; render(); },750);
+  }
+};
+ACT.sunpick=d=>{ if(!S.scrOk){ S.scrPicked=S.scrPicked.slice(0,+d.i); render(); } };
+ACT.sreset =()=>{ loadScramble(S.scrIdx); render(); };
+ACT.snext  =()=>{ loadScramble((S.scrIdx+1)%SCRAMBLE.length); render(); };
+/* ---------- 6.5 MISSING SOUND ---------- */
+const misOnset = it => it.blank==='onset' ? it.opts[0] : it.w.slice(0, it.w.length-it.opts[0].length);
+const misRime  = it => it.w.slice(misOnset(it).length);
+VIEWS.missing = ()=>{
+  const it=MISSING[S.misIdx], isOn=it.blank==='onset', correct=it.opts[0];
+  const rest=isOn ? it.w.slice(correct.length) : it.w.slice(0,it.w.length-correct.length);
+  const opts=shuffleStable(it.opts,S.misIdx);
+  const picked=S.misPick!==null, right=S.misPick===correct;
+  const blankHTML=`<span style="color:${picked?C('teal-d'):'#DCC9B4'};min-width:96px;text-align:center;
+      border-bottom:8px solid #E7D6C1;display:inline-block">${picked?esc(correct):'?'}</span>`;
+  return `
+  <div class="row g10" style="margin-bottom:9px">
+    <div class="pill">ข้อ <b>&nbsp;${S.misIdx+1} / ${MISSING.length}</b></div>
+    <div class="hint">ฟังคำ แล้วเลือก “เสียงที่หายไป”</div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" data-act="msay">👂 ฟังคำนี้</button>
+    ${btnSlow(it.w, misOnset(it)+'|'+misRime(it), 'ghost sm')}
+  </div>
+  <div class="card f1 col" style="align-items:center;justify-content:center;gap:18px;border-color:${C('gold-t')}">
+    <div style="font-size:80px" class="bob">${it.emoji}</div>
+    <div class="row" style="font-size:62px;font-weight:900;letter-spacing:2px">
+      ${isOn ? blankHTML+`<span>${esc(rest)}</span>` : `<span>${esc(rest)}</span>`+blankHTML}
+    </div>
+    <div class="th" style="font-size:20px;font-weight:800;color:var(--ink2)">${esc(th(it.th))}</div>
+    <div class="row g12 wrap center">
+      ${opts.map(o=>{
+        const isRight=o===correct;
+        const bg=picked?(isRight?C('teal-t'):(S.misPick===o?C('pink-t'):'#FFFCF5')):'#FFFCF5';
+        const bd=picked?(isRight?C('teal'):(S.misPick===o?C('pink'):C('line'))):C('line');
+        return `<button class="opt ${S.misPick===o&&!isRight?'shake':''}" data-act="mpick" data-o="${esc(o)}"
+          style="min-width:158px;justify-content:center;background:${bg};border-color:${bd};font-size:36px">
+          ${esc(o)} <span style="font-size:15px;color:var(--ink3)">${esc(ipaOf(o))}</span>
+          ${picked&&isRight?'✅':(S.misPick===o?'❌':'')}</button>`;
+      }).join('')}
+    </div>
+    <div class="msg" style="color:${!picked?'var(--ink3)':(right?C('teal-d'):C('pink-d'))}">
+      ${!picked?'แตะปุ่ม 👂 ฟังคำก่อนก็ได้นะ'
+        :(right?'ถูกต้อง! '+it.w+' = '+it.th+' ⭐⭐':'คำตอบคือ '+correct+' → '+it.w)}
+    </div>
+    <button class="btn" style="background:${C('gold')};box-shadow:0 5px 0 ${C('gold-d')}" data-act="mnext">ข้อต่อไป ▶</button>
+  </div>`;
+};
+ACT.msay =()=>Voice.say(MISSING[S.misIdx].w, 0.7);
+ACT.mpick=d=>{
+  if(S.misPick!==null) return;
+  const it=MISSING[S.misIdx];
+  S.misPick=d.o;
+  if(d.o===it.opts[0]){ star(2); Voice.say('Yes! '+it.w, 0.78); }
+  else Voice.phonics(it.w,[misOnset(it),misRime(it)]);
+  render();
+};
+ACT.mnext=()=>{ S.misIdx=(S.misIdx+1)%MISSING.length; S.misPick=null; render(); setTimeout(ACT.msay,260); };
+
+/* ---------- 6.6 CIRCLE THE WORD ---------- */
+VIEWS.circle = ()=>{
+  const it=CIRCLE[S.cirIdx];
+  const opts=shuffleStable(it.opts,S.cirIdx);
+  const picked=S.cirPick!==null, right=S.cirPick===it.w;
+  return `
+  <div class="row g10" style="margin-bottom:9px">
+    <div class="pill">ข้อ <b>&nbsp;${S.cirIdx+1} / ${CIRCLE.length}</b></div>
+    <div class="hint">ดูภาพ แล้วเลือกคำที่ตรงกับภาพ — คำที่ให้เลือกเสียงคล้ายกันมาก ต้องฟังดีๆ</div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" data-act="csayall">👂 ฟังทุกคำ</button>
+  </div>
+  <div class="card f1 col" style="align-items:center;justify-content:center;gap:22px;border-color:${C('coral-t')}">
+    <div style="font-size:104px;line-height:1" class="${picked&&right?'pop':'bob'}">${it.emoji}</div>
+    <div class="th" style="font-size:20px;font-weight:800;color:var(--ink2);min-height:26px">${esc(picked?th(it.th):'')}</div>
+    <div class="row g14 wrap center" style="gap:14px">
+      ${opts.map(o=>{
+        const isRight=o===it.w;
+        const bg=picked?(isRight?C('teal-t'):(S.cirPick===o?C('pink-t'):'#FFFCF5')):'#FFFCF5';
+        const bd=picked?(isRight?C('teal'):(S.cirPick===o?C('pink'):C('line'))):C('line');
+        return `<button class="opt ${S.cirPick===o&&!isRight?'shake':''}" data-act="cirpick" data-o="${esc(o)}"
+          style="min-width:190px;justify-content:center;background:${bg};border-color:${bd};font-size:38px;padding:16px">
+          ${esc(o)} ${picked&&isRight?'✅':(S.cirPick===o?'❌':'')}</button>`;
+      }).join('')}
+    </div>
+    <div class="msg" style="color:${!picked?'var(--ink3)':(right?C('teal-d'):C('pink-d'))}">
+      ${!picked?'แตะคำเพื่อฟังเสียงก่อนเลือกได้'
+        :(right?'ถูกต้อง! '+it.w+' = '+it.th+' ⭐⭐':'คำที่ถูกคือ '+it.w+' = '+it.th)}
+    </div>
+    <div class="row g10">
+      ${btnSlow(it.w,'','ghost')}
+      <button class="btn" style="background:${C('coral')};box-shadow:0 5px 0 ${C('coral-d')}" data-act="cirnext">ข้อต่อไป ▶</button>
+    </div>
+  </div>`;
+};
+ACT.csayall=()=>{
+  const it=CIRCLE[S.cirIdx];
+  Voice.sequence(shuffleStable(it.opts,S.cirIdx).map(o=>({text:o, rate:Math.max(.4,S.rate-.12), gap:Math.round(320/S.rate)})));
+};
+ACT.cirpick=d=>{
+  if(S.cirPick!==null) return;
+  const it=CIRCLE[S.cirIdx];
+  S.cirPick=d.o;
+  if(d.o===it.w){ star(2); Voice.say('Yes! '+it.w, 0.78); } else Voice.phonics(it.w);
+  render();
+};
+ACT.cirnext=()=>{ S.cirIdx=(S.cirIdx+1)%CIRCLE.length; S.cirPick=null; render(); };
+
+/* ---------- 6.7 MATCH & LINK ---------- */
+function loadMatch(mode){
+  const pairs=MATCH[mode].pairs;
+  S.matMode=mode;
+  S.matLeft=shuffle(pairs.map((_,i)=>i));
+  S.matRight=shuffle(pairs.map((_,i)=>i));
+  S.matSel=null; S.matDone={}; S.matBad=null;
+}
+VIEWS.match = ()=>{
+  const pairs=MATCH[S.matMode].pairs;
+  const tones=[C('orange-t'),C('teal-t'),C('blue-t'),C('purple-t'),C('gold-t')];
+  const lines=[C('orange'),C('teal'),C('blue'),C('purple'),C('gold')];
+  const done=Object.keys(S.matDone).length;
+  return `
+  <div class="row g8" style="margin-bottom:9px">
+    ${Object.keys(MATCH).map(k=>`<button class="chip ${k===S.matMode?'on':''}"
+      style="${k===S.matMode?`background:${C('blue')};border-color:${C('blue')}`:''}"
+      data-act="mmode" data-k="${k}">${MATCH[k].label}</button>`).join('')}
+    <div class="spacer"></div>
+    <div class="pill">${done===pairs.length?'ครบทุกคู่แล้ว เก่งมาก! 🎉':`จับคู่แล้ว <b>&nbsp;${done} / ${pairs.length}</b>`}</div>
+    <button class="btn ghost sm" data-act="mreset">↺ เริ่มใหม่</button>
+  </div>
+  <div class="row g16 f1" style="align-items:stretch">
+    <div class="col g9 f1" style="gap:9px">
+      ${S.matLeft.map(i=>{
+        const ok=S.matDone[i]!==undefined;
+        return `<button class="opt f1" data-act="mleft" data-i="${i}"
+          style="background:${ok?tones[S.matDone[i]%5]:'#fff'};
+                 border-color:${ok?lines[S.matDone[i]%5]:(S.matSel===i?C('blue'):C('line'))}">
+          <span style="font-size:28px">${pairs[i].icon}</span>
+          <span class="f1">${esc(pairs[i].l)}</span>
+          <span style="font-size:22px">${ok?'✅':(S.matSel===i?'👉':'')}</span></button>`;
+      }).join('')}
+    </div>
+    <div class="col g9 f1" style="gap:9px">
+      ${S.matRight.map(i=>{
+        const ok=S.matDone[i]!==undefined;
+        return `<button class="opt f1 ${S.matBad===i?'shake':''}" data-act="mright" data-i="${i}"
+          style="background:${ok?tones[S.matDone[i]%5]:'#fff'};border-color:${ok?lines[S.matDone[i]%5]:C('line')}">
+          <span class="f1"><span>${esc(pairs[i].r)}</span><br><span class="th">${esc(th(pairs[i].th))}</span></span>
+          <span style="font-size:22px">${ok?'✅':''}</span></button>`;
+      }).join('')}
+    </div>
+  </div>`;
+};
+ACT.mmode =d=>{ loadMatch(d.k); render(); };
+ACT.mreset=()=>{ loadMatch(S.matMode); render(); };
+ACT.mleft =d=>{ const i=+d.i; if(S.matDone[i]!==undefined) return; S.matSel=i; S.matBad=null;
+  Voice.say(MATCH[S.matMode].pairs[i].l,0.8); render(); };
+ACT.mright=d=>{
+  const i=+d.i, sel=S.matSel, pairs=MATCH[S.matMode].pairs;
+  if(sel===null||S.matDone[i]!==undefined) return;
+  if(sel===i){ S.matDone[i]=Object.keys(S.matDone).length; S.matSel=null; star(1);
+    Voice.say(pairs[i].l+' '+pairs[i].r,0.8); }
+  else { S.matBad=i; setTimeout(()=>{S.matBad=null;render();},600); }
+  render();
+};
+
+/* ---------- 6.8 WORD SORT ---------- */
+function loadSort(i){
+  S.sortIdx=i; S.sortQueue=shuffle(SORTS[i].items.slice());
+  S.sortDone=0; S.sortBad=false; S.sortMsg='';
+}
+VIEWS.sort = ()=>{
+  const st=SORTS[S.sortIdx];
+  const cur=S.sortQueue[0];
+  const total=st.items.length;
+  return `
+  <div class="row g8" style="margin-bottom:9px">
+    ${SORTS.map((x,i)=>`<button class="chip ${i===S.sortIdx?'on':''}"
+      style="${i===S.sortIdx?`background:${C('lime')};border-color:${C('lime')}`:''}"
+      data-act="sortset" data-i="${i}">${esc(x.label)}</button>`).join('')}
+    <div class="spacer"></div>
+    <div class="pill">แยกแล้ว <b>&nbsp;${S.sortDone} / ${total}</b></div>
+    <button class="btn ghost sm" data-act="sortreset">↺ เริ่มใหม่</button>
+  </div>
+  <div class="card f1 col" style="align-items:center;justify-content:center;gap:20px;border-color:${C('lime-t')}">
+    ${cur ? `
+      <div class="hint">ลากไม่ต้อง — แค่แตะกล่องที่ถูกต้อง</div>
+      <div class="soft ${S.sortBad?'shake':'bob'}" style="padding:20px 46px;border-color:${C('lime')}">
+        <button style="font-size:48px;font-weight:900;color:${C('lime-d')}" data-act="sortsay">${esc(cur.w)}</button>
+        <div class="th tc" style="font-size:17px;font-weight:800;color:var(--ink2)">${esc(th(cur.th))}</div>
+      </div>
+      <div class="row g16 wrap center">
+        ${st.bins.map(b=>`<button data-act="sortbin" data-k="${esc(b.k)}"
+          style="min-width:230px;border-radius:26px;border:3px solid ${C(b.color)};background:${C(b.color+'-t')};
+                 padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:3px">
+          <span style="font-size:40px">${b.icon}</span>
+          <span style="font-size:23px;font-weight:900;color:${C(b.color+'-d')}">${esc(b.label)}</span>
+          <span class="th" style="font-size:15px;font-weight:700;color:var(--ink2)">${esc(th(b.th))}</span>
+        </button>`).join('')}
+      </div>
+      <div class="msg" style="color:${S.sortBad?C('pink-d'):C('lime-d')}">${esc(S.sortMsg)}</div>
+    ` : `
+      <div style="font-size:80px" class="pop">🎉</div>
+      <div style="font-size:30px;font-weight:900;color:${C('lime-d')}">แยกครบทุกคำแล้ว เก่งมาก!</div>
+      <button class="btn" style="background:${C('lime')};box-shadow:0 5px 0 ${C('lime-d')}" data-act="sortreset">เล่นอีกครั้ง</button>
+    `}
+  </div>`;
+};
+ACT.sortset  =d=>{ loadSort(+d.i); render(); };
+ACT.sortreset=()=>{ loadSort(S.sortIdx); render(); };
+ACT.sortsay  =()=>{ const c=S.sortQueue[0]; if(c) Voice.phonics(c.w); };
+ACT.sortbin  =d=>{
+  const cur=S.sortQueue[0]; if(!cur) return;
+  if(cur.bin===d.k){
+    S.sortQueue=S.sortQueue.slice(1); S.sortDone++; S.sortBad=false;
+    S.sortMsg='ถูกต้อง! '+cur.w+' = '+cur.th+' ⭐';
+    star(1); Voice.say('Yes! '+cur.w, 0.78);
+  }else{
+    S.sortBad=true; S.sortMsg='ยังไม่ใช่นะ ลองคิดอีกที 💪';
+    Voice.say(cur.w, 0.65);
+    setTimeout(()=>{ S.sortBad=false; render(); },700);
+  }
+  render();
+};
+
+/* ---------- 6.9 READ ALONG ---------- */
+VIEWS.read = ()=>{
+  const st=STORIES[S.storyIdx], col=C(st.color), dark=C(st.color+'-d');
+  return `
+  <div class="scrollx" style="margin-bottom:8px">
+    ${STORIES.map((x,i)=>`<button class="chip ${i===S.storyIdx?'on':''}"
+      style="${i===S.storyIdx?`background:${C(x.color)};border-color:${C(x.color)}`:`color:${C(x.color+'-d')};border-color:${C(x.color+'-t')}`}"
+      data-act="stpick" data-i="${i}">${x.emoji} ${esc(x.title)}</button>`).join('')}
+  </div>
+  <div class="row g8" style="margin-bottom:8px">
+    <button class="chip ${S.storyTab==='read'?'on':''}" style="${S.storyTab==='read'?`background:${col};border-color:${col}`:''}"
+      data-act="sttab" data-k="read">📖 อ่านเรื่อง</button>
+    <button class="chip ${S.storyTab==='quiz'?'on':''}" style="${S.storyTab==='quiz'?`background:${col};border-color:${col}`:''}"
+      data-act="sttab" data-k="quiz">❓ คำถาม ${st.q.length} ข้อ</button>
+    <div class="spacer"></div>
+    <div class="hint">${esc(st.src)}</div>
+  </div>
+  ${S.storyTab==='read' ? readBody(st,col,dark) : quizBody(st,col,dark)}`;
+};
+function readBody(st,col,dark){
+  return `
+  <div class="row g16 f1" style="align-items:stretch">
+    <div class="card f1 col" style="overflow:hidden;border-color:${C(st.color+'-t')}">
+      <div class="row g12" style="margin-bottom:4px">
+        <div style="font-size:36px">${st.emoji}</div>
+        <div class="col f1">
+          <div style="font-size:24px;font-weight:900;color:${dark}">${esc(st.title)}</div>
+          <div class="th hint">${esc(th(st.th))}</div>
+        </div>
+        <button class="btn sm" style="background:${col};box-shadow:0 5px 0 ${dark}" data-act="stall">🔊 อ่านทั้งเรื่อง</button>
+        <button class="btn ghost sm" data-act="ststop">⏹</button>
+      </div>
+      <div class="story f1">
+        ${st.lines.map((ln,li)=>`<div class="sline ${li===S.readLine?'on':''}">${
+          ln.split(' ').map((wd,wi)=>{
+            const clean=wd.toLowerCase().replace(/[^a-z']/g,'');
+            const def=DICT[clean];
+            const on=S.tipWord&&S.tipWord.k===li+'-'+wi;
+            return `<span class="w ${def?'hasdef':''} ${on?'on':''}" data-act="stword"
+              data-w="${esc(clean)}" data-k="${li}-${wi}">${esc(wd)}</span>`;
+          }).join(' ')}</div>`).join('')}
+      </div>
+    </div>
+    <div class="col g10" style="width:340px;flex:0 0 auto">
+      <div class="card f1 col tc" style="align-items:center;justify-content:center;gap:9px;border-color:${C(st.color+'-t')}">
+        <div style="font-size:48px">${S.tipWord?'💡':'👆'}</div>
+        <div style="font-size:34px;font-weight:900;color:${dark};line-height:1.1">${esc(S.tipWord?S.tipWord.w:'แตะคำในเรื่อง')}</div>
+        <div style="font-size:19px;font-weight:800;color:var(--ink2)">${
+          esc(S.tipWord?th(S.tipWord.th):'จะได้ยินเสียงอ่าน และเห็นคำแปลภาษาไทย')}</div>
+        ${S.tipWord?`<div class="row g8">
+          <button class="btn ghost sm" data-act="say" data-t="${esc(S.tipWord.w)}" data-r="0.72">🔊 ฟังอีกครั้ง</button>
+          ${btnSlow(S.tipWord.w,'','ghost sm')}</div>`:''}
+      </div>
+      <div class="soft" style="padding:12px 16px">
+        <div class="hint">คำที่มีขีดใต้ = มีคำแปล แตะได้เลย · ปรับความเร็วเสียงที่ปุ่มด้านบน</div>
+      </div>
+    </div>
+  </div>`;
+}
+function quizBody(st,col,dark){
+  const q=st.q[Math.min(S.qIdx,st.q.length-1)], picked=S.qPick!==null;
+  return `
+  <div class="card f1 col" style="gap:15px;justify-content:center;border-color:${C(st.color+'-t')}">
+    <div class="row g12">
+      <div class="pill">ข้อ <b>&nbsp;${S.qIdx+1} / ${st.q.length}</b></div>
+      <div class="spacer"></div>
+      <button class="btn ghost sm" data-act="say" data-t="${esc(q.q)}" data-r="0.8">🔊 ฟังคำถาม</button>
+    </div>
+    <div>
+      <div style="font-size:30px;font-weight:900;line-height:1.28">${esc(q.q)}</div>
+      <div class="th" style="font-size:18px;font-weight:700;color:var(--ink2);margin-top:2px">${esc(th(q.th))}</div>
+    </div>
+    <div class="col g12">
+      ${q.o.map((o,i)=>{
+        const right=i===q.a;
+        const bg=picked?(right?C('teal-t'):(S.qPick===i?C('pink-t'):'#FFFCF5')):'#FFFCF5';
+        const bd=picked?(right?C('teal'):(S.qPick===i?C('pink'):C('line'))):C('line');
+        return `<button class="opt ${S.qPick===i&&!right?'shake':''}" data-act="qpick" data-i="${i}"
+          style="background:${bg};border-color:${bd}">
+          <span class="badge" style="background:${picked&&right?C('teal'):'#E2D2BE'}">${i===0?'a':'b'}</span>
+          <span class="f1">${esc(o)}</span>
+          <span style="font-size:22px">${picked&&right?'✅':(S.qPick===i?'❌':'')}</span></button>`;
+      }).join('')}
+    </div>
+    <div class="msg" style="color:${!picked?'var(--ink3)':(S.qPick===q.a?C('teal-d'):C('pink-d'))}">
+      ${!picked?'อ่านเรื่องแล้วเลือกคำตอบ a หรือ b':(S.qPick===q.a?'ถูกต้อง! '+q.why:'เฉลย: '+q.why)}
+    </div>
+    <div class="row g10">
+      <button class="btn ghost" data-act="sttab" data-k="read">📖 กลับไปอ่านเรื่อง</button>
+      <button class="btn" style="background:${col};box-shadow:0 5px 0 ${dark}" data-act="qnext">ข้อต่อไป ▶</button>
+    </div>
+  </div>`;
+}
+ACT.stpick=d=>{ S.storyIdx=+d.i; S.qIdx=0; S.qPick=null; S.tipWord=null; S.readLine=-1; render(); };
+ACT.sttab =d=>{ S.storyTab=d.k; render(); };
+ACT.stword=d=>{ S.tipWord={w:d.w, th:DICT[d.w]||'—', k:d.k}; render(); Voice.say(d.w,0.72); };
+ACT.stall =()=>{
+  const st=STORIES[S.storyIdx];
+  Voice.sequence(st.lines.map(l=>({text:l, rate:Math.max(.4,S.rate), gap:Math.round(230/S.rate)})),
+    i=>{ S.readLine=i; render(); }, ()=>{ S.readLine=-1; star(2); render(); });
+};
+ACT.ststop=()=>{ Voice.stop(); S.readLine=-1; render(); };
+ACT.qpick =d=>{
+  if(S.qPick!==null) return;
+  const q=STORIES[S.storyIdx].q[S.qIdx], i=+d.i;
+  S.qPick=i; Voice.say(q.o[i],0.8);
+  if(i===q.a) star(2);
+  render();
+};
+ACT.qnext=()=>{ const st=STORIES[S.storyIdx]; S.qIdx=(S.qIdx+1)%st.q.length; S.qPick=null; render(); };
+/* ---------- 6.10 YES OR NO ---------- */
+VIEWS.yesno = ()=>{
+  const it=YESNO.items[S.ynIdx], picked=S.ynPick!==null, right=S.ynPick===it.a;
+  return `
+  <div class="row g10" style="margin-bottom:9px">
+    <div class="pill">ข้อ <b>&nbsp;${S.ynIdx+1} / ${YESNO.items.length}</b></div>
+    <div class="hint">Focus on Skills · SRA — ถ้าประโยคบอกว่าทำไมแมวเป็นสัตว์เลี้ยงที่ดี ตอบ Yes</div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" data-act="say" data-t="${esc(it.s)}" data-r="0.8">🔊 ฟังประโยค</button>
+  </div>
+  <div class="card f1 col" style="align-items:center;justify-content:center;gap:20px;border-color:${C('teal-t')}">
+    <div style="font-size:22px;font-weight:800;color:${C('teal-d')}">${esc(YESNO.q)}</div>
+    <div class="th hint">${esc(th(YESNO.th))}</div>
+    <div class="soft tc" style="padding:26px 34px;max-width:820px">
+      <div style="font-size:34px;font-weight:900;line-height:1.3">${esc(it.s)}</div>
+      <div class="th" style="font-size:19px;font-weight:800;color:var(--ink2);margin-top:6px">${esc(th(it.th))}</div>
+    </div>
+    <div class="row g16">
+      ${[[true,'YES','ใช่','teal','👍'],[false,'NO','ไม่ใช่','pink','👎']].map(([val,en,tha,cc,ic])=>{
+        const isRight=val===it.a;
+        const bg=picked?(isRight?C(cc+'-t'):(S.ynPick===val?'#F4EDE4':'#FFFCF5')):C(cc+'-t');
+        const bd=picked?(isRight?C(cc):(S.ynPick===val?'#DCC9B4':C('line'))):C(cc);
+        return `<button class="${S.ynPick===val&&!isRight?'shake':''}" data-act="ynpick" data-v="${val}"
+          style="min-width:230px;border-radius:26px;border:3px solid ${bd};background:${bg};padding:18px 16px;
+                 display:flex;flex-direction:column;align-items:center;gap:2px">
+          <span style="font-size:42px">${ic}</span>
+          <span style="font-size:30px;font-weight:900;color:${C(cc+'-d')}">${en}</span>
+          <span class="th" style="font-size:15px;font-weight:800;color:var(--ink2)">${esc(th(tha))}</span>
+          <span style="font-size:20px">${picked&&isRight?'✅':(S.ynPick===val?'❌':'')}</span>
+        </button>`;
+      }).join('')}
+    </div>
+    <div class="msg" style="color:${!picked?'var(--ink3)':(right?C('teal-d'):C('pink-d'))}">
+      ${!picked?'อ่านประโยคแล้วเลือก YES หรือ NO':(right?'ถูกต้อง! '+it.why:'เฉลย: '+it.why)}
+    </div>
+    <button class="btn" style="background:${C('teal')};box-shadow:0 5px 0 ${C('teal-d')}" data-act="ynnext">ข้อต่อไป ▶</button>
+  </div>`;
+};
+ACT.ynpick=d=>{
+  if(S.ynPick!==null) return;
+  const it=YESNO.items[S.ynIdx], v=d.v==='true';
+  S.ynPick=v;
+  if(v===it.a){ star(2); Voice.say(v?'Yes!':'No!',0.8); } else Voice.say(it.s,0.7);
+  render();
+};
+ACT.ynnext=()=>{ S.ynIdx=(S.ynIdx+1)%YESNO.items.length; S.ynPick=null; render(); };
+
+/* ---------- 6.11 SIGHT WORDS ---------- */
+function loadSight(i){
+  S.sightIdx=i;
+  const target=SIGHT[i];
+  const pool=shuffle(SIGHT.filter(x=>x.w!==target.w)).slice(0,3);
+  S.sightOpts=shuffle([target].concat(pool));
+  S.sightPick=null;
+}
+VIEWS.sight = ()=>{
+  const target=SIGHT[S.sightIdx], picked=S.sightPick!==null, right=S.sightPick===target.w;
+  return `
+  <div class="row g10" style="margin-bottom:9px">
+    <div class="pill">ชุด <b>&nbsp;${esc(target.set)}</b></div>
+    <div class="pill">คำที่ <b>&nbsp;${S.sightIdx+1} / ${SIGHT.length}</b></div>
+    <div class="hint">Sight words = คำที่ต้องจำทั้งคำ สะกดตามเสียงไม่ได้</div>
+    <div class="spacer"></div>
+    <button class="btn sm" style="background:${C('cyan')};box-shadow:0 5px 0 ${C('cyan-d')}" data-act="wsay">👂 ฟังอีกครั้ง</button>
+  </div>
+  <div class="card f1 col" style="align-items:center;justify-content:center;gap:22px;border-color:${C('cyan-t')}">
+    <div style="font-size:60px" class="bob">👂</div>
+    <div style="font-size:23px;font-weight:800;color:var(--ink2)">ครูอ่านคำไหน? แตะคำที่ถูกต้อง</div>
+    <div class="row g16 wrap center">
+      ${S.sightOpts.map(o=>{
+        const isRight=o.w===target.w;
+        const bg=picked?(isRight?C('cyan-t'):(S.sightPick===o.w?C('pink-t'):'#fff')):'#fff';
+        const bd=picked?(isRight?C('cyan'):(S.sightPick===o.w?C('pink'):C('line'))):C('line');
+        return `<button class="opt ${S.sightPick===o.w&&!isRight?'shake':''}" data-act="wpick" data-w="${esc(o.w)}"
+          style="min-width:220px;justify-content:center;flex-direction:column;gap:2px;padding:20px 16px;
+                 background:${bg};border-color:${bd}">
+          <span style="font-size:44px;font-weight:900">${esc(o.w)}</span>
+          <span class="th">${esc(picked?th(o.th):'')}</span>
+          <span style="font-size:20px">${picked&&isRight?'✅':(S.sightPick===o.w?'❌':'')}</span></button>`;
+      }).join('')}
+    </div>
+    <div class="msg" style="color:${!picked?'var(--ink3)':(right?C('cyan-d'):C('pink-d'))}">
+      ${!picked?'ฟังไม่ทัน กดปุ่ม 👂 ฟังอีกครั้งได้ · ปรับให้ช้าลงที่ปุ่ม 🐢 ด้านบน'
+        :(right?'ถูกต้อง! '+target.w+' = '+target.th+' ⭐⭐':'คำที่ครูอ่านคือ "'+target.w+'" = '+target.th)}
+    </div>
+    <button class="btn" style="background:${C('cyan')};box-shadow:0 5px 0 ${C('cyan-d')}" data-act="wnext">คำต่อไป ▶</button>
+  </div>`;
+};
+ACT.wsay =()=>Voice.say(SIGHT[S.sightIdx].w, 0.66);
+ACT.wpick=d=>{
+  if(S.sightPick!==null) return;
+  const target=SIGHT[S.sightIdx];
+  S.sightPick=d.w;
+  if(d.w===target.w){ star(2); Voice.say('Yes! '+target.w,0.78); } else Voice.say(target.w,0.58);
+  render();
+};
+ACT.wnext=()=>{ loadSight((S.sightIdx+1)%SIGHT.length); render(); setTimeout(ACT.wsay,300); };
+
+/* ---------- 6.12 TRANSLATE ---------- */
+VIEWS.translate = ()=>{
+  const it=TRANSLATE[S.trIdx], picked=S.trPick!==null, right=S.trPick===it.a;
+  const pct=Math.round(((S.trIdx+1)/TRANSLATE.length)*100);
+  return `
+  <div class="row g10" style="margin-bottom:9px">
+    <div class="pill">ข้อ <b>&nbsp;${S.trIdx+1} / ${TRANSLATE.length}</b></div>
+    <div class="f1" style="height:13px;border-radius:7px;background:#F0E2CE;overflow:hidden">
+      <div style="height:100%;width:${pct}%;background:${C('gold')};border-radius:7px;transition:width .3s"></div>
+    </div>
+  </div>
+  <div class="card f1 col" style="gap:16px;justify-content:center;border-color:${C('gold-t')}">
+    <div class="hint tc">${esc(it.p)}</div>
+    <button class="soft row g12 center" style="padding:20px 24px" data-act="say" data-t="${esc(it.q)}" data-r="0.78">
+      <span style="font-size:38px;font-weight:900;color:${C('gold-d')};line-height:1.2">${esc(it.q)}</span>
+      <span style="font-size:28px">🔊</span>
+    </button>
+    <div class="col g10">
+      ${it.o.map((o,i)=>{
+        const isRight=i===it.a;
+        const bg=picked?(isRight?C('teal-t'):(S.trPick===i?C('pink-t'):'#FFFCF5')):'#FFFCF5';
+        const bd=picked?(isRight?C('teal'):(S.trPick===i?C('pink'):C('line'))):C('line');
+        return `<button class="opt ${S.trPick===i&&!isRight?'shake':''}" data-act="trpick" data-i="${i}"
+          style="background:${bg};border-color:${bd}">
+          <span class="badge" style="background:${picked&&isRight?C('teal'):'#E2D2BE'}">${i+1}</span>
+          <span class="f1">${esc(o)}</span>
+          <span style="font-size:22px">${picked&&isRight?'✅':(S.trPick===i?'❌':'')}</span></button>`;
+      }).join('')}
+    </div>
+    <div class="msg tc" style="color:${!picked?'var(--ink3)':(right?C('teal-d'):C('pink-d'))}">
+      ${!picked?'แตะคำอังกฤษด้านบนเพื่อฟังเสียงก่อนเลือกได้':(right?'ถูกต้องเลย! ⭐⭐':'คำตอบคือ '+it.o[it.a])}
+    </div>
+    <div class="row g10 center">
+      ${btnSlow(it.q.split(' ')[0].replace(/[^A-Za-z]/g,''),'','ghost')}
+      <button class="btn" style="background:${C('gold')};box-shadow:0 5px 0 ${C('gold-d')}" data-act="trnext">ข้อต่อไป ▶</button>
+    </div>
+  </div>`;
+};
+ACT.trpick=d=>{
+  if(S.trPick!==null) return;
+  const it=TRANSLATE[S.trIdx], i=+d.i;
+  S.trPick=i;
+  if(i===it.a){ star(2); Voice.say(it.q,0.78); }
+  render();
+};
+ACT.trnext=()=>{ S.trIdx=(S.trIdx+1)%TRANSLATE.length; S.trPick=null; render(); };
+
+/* ---------- 6.13 READ & COLOUR ---------- */
+function loadColour(){ S.colTask=0; S.colPaint='blue'; S.colFill={}; S.colMsg=''; }
+const CLASSROOM_SVG = fill=>{
+  const F=k=>fill[k]||'#FFFFFF';
+  const S_='#B8A28C';
+  return `<svg viewBox="0 0 900 430" style="width:100%;height:100%">
+    <rect x="0" y="0" width="900" height="300" fill="#FBF3E6"/>
+    <rect x="0" y="300" width="900" height="130" fill="#F3E7D3"/>
+    <!-- letters a b c -->
+    <g data-act="colpart" data-p="letters" fill="${F('letters')}" stroke="${S_}" stroke-width="3">
+      <rect x="60" y="26" width="72" height="72" rx="16"/>
+      <rect x="146" y="26" width="72" height="72" rx="16"/>
+      <rect x="232" y="26" width="72" height="72" rx="16"/>
+    </g>
+    <g pointer-events="none" font-size="46" font-weight="900" fill="#5C4A3A" text-anchor="middle">
+      <text x="96" y="79">a</text><text x="182" y="79">b</text><text x="268" y="79">c</text>
+    </g>
+    <!-- books on shelf -->
+    <g data-act="colpart" data-p="books" fill="${F('books')}" stroke="${S_}" stroke-width="3">
+      <rect x="620" y="30" width="34" height="96" rx="6"/>
+      <rect x="660" y="42" width="34" height="84" rx="6"/>
+      <rect x="700" y="24" width="34" height="102" rx="6"/>
+      <rect x="740" y="46" width="34" height="80" rx="6"/>
+      <rect x="780" y="34" width="34" height="92" rx="6"/>
+    </g>
+    <rect x="604" y="126" width="230" height="12" rx="6" fill="#D6BFA4" pointer-events="none"/>
+    <!-- faces -->
+    <g data-act="colpart" data-p="faces" fill="${F('faces')}" stroke="${S_}" stroke-width="3">
+      <circle cx="400" cy="62" r="34"/><circle cx="478" cy="62" r="34"/><circle cx="556" cy="62" r="34"/>
+    </g>
+    <g pointer-events="none" fill="none" stroke="#5C4A3A" stroke-width="4" stroke-linecap="round">
+      <path d="M388 72 q12 12 24 0"/><path d="M466 72 q12 12 24 0"/><path d="M544 72 q12 12 24 0"/>
+    </g>
+    <g pointer-events="none" fill="#5C4A3A">
+      <circle cx="390" cy="54" r="4"/><circle cx="410" cy="54" r="4"/>
+      <circle cx="468" cy="54" r="4"/><circle cx="488" cy="54" r="4"/>
+      <circle cx="546" cy="54" r="4"/><circle cx="566" cy="54" r="4"/>
+    </g>
+    <!-- table -->
+    <g data-act="colpart" data-p="table" fill="${F('table')}" stroke="${S_}" stroke-width="3">
+      <rect x="300" y="196" width="300" height="30" rx="12"/>
+      <rect x="322" y="226" width="18" height="86" rx="7"/>
+      <rect x="560" y="226" width="18" height="86" rx="7"/>
+    </g>
+    <!-- chairs -->
+    <g data-act="colpart" data-p="chairs" fill="${F('chairs')}" stroke="${S_}" stroke-width="3">
+      <rect x="228" y="150" width="20" height="96" rx="8"/>
+      <rect x="200" y="238" width="76" height="18" rx="8"/>
+      <rect x="206" y="256" width="14" height="58" rx="6"/>
+      <rect x="256" y="256" width="14" height="58" rx="6"/>
+      <rect x="652" y="150" width="20" height="96" rx="8"/>
+      <rect x="624" y="238" width="76" height="18" rx="8"/>
+      <rect x="630" y="256" width="14" height="58" rx="6"/>
+      <rect x="680" y="256" width="14" height="58" rx="6"/>
+    </g>
+    <!-- toy box -->
+    <g data-act="colpart" data-p="toybox" fill="${F('toybox')}" stroke="${S_}" stroke-width="3">
+      <rect x="60" y="286" width="180" height="104" rx="16"/>
+      <rect x="46" y="264" width="208" height="30" rx="12"/>
+    </g>
+    <!-- teddy -->
+    <g data-act="colpart" data-p="teddy" fill="${F('teddy')}" stroke="${S_}" stroke-width="3">
+      <circle cx="742" cy="242" r="26"/><circle cx="718" cy="216" r="13"/><circle cx="766" cy="216" r="13"/>
+      <ellipse cx="742" cy="316" rx="40" ry="48"/>
+      <circle cx="700" cy="308" r="15"/><circle cx="784" cy="308" r="15"/>
+    </g>
+    <g pointer-events="none" fill="#5C4A3A">
+      <circle cx="733" cy="238" r="3.5"/><circle cx="751" cy="238" r="3.5"/>
+      <ellipse cx="742" cy="250" rx="6" ry="4"/>
+    </g>
+  </svg>`;
+};
+VIEWS.colour = ()=>{
+  const done=COLOUR_TASKS.filter(t=>S.colFill[t.part]===paintHex(t.paint)).length;
+  const all=done===COLOUR_TASKS.length;
+  const cur=COLOUR_TASKS[Math.min(S.colTask,COLOUR_TASKS.length-1)];
+  return `
+  <div class="row g10" style="margin-bottom:8px">
+    <div class="pill">ระบายถูกแล้ว <b>&nbsp;${done} / ${COLOUR_TASKS.length}</b></div>
+    <div class="hint">เลือกสีก่อน แล้วแตะสิ่งของในภาพ</div>
+    <div class="spacer"></div>
+    <button class="btn ghost sm" data-act="colreset">↺ ลบสีทั้งหมด</button>
+  </div>
+  <div class="row g14 f1" style="align-items:stretch">
+    <div class="col g10" style="width:330px;flex:0 0 auto">
+      <div class="card col g8" style="border-color:${C('coral-t')};padding:14px">
+        <div class="hint">จานสี · แตะเลือกสี</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+          ${PAINTS.map(p=>`<button data-act="colpaint" data-w="${p.w}" title="${p.th}"
+            style="height:56px;border-radius:16px;background:${p.hex};border:4px solid ${S.colPaint===p.w?'#3B2E26':'rgba(0,0,0,.12)'};
+                   display:flex;align-items:flex-end;justify-content:center;padding-bottom:3px">
+            <span style="font-size:11px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5)">${p.w}</span>
+          </button>`).join('')}
+        </div>
+        <button class="btn ghost sm center" data-act="colpaint" data-w="">🧽 ยางลบสี</button>
+      </div>
+      <div class="card f1 col" style="border-color:${C('coral-t')};padding:14px;overflow:hidden">
+        <div class="hint" style="margin-bottom:6px">Instructions · คำสั่ง</div>
+        <div class="rowlist f1">
+          ${COLOUR_TASKS.map((t,i)=>{
+            const ok=S.colFill[t.part]===paintHex(t.paint);
+            return `<button class="opt" data-act="coltask" data-i="${i}"
+              style="padding:10px 13px;font-size:16px;background:${ok?C('teal-t'):(i===S.colTask?C('coral-t'):'#FFFCF5')};
+                     border-color:${ok?C('teal'):(i===S.colTask?C('coral'):C('line'))}">
+              <span class="badge" style="background:${ok?C('teal'):'#E2D2BE'};width:28px;height:28px;font-size:14px">${i+1}</span>
+              <span class="f1"><span style="font-size:16.5px">${esc(t.en)}</span>
+                <br><span class="th" style="font-size:13.5px">${esc(th(t.th))}</span></span>
+              <span style="font-size:18px">${ok?'✅':''}</span></button>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="col g8 f1">
+      <button class="soft row g10" style="padding:12px 16px;flex:0 0 auto" data-act="say" data-t="${esc(cur.en)}" data-r="0.78">
+        <span style="font-size:24px">🔊</span>
+        <span class="f1"><span style="font-size:22px;font-weight:900;color:${C('coral-d')}">${esc(cur.en)}</span>
+          <br><span class="th" style="font-size:15px;font-weight:700;color:var(--ink2)">${esc(th(cur.th))}</span></span>
+      </button>
+      <div class="card f1" style="padding:8px;border-color:${C('coral-t')};overflow:hidden">
+        ${CLASSROOM_SVG(S.colFill)}
+      </div>
+      <div class="msg tc" style="flex:0 0 auto;color:${all?C('teal-d'):(S.colMsg.indexOf('ยังไม่')===0?C('pink-d'):'var(--ink3)')}">
+        ${all?'🎉 ระบายครบทุกคำสั่งแล้ว เก่งมาก!':esc(S.colMsg||'อ่านคำสั่ง เลือกสี แล้วแตะสิ่งของในภาพ')}
+      </div>
+    </div>
+  </div>`;
+};
+function paintHex(w){ const p=PAINTS.find(x=>x.w===w); return p?p.hex:''; }
+ACT.colpaint=d=>{ S.colPaint=d.w||''; S.colMsg=d.w?('เลือกสี '+d.w+' แล้ว — แตะสิ่งของในภาพได้เลย'):'เลือกยางลบ — แตะสิ่งของเพื่อลบสี';
+  if(d.w) Voice.say(d.w,0.72); render(); };
+ACT.coltask =d=>{ S.colTask=+d.i; render(); Voice.say(COLOUR_TASKS[+d.i].en,0.78); };
+ACT.colreset=()=>{ S.colFill={}; S.colMsg=''; render(); };
+ACT.colpart =d=>{
+  const part=d.p;
+  if(!S.colPaint){ delete S.colFill[part]; S.colMsg='ลบสีแล้ว'; render(); return; }
+  S.colFill[part]=paintHex(S.colPaint);
+  const task=COLOUR_TASKS.find(t=>t.part===part);
+  if(task && task.paint===S.colPaint){
+    S.colMsg='ถูกต้อง! '+task.en+' ⭐';
+    star(1); Voice.say(task.en,0.78);
+    const idx=COLOUR_TASKS.indexOf(task);
+    const nextIdx=COLOUR_TASKS.findIndex((t,i)=>i>idx && S.colFill[t.part]!==paintHex(t.paint));
+    S.colTask = nextIdx>=0 ? nextIdx : idx;
+  }else{
+    S.colMsg='ยังไม่ตรงกับคำสั่งนะ ลองอ่านอีกครั้ง';
+    Voice.say(task?task.en:S.colPaint,0.7);
+  }
+  render();
+};
+
+/* ---------- 6.14 FIND & SAY ---------- */
+VIEWS.find = ()=>{
+  const sc=SCENES[S.sceneIdx];
+  const listed=sc.items.slice(0,6);
+  const got=listed.filter(x=>S.findGot[x.w]).length;
+  return `
+  <div class="row g8" style="margin-bottom:9px">
+    ${SCENES.map((x,i)=>`<button class="chip ${i===S.sceneIdx?'on':''}"
+      style="${i===S.sceneIdx?`background:${C('pink')};border-color:${C('pink')}`:''}"
+      data-act="fscene" data-i="${i}">${x.label}</button>`).join('')}
+    <div class="spacer"></div>
+    <div class="hint">${esc(sc.src)}</div>
+    <div class="pill">หาเจอแล้ว <b>&nbsp;${got} / ${listed.length}</b></div>
+    <button class="btn ghost sm" data-act="freset">↺ เริ่มใหม่</button>
+  </div>
+  <div class="row g14 f1" style="align-items:stretch">
+    <div class="col g8" style="width:300px;flex:0 0 auto">
+      ${listed.map(f=>`<button class="opt f1" data-act="fpick" data-w="${esc(f.w)}"
+        style="background:${S.findGot[f.w]?C('teal-t'):(S.findSel===f.w?C('blue-t'):'#fff')};
+               border-color:${S.findGot[f.w]?C('teal'):(S.findSel===f.w?C('blue'):C('line'))}">
+        <span style="font-size:27px">${f.icon}</span>
+        <span class="f1"><span>${esc(f.w)}</span><br><span class="th">${esc(th(f.th))}</span></span>
+        <span style="font-size:20px">${S.findGot[f.w]?'✅':''}</span></button>`).join('')}
+    </div>
+    <div class="col g8 f1">
+      <div class="scene" style="background:${sc.bg}">
+        ${sc.items.map(f=>`<button class="obj ${S.findBad===f.w?'shake':(S.findGot[f.w]?'glow':'')}"
+          data-act="ftap" data-w="${esc(f.w)}"
+          style="left:${f.x}%;top:${f.y}%;font-size:${f.size}px;transform:translate(-50%,-50%) rotate(${f.rot}deg)">${f.icon}</button>`).join('')}
+        <div style="position:absolute;left:14px;top:10px;font-size:18px;font-weight:900;color:#8A7460;opacity:.6">${esc(sc.title)}</div>
+      </div>
+      <div class="msg center" style="flex:0 0 auto;color:${S.findMsg.indexOf('เจอแล้ว')===0?C('teal-d'):'var(--ink3)'}">
+        ${esc(S.findMsg||'เลือกคำจากรายการซ้าย แล้วแตะสิ่งของนั้นในภาพ')}</div>
+    </div>
+  </div>`;
+};
+ACT.fscene=d=>{ S.sceneIdx=+d.i; S.findSel=null; S.findGot={}; S.findMsg=''; render(); };
+ACT.freset=()=>{ S.findSel=null; S.findGot={}; S.findMsg=''; render(); };
+ACT.fpick =d=>{ S.findSel=d.w; S.findMsg='หา "'+d.w+'" ในภาพให้เจอ!'; Voice.say(d.w,0.75); render(); };
+ACT.ftap  =d=>{
+  const w=d.w;
+  if(S.findGot[w]) return;
+  if(S.findSel===w){
+    S.findGot[w]=true;
+    const item=SCENES[S.sceneIdx].items.find(x=>x.w===w);
+    S.findMsg='เจอแล้ว! '+w+' = '+item.th+' ⭐';
+    S.findSel=null; star(1); Voice.say(w,0.75);
+  }else{
+    S.findBad=w;
+    S.findMsg=S.findSel?('อันนี้ไม่ใช่ "'+S.findSel+'" นะ'):'เลือกคำจากรายการซ้ายก่อนนะ';
+    setTimeout(()=>{ S.findBad=null; render(); },600);
+  }
+  render();
+};
+
+/* ---------- 6.15 PHONICS RACE ---------- */
+function resetRace(){
+  S.racePos=[4,4,4,4]; S.raceOver=false; S.raceIdx=0;
+  S.raceOk=null; S.raceMsg=''; S.raceHeard=''; S.raceChoice=null; S.raceListening=false;
+}
+VIEWS.race = ()=>{
+  const it=RACE_WORDS[S.raceIdx];
+  const names=[S.kidName+' 🎀'].concat(RIVALS.map(r=>r.name));
+  const cars =['🚕'].concat(RIVALS.map(r=>r.car));
+  const cols =[C('purple')].concat(RIVALS.map(r=>r.color));
+  const lead =S.racePos.indexOf(Math.max.apply(null,S.racePos));
+  const stage=S.raceOver
+    ? (S.racePos[0]>=100?'🏆 '+S.kidName+' ชนะ! เก่งมาก':'🏁 '+names[lead]+' เข้าเส้นชัยก่อน — ลองใหม่อีกครั้ง!')
+    : 'อ่านคำนี้ให้ถูก แล้วรถของหนูจะพุ่งแซง';
+  const opts=shuffleStable([it.w].concat(it.near),S.raceIdx);
+  const p1=phon(it.parts[0]), p2=phon(it.parts[1]);
+  return `
+  <div class="col g8 f1">
+    <div class="col g6" style="flex:0 0 208px">
+      ${S.racePos.map((p,i)=>`
+        <div class="lane f1" style="border-color:${i===0?cols[0]:C('line')}">
+          <div class="road"></div>
+          <div class="lanename" style="color:${cols[i]}">${esc(names[i])}</div>
+          <div class="flag">🏁</div>
+          <div class="car ${i===0&&S.raceOk===true?'pop':(i===0&&S.raceOk===false?'shake':'')}"
+               style="left:${Math.min(95,p)}%">${cars[i]}</div>
+        </div>`).join('')}
+    </div>
+    <div class="row g10 f0">
+      <button class="chip ${S.raceMode==='tap'?'on':''}" style="${S.raceMode==='tap'?`background:${C('blue')};border-color:${C('blue')}`:''}"
+        data-act="rmode" data-k="tap">👂 ฟังแล้วเลือกคำ</button>
+      <button class="chip ${S.raceMode==='mic'?'on':''}" style="${S.raceMode==='mic'?`background:${C('blue')};border-color:${C('blue')}`:''}"
+        data-act="rmode" data-k="mic">🎤 พูดใส่ไมค์</button>
+      <div class="spacer"></div>
+      <div class="hint">${esc(stage)}</div>
+      <button class="btn ghost sm" data-act="rreset">↺ แข่งใหม่</button>
+    </div>
+    <div class="card f1 row g16" style="align-items:center;border-color:${C('blue-t')}">
+      <div class="col g8" style="width:330px;flex:0 0 auto;align-items:center">
+        <div style="font-size:54px;font-weight:900;color:${C('blue-d')};line-height:1.05">${esc(it.w)}</div>
+        <div class="th" style="font-size:18px;font-weight:800;color:var(--ink2)">${esc(th(it.th))}</div>
+        <div class="row g8">
+          <button class="part" style="background:${C('orange-t')};color:${C('orange-d')};font-size:28px;padding:9px 15px"
+            data-act="say" data-t="${esc(p1[1])}" data-r="0.5">${esc(it.parts[0])}<small>${esc(p1[0])}</small></button>
+          <div class="op" style="font-size:24px">+</div>
+          <button class="part" style="background:${C('teal-t')};color:${C('teal-d')};font-size:28px;padding:9px 15px"
+            data-act="say" data-t="${esc(p2[1])}" data-r="0.5">${esc(it.parts[1])}<small>${esc(p2[0])}</small></button>
+        </div>
+        ${btnSlow(it.w, it.parts.join('|'), 'ghost sm')}
+      </div>
+      <div class="col g8 f1">
+        ${S.raceMode==='mic'?`
+          <div class="center f1">
+            <button class="btn lg ${S.raceListening?'bob':''}"
+              style="background:${S.raceListening?C('pink'):C('blue')};box-shadow:0 5px 0 ${S.raceListening?C('pink-d'):C('blue-d')}"
+              data-act="rlisten">${S.raceListening?'🎙️ กำลังฟัง...':'🎤 แตะแล้วพูดคำนี้'}</button>
+          </div>
+          <div class="hint center">${esc(S.raceHeard)}</div>`
+        :`
+          <div class="col g8 f1">
+            ${opts.map(o=>{
+              const isRight=o===it.w, picked=S.raceChoice!==null;
+              const bg=!picked?'#FFFCF5':(isRight?C('teal-t'):(S.raceChoice===o?C('pink-t'):'#FFFCF5'));
+              const bd=!picked?C('line'):(isRight?C('teal'):(S.raceChoice===o?C('pink'):C('line')));
+              return `<button class="opt f1 ${S.raceChoice===o&&!isRight?'shake':''}" data-act="rchoice" data-o="${esc(o)}"
+                style="background:${bg};border-color:${bd};justify-content:center;font-size:29px">
+                ${esc(o)} ${picked&&isRight?'✅':(S.raceChoice===o?'❌':'')}</button>`;
+            }).join('')}
+          </div>
+          <button class="btn ghost sm center" data-act="say" data-t="${esc(it.w)}" data-r="0.66">👂 ฟังอีกครั้ง</button>`}
+        <div class="msg center" style="color:${S.raceOk===true?C('teal-d'):(S.raceOk===false?C('pink-d'):'var(--ink3)')}">
+          ${esc(S.raceMsg||(S.raceMode==='mic'?'แตะไมค์แล้วพูดคำให้ชัด':'ฟังเสียงครู แล้วเลือกคำที่ตรงกัน'))}</div>
+      </div>
+    </div>
+  </div>`;
+};
+ACT.rmode =d=>{ S.raceMode=d.k; S.raceMsg=''; render();
+  if(d.k==='tap'){ const it=RACE_WORDS[S.raceIdx]; Voice.phonics(it.w,it.parts); } };
+ACT.rreset=()=>{ resetRace(); render(); };
+function raceAdvance(ok){
+  const pos=S.racePos.slice();
+  pos[0]=Math.max(2,Math.min(100,pos[0]+(ok?13:-5)));
+  for(let i=0;i<3;i++) pos[i+1]=Math.min(100,pos[i+1]+RIVALS[i].speed*(0.7+Math.random()*0.8));
+  const over=pos.some(p=>p>=100);
+  if(over&&pos[0]>=100) star(5);
+  S.racePos=pos; S.raceOver=over; render();
+  setTimeout(()=>{
+    if(!S.raceOver){
+      S.raceIdx=(S.raceIdx+1)%RACE_WORDS.length;
+      S.raceOk=null; S.raceMsg=''; S.raceHeard=''; S.raceChoice=null; render();
+      if(S.raceMode==='tap'){ const it=RACE_WORDS[S.raceIdx]; Voice.phonics(it.w,it.parts); }
+    }
+  }, over?900:1300);
+}
+ACT.rchoice=d=>{
+  if(S.raceChoice!==null||S.raceOver) return;
+  const it=RACE_WORDS[S.raceIdx], ok=d.o===it.w;
+  S.raceChoice=d.o; S.raceOk=ok;
+  S.raceMsg=ok?'ถูกต้อง! รถพุ่งแซง 🚀':'ยังไม่ใช่ ฟังเสียงโฟนิกส์อีกครั้งนะ 🐢';
+  if(ok){ star(2); Voice.say('Yes! '+it.w,0.78); } else Voice.phonics(it.w,it.parts);
+  raceAdvance(ok);
+};
+ACT.rlisten=()=>{
+  if(S.raceOver) return;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ S.raceMode='tap'; S.raceMsg='อุปกรณ์นี้ยังไม่รองรับไมค์ — เปลี่ยนเป็นโหมดฟัง-เลือกให้แล้ว'; render(); return; }
+  try{
+    const r=new SR();
+    r.lang='en-US'; r.interimResults=false; r.maxAlternatives=3;
+    r.onresult=e=>{ let best=''; for(let i=0;i<e.results[0].length;i++) best+=' '+e.results[0][i].transcript; judgeRace(best); };
+    r.onerror =()=>{ S.raceListening=false; S.raceMsg='ไม่ได้ยินเสียง ลองแตะไมค์แล้วพูดใหม่นะ'; S.raceHeard=''; render(); };
+    r.onend   =()=>{ S.raceListening=false; render(); };
+    S.raceListening=true; S.raceMsg='พูดเลย!'; S.raceHeard=''; S.raceOk=null; render();
+    r.start();
+  }catch(e){ S.raceListening=false; S.raceMode='tap'; render(); }
+};
+function judgeRace(said){
+  const it=RACE_WORDS[S.raceIdx];
+  const heard=String(said||'').toLowerCase().trim();
+  const ok=heard.split(/\s+/).some(w=>w.replace(/[^a-z]/g,'')===it.w);
+  S.raceOk=ok; S.raceListening=false;
+  S.raceHeard=heard?('ได้ยินว่า: "'+heard+'"'):'ไม่ได้ยินเสียงเลย ลองอีกครั้งนะ';
+  S.raceMsg=ok?'ออกเสียงถูกต้อง! รถพุ่งแซง 🚀':'ยังไม่ตรง ฟังครูออกเสียงอีกครั้ง 🐢';
+  if(ok){ star(2); Voice.say('Great! '+it.w,0.8); } else Voice.phonics(it.w,it.parts);
+  raceAdvance(ok);
+}
+
+/* ---------- SETTINGS ---------- */
+ACT.settings=()=>{
+  const voices=Voice.list;
+  $('#modal').innerHTML=`
+  <div class="sheet" data-act="closeset">
+    <div class="sheetbox">
+      <div class="row g12" style="margin-bottom:18px">
+        <div style="font-size:34px">⚙️</div>
+        <div class="col f1">
+          <div style="font-size:25px;font-weight:900">ตั้งค่า</div>
+          <div class="hint">ปรับให้เหมาะกับน้อง แล้วปิดหน้าต่างนี้ได้เลย</div>
+        </div>
+      </div>
+      <div class="field"><label>ชื่อเด็ก</label><input type="text" id="setName" value="${esc(S.kidName)}" maxlength="16"></div>
+      <div class="field"><label>แสดงคำแปลไทย</label>
+        <button class="switch ${S.showThai?'on':''}" data-act="togthai"><i></i></button>
+        <span class="hint">ปิดไว้เพื่อฝึกอ่านอังกฤษล้วน</span></div>
+      <div class="field"><label>ความเร็วเสียงอ่าน</label>
+        <input type="range" id="setRate" min="0.4" max="1.1" step="0.02" value="${S.rate}">
+        <span class="hint" id="rateLbl" style="width:66px">${S.rate.toFixed(2)}x</span></div>
+      <div class="field"><label>เสียงครู</label>
+        <select id="setVoice">
+          <option value="">เลือกอัตโนมัติ (เสียงผู้หญิง)</option>
+          ${voices.map(v=>`<option value="${esc(v.voiceURI)}" ${v.voiceURI===S.voiceURI?'selected':''}>${esc(v.name)} · ${esc(v.lang)}</option>`).join('')}
+        </select></div>
+      <div class="hint" style="margin:-4px 0 16px 186px">
+        ${voices.length?'ระบบเลือกเสียงผู้หญิงให้อัตโนมัติ · เลือกเองได้ถ้าต้องการ'
+          :'ยังไม่พบเสียงในเครื่อง — บน iPad ให้เปิดใน Safari แล้วแตะปุ่มเสียงหนึ่งครั้ง'}</div>
+      <div class="row g10">
+        <button class="btn ghost" data-act="testvoice">🎙️ ทดสอบเสียงครู</button>
+        <button class="btn ghost" data-act="resetstars">↺ ล้างดาว</button>
+        <div class="spacer"></div>
+        <button class="btn" style="background:${C('teal')};box-shadow:0 5px 0 ${C('teal-d')}" data-act="closeset">เสร็จแล้ว</button>
+      </div>
+    </div>
+  </div>`;
+  const nameEl=$('#setName'), rateEl=$('#setRate'), voiceEl=$('#setVoice');
+  nameEl.oninput  =()=>{ S.kidName=nameEl.value.trim()||'Milin'; save(); render(); };
+  rateEl.oninput  =()=>{ S.rate=+rateEl.value; $('#rateLbl').textContent=S.rate.toFixed(2)+'x'; save(); paintSpeed(); };
+  voiceEl.onchange=()=>{ S.voiceURI=voiceEl.value; save(); Voice.refresh(); ACT.testvoice(); };
+};
+/* ปิดได้เมื่อแตะพื้นหลังนอกกล่อง หรือแตะปุ่ม "เสร็จแล้ว" (ปุ่มในกล่องอื่นๆ ยังทำงานปกติ) */
+ACT.closeset  =(d,t,e)=>{ if(t.classList.contains('sheet') && e.target!==t) return; $('#modal').innerHTML=''; };
+ACT.togthai   =(d,t)=>{ S.showThai=!S.showThai; t.classList.toggle('on',S.showThai); save(); render(); };
+ACT.resetstars=()=>{ S.stars=0; save(); render(); };
+
+/* ═════════════════════════════════════════════════════════════════════
+   7. BOOT
+   ═════════════════════════════════════════════════════════════════════ */
+/* ย่อ/ขยายเวทีให้พอดีหน้าจอ */
+function fitStage(){
+  const k=Math.min(window.innerWidth/1194, window.innerHeight/834);
+  document.getElementById('app').style.transform='scale('+k+')';
+}
+window.addEventListener('resize', fitStage);
+window.addEventListener('orientationchange', ()=>setTimeout(fitStage,120));
+fitStage();
+
+loadScramble(0); loadMatch('animal'); loadSort(0); loadSight(0); loadColour();
+render();
+Voice.refresh();
+try{ window.speechSynthesis.addEventListener('voiceschanged',()=>Voice.refresh()); }catch(e){}
+/* iOS ต้องมี user gesture ครั้งแรกก่อนเสียงจะทำงาน */
+['touchstart','mousedown'].forEach(ev=>document.addEventListener(ev,function unlock(){
+  try{ const u=new SpeechSynthesisUtterance(' '); u.volume=0; window.speechSynthesis.speak(u); }catch(e){}
+  Voice.refresh();
+  ['touchstart','mousedown'].forEach(e2=>document.removeEventListener(e2,unlock));
+},{once:true}));
+window.addEventListener('beforeunload',save);
+</script>
+</body>
+</html>

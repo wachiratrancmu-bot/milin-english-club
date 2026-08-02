@@ -1,0 +1,10 @@
+# ภาพชีทต้นฉบับ — เป็นลิขสิทธิ์ของสำนักพิมพ์ (McGraw-Hill / Scholastic / Twinkl)
+# เก็บไว้ในเครื่องได้ แต่ห้ามขึ้น GitHub สาธารณะ
+LINE_ALBUM_*.jpg
+
+# ไฟล์เก่าที่ export จาก artifact (bundle บีบอัด ใช้งานต่อไม่ได้)
+Milin English Club (standalone).html
+
+# ระบบ
+Thumbs.db
+.DS_Store
