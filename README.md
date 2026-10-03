@@ -57,6 +57,7 @@ git add -A && git commit -m "update" && git push
 
 ```
 Milin-English-Club.html   แอปทั้งหมด (HTML + CSS + JS + ฟอนต์ฝังในไฟล์)
+                          ลิงก์ตรงไปยังบทเรียน: #exam  #unit=u3  #drill=blank  #grammar=g2  #spell=u4  #mock
 index.html                หน้าแรกของเว็บ → เปิดแอป
 manifest.webmanifest      ข้อมูลสำหรับ Add to Home Screen
 sw.js                     ใช้งานออฟไลน์ (service worker)
@@ -68,7 +69,7 @@ LEARNING-DESIGN.md        หลักการเรียนรู้และ
 
 | ส่วน | หน้าที่ |
 |---|---|
-| 1. CSS | ระบบดีไซน์ (สีประจำ Unit, ฟอนต์, เลย์เอาต์ iPad/มือถือ) |
+| 1. CSS | ระบบดีไซน์ v3 (สี · ฟอนต์ Lexend / Andika / IBM Plex Sans Thai Looped · เลย์เอาต์ iPad/มือถือ) |
 | 2. CONTENT | เนื้อหาจากชีท 39 ใบ (โฟนิกส์ เรื่องอ่าน เกม) |
 | 2B. หลักสูตรสอบ | `UNITS` `BONUS` `BLANKS` `GRAMMAR` `PASSAGES` `ODD` `TRICKY` `MISTAKES` |
 | 3–4. PHONICS / VOICE | ตารางเสียง + เสียงครูผู้หญิง |
