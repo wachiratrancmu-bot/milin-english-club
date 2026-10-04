@@ -207,6 +207,8 @@ button:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-r
 /* ---------- ภาพคำศัพท์ (วางบนจานวงกลมเพื่อความเรียบร้อยสม่ำเสมอ) ---------- */
 .pic{white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;line-height:1;flex:0 0 auto;border-radius:50%;background:#F2F4F8}
 .pic svg{width:72%;height:72%}
+.pic.scene-pic{border-radius:22%;overflow:hidden;background:#fff;box-shadow:inset 0 0 0 1px var(--line)}
+.pic.scene-pic svg{width:100%;height:100%}
 .pic.glyph{font-weight:600;color:var(--ink);background:#F2F4F8}
 .pic.swatch{background:none;box-shadow:inset 0 -5px 0 rgba(0,0,0,.10),0 0 0 3px #fff,0 0 0 4px var(--line2)}
 
@@ -960,16 +962,16 @@ const TITLES = {
 const UNITS = [
   { key:'u1', n:1, title:'My Tree House', th:'บ้านของฉัน · ห้องและของในบ้าน', c:'u1', words:[
     {w:'chair',       th:'เก้าอี้',        e:'🪑', s:'There is a chair in my bedroom.'},
-    {w:'bookcase',    th:'ตู้หนังสือ',     e:'📚', s:'There are many books in the bookcase.'},
-    {w:'lamp',        th:'โคมไฟ',         e:'💡', s:'Turn on the lamp, please.'},
+    {w:'bookcase',    th:'ตู้หนังสือ',     svg:'bookcase', s:'There are many books in the bookcase.'},
+    {w:'lamp',        th:'โคมไฟ',         svg:'lamp', s:'Turn on the lamp, please.'},
     {w:'mirror',      th:'กระจกเงา',      e:'🪞', s:'I look in the mirror.'},
     {w:'rug',         th:'พรม',           svg:'rug', s:'There is a soft rug on the floor.'},
     {w:'television',  th:'โทรทัศน์',       e:'📺', s:'We watch television.'},
-    {w:'garden',      th:'สวน',           e:'🌷', s:'There are flowers in the garden.'},
-    {w:'kitchen',     th:'ห้องครัว',       e:'🍳', s:'Mom cooks in the kitchen.'},
-    {w:'bedroom',     th:'ห้องนอน',        e:'🛏️', s:'I sleep in my bedroom.'},
-    {w:'bathroom',    th:'ห้องน้ำ',        e:'🚿', s:'There is a bathtub in the bathroom.'},
-    {w:'living room', th:'ห้องนั่งเล่น',    e:'🛋️', s:'We watch TV in the living room.'},
+    {w:'garden',      th:'สวน',           svg:'garden', s:'There are flowers in the garden.'},
+    {w:'kitchen',     th:'ห้องครัว',       svg:'kitchen', s:'Mom cooks in the kitchen.'},
+    {w:'bedroom',     th:'ห้องนอน',        svg:'bedroom', s:'I sleep in my bedroom.'},
+    {w:'bathroom',    th:'ห้องน้ำ',        svg:'bathroom', s:'There is a bathtub in the bathroom.'},
+    {w:'living room', th:'ห้องนั่งเล่น',    svg:'livingroom', s:'We watch TV in the living room.'},
     {w:'basement',    th:'ห้องใต้ดิน',     svg:'basement', s:'The basement is under the house.'}
   ]},
   { key:'u2', n:2, title:'In My Classroom', th:'ในห้องเรียน', c:'u2', words:[
@@ -980,7 +982,7 @@ const UNITS = [
     {w:'door',       th:'ประตู',               e:'🚪', s:'Please close the door.'},
     {w:'window',     th:'หน้าต่าง',             e:'🪟', s:'Open the window, please.'},
     {w:'locker',     th:'ตู้ล็อกเกอร์',          svg:'locker', s:'My bag is in my locker.'},
-    {w:'poster',     th:'โปสเตอร์',             e:'🖼️', s:'There is a big poster on the wall.'},
+    {w:'poster',     th:'โปสเตอร์',             svg:'poster', s:'There is a big poster on the wall.'},
     {w:'plant',      th:'ต้นไม้ (ในกระถาง)',     e:'🪴', s:'The plant is green.'},
     {w:'clock',      th:'นาฬิกา',               e:'🕐', s:'The clock is on the wall.'},
     {w:'teacher',    th:'ครู',                 e:'🧑‍🏫', s:'My teacher is kind.'},
@@ -995,62 +997,62 @@ const UNITS = [
     {w:'school bag',       th:'กระเป๋านักเรียน',    e:'🎒', s:'My school bag is blue.'},
     {w:'bottle',           th:'ขวด (ขวดน้ำ)',      svg:'bottle', s:'There is water in my bottle.'},
     {w:'highlighter',      th:'ปากกาเน้นข้อความ',   svg:'highlighter', s:'My highlighter is yellow.'},
-    {w:'drawing book',     th:'สมุดวาดภาพ',        e:'📔', s:'I draw in my drawing book.'},
+    {w:'drawing book',     th:'สมุดวาดภาพ',        svg:'drawingbook', s:'I draw in my drawing book.'},
     {w:'pen',              th:'ปากกา',            e:'🖊️', s:'That is a red pen.'},
-    {w:'pencil case',      th:'กล่องดินสอ',        e:'👝', s:'My pencils are in my pencil case.'},
+    {w:'pencil case',      th:'กล่องดินสอ',        svg:'pencilcase', s:'My pencils are in my pencil case.'},
     {w:'pencil sharpener', th:'กบเหลาดินสอ',       svg:'sharpener', s:'I need a pencil sharpener.'}
   ]},
   { key:'u4', n:4, title:'My Big Family', th:'ครอบครัวของฉัน', c:'u4', words:[
-    {w:'dad',          th:'พ่อ',                     e:'👨', s:'My dad is tall.'},
-    {w:'mom',          th:'แม่',                     e:'👩', s:'My mom is pretty.'},
-    {w:'grandpa',      th:'ปู่ / ตา',                 e:'👴', s:'Grandpa has a big hat.'},
-    {w:'grandma',      th:'ย่า / ยาย',                e:'👵', s:'Grandma sings a song.'},
-    {w:'brother',      th:'พี่ชาย / น้องชาย',          e:'👦', s:'My brother plays soccer.'},
-    {w:'sister',       th:'พี่สาว / น้องสาว',          e:'👧', s:'My sister has long hair.'},
-    {w:'grandparents', th:'ปู่ย่าตายาย',               e:'👴👵', s:'I love my grandparents.'},
-    {w:'aunt',         th:'ป้า / น้า / อา (ผู้หญิง)',   e:'👩‍🦰', s:"My aunt is my mom's sister."},
-    {w:'uncle',        th:'ลุง / น้า / อา (ผู้ชาย)',    e:'👨‍🦱', s:"My uncle is my dad's brother."},
-    {w:'daughter',     th:'ลูกสาว',                   e:'👧🏻', s:'Milin is a daughter.'},
-    {w:'son',          th:'ลูกชาย',                   e:'👦🏻', s:'Tom is a son.'},
-    {w:'cousins',      th:'ลูกพี่ลูกน้อง',              e:'🧒🧒', s:'My cousins are funny.'}
+    {w:'dad',          th:'พ่อ',                     svg:'fam:dad', s:'My dad is tall.'},
+    {w:'mom',          th:'แม่',                     svg:'fam:mom', s:'My mom is pretty.'},
+    {w:'grandpa',      th:'ปู่ / ตา',                 svg:'fam:grandpa', s:'Grandpa has a big hat.'},
+    {w:'grandma',      th:'ย่า / ยาย',                svg:'fam:grandma', s:'Grandma sings a song.'},
+    {w:'brother',      th:'พี่ชาย / น้องชาย',          svg:'fam:brother', s:'My brother plays soccer.'},
+    {w:'sister',       th:'พี่สาว / น้องสาว',          svg:'fam:sister', s:'My sister has long hair.'},
+    {w:'grandparents', th:'ปู่ย่าตายาย',               svg:'fam:grandparents', s:'I love my grandparents.'},
+    {w:'aunt',         th:'ป้า / น้า / อา (ผู้หญิง)',   svg:'fam:aunt', s:"My aunt is my mom's sister."},
+    {w:'uncle',        th:'ลุง / น้า / อา (ผู้ชาย)',    svg:'fam:uncle', s:"My uncle is my dad's brother."},
+    {w:'daughter',     th:'ลูกสาว',                   svg:'fam:daughter', s:'Milin is a daughter.'},
+    {w:'son',          th:'ลูกชาย',                   svg:'fam:son', s:'Tom is a son.'},
+    {w:'cousins',      th:'ลูกพี่ลูกน้อง',              svg:'fam:cousins', s:'My cousins are funny.'}
   ]},
   { key:'u5', n:5, title:'Little Blue Eyes', th:'ร่างกายของเรา (Body Parts)', c:'u5', words:[
-    {w:'ear',   th:'หู',            e:'👂', s:'I hear with my ears.'},
-    {w:'eye',   th:'ตา',            e:'👁️', s:'She has blue eyes.'},
-    {w:'head',  th:'หัว / ศีรษะ',    e:'🙂', s:'I wear a hat on my head.'},
-    {w:'mouth', th:'ปาก',           e:'👄', s:'I eat with my mouth.'},
-    {w:'nose',  th:'จมูก',          e:'👃', s:'I smell with my nose.'},
-    {w:'teeth', th:'ฟัน (หลายซี่)',   e:'🦷', s:'I brush my teeth.'},
-    {w:'arm',   th:'แขน',           e:'💪', s:'I have two arms.'},
-    {w:'leg',   th:'ขา',            e:'🦵', s:'I have two legs.'},
-    {w:'hand',  th:'มือ',           e:'✋', s:'Clap your hands!'},
-    {w:'foot',  th:'เท้า',          e:'🦶', s:'I kick the ball with my foot.'},
-    {w:'hair',  th:'ผม',            e:'💇‍♀️', s:'She has long hair.'},
-    {w:'neck',  th:'คอ',            e:'🦒', s:'A giraffe has a long neck.'}
+    {w:'ear',   th:'หู',            svg:'body:ear', s:'I hear with my ears.'},
+    {w:'eye',   th:'ตา',            svg:'body:eye', s:'She has blue eyes.'},
+    {w:'head',  th:'หัว / ศีรษะ',    svg:'body:head', s:'I wear a hat on my head.'},
+    {w:'mouth', th:'ปาก',           svg:'body:mouth', s:'I eat with my mouth.'},
+    {w:'nose',  th:'จมูก',          svg:'body:nose', s:'I smell with my nose.'},
+    {w:'teeth', th:'ฟัน (หลายซี่)',   svg:'body:teeth', s:'I brush my teeth.'},
+    {w:'arm',   th:'แขน',           svg:'body:arm', s:'I have two arms.'},
+    {w:'leg',   th:'ขา',            svg:'body:leg', s:'I have two legs.'},
+    {w:'hand',  th:'มือ',           svg:'body:hand', s:'Clap your hands!'},
+    {w:'foot',  th:'เท้า',          svg:'body:foot', s:'I kick the ball with my foot.'},
+    {w:'hair',  th:'ผม',            svg:'body:hair', s:'She has long hair.'},
+    {w:'neck',  th:'คอ',            svg:'body:neck', s:'A giraffe has a long neck.'}
   ]},
   { key:'u6', n:6, title:'Fun Time', th:'ดนตรีและความสนุก', c:'u6', words:[
-    {w:'band',        th:'วงดนตรี',          e:'🎷', s:'The band plays music.'},
+    {w:'band',        th:'วงดนตรี',          svg:'band', s:'The band plays music.'},
     {w:'clap',        th:'ปรบมือ',           e:'👏', s:'Clap, clap, clap!'},
     {w:'guitar',      th:'กีตาร์',            e:'🎸', s:'He plays the guitar.'},
     {w:'piano',       th:'เปียโน',           e:'🎹', s:'She plays the piano.'},
-    {w:'sing',        th:'ร้องเพลง',          e:'🎤', s:'I like to sing.'},
+    {w:'sing',        th:'ร้องเพลง',          e:'🧑‍🎤', s:'I like to sing.'},
     {w:'dance',       th:'เต้นรำ',            e:'💃', s:"Let's dance!"},
-    {w:'countryside', th:'ชนบท',             e:'🏞️', s:'There are farms in the countryside.'},
+    {w:'countryside', th:'ชนบท',             svg:'countryside', s:'There are farms in the countryside.'},
     {w:'balloon',     th:'ลูกโป่ง',           e:'🎈', s:'I have a red balloon.'},
-    {w:'children',    th:'เด็ก ๆ (หลายคน)',   e:'👫', s:'The children are happy.'},
+    {w:'children',    th:'เด็ก ๆ (หลายคน)',   e:'👧🧒', s:'The children are happy.'},
     {w:'hat',         th:'หมวก',             e:'👒', s:'The clown has a funny hat.'},
     {w:'funfair',     th:'งานรื่นเริง',        e:'🎡', s:'We go to the funfair.'},
     {w:'clown',       th:'ตัวตลก',            e:'🤡', s:'The clown is funny.'}
   ]},
   { key:'u7', n:7, title:'Favorite Toys', th:'ของเล่นที่ชอบ', c:'u7', words:[
     {w:'airplane',        th:'เครื่องบิน',       e:'✈️', s:'The airplane is in the sky.'},
-    {w:'board game',      th:'เกมกระดาน',       e:'🎲', s:'We play a board game.'},
+    {w:'board game',      th:'เกมกระดาน',       svg:'boardgame', s:'We play a board game.'},
     {w:'boat',            th:'เรือ',            e:'⛵', s:'The boat is on the water.'},
     {w:'car',             th:'รถยนต์',          e:'🚗', s:'This is a small red car.'},
     {w:'robot',           th:'หุ่นยนต์',         e:'🤖', s:'My robot can walk.'},
     {w:'stuffed toy',     th:'ตุ๊กตานุ่มนิ่ม',     e:'🧸', s:'I hug my stuffed toy.'},
-    {w:'building blocks', th:'ตัวต่อ',           e:'🧱', s:'I build a house with building blocks.'},
-    {w:'dollhouse',       th:'บ้านตุ๊กตา',       e:'🏡', s:'My doll lives in a dollhouse.'},
+    {w:'building blocks', th:'ตัวต่อ',           svg:'blocks', s:'I build a house with building blocks.'},
+    {w:'dollhouse',       th:'บ้านตุ๊กตา',       svg:'dollhouse', s:'My doll lives in a dollhouse.'},
     {w:'kite',            th:'ว่าว',            e:'🪁', s:'I fly a kite.'},
     {w:'puppet',          th:'หุ่นมือ',          svg:'puppet', s:'The puppet is on my hand.'},
     {w:'skateboard',      th:'สเก็ตบอร์ด',       e:'🛹', s:'He rides a skateboard.'},
@@ -1256,6 +1258,220 @@ const ART = {
     <path d="M20 44 L18 90 M80 44 L82 90 M42 48 L41 92 M58 48 L59 92" stroke="#A9652D" stroke-width="6" stroke-linecap="round"/>
     <path d="M44 22 q6 -10 12 0 v8 h-12z" fill="#F59BB8"/></svg>`
 };
+
+/* ---- ภาพประกอบคำศัพท์ที่วาดเอง: ให้ “ภาพตรงกับคำ” แบบไม่กำกวม (สำหรับข้อสอบ Final) ----
+   ห้อง = ฉากทั้งห้อง · ครอบครัว = แผนผังครอบครัวที่ไฮไลต์คนนั้น · ร่างกาย = ภาพเด็กที่ไฮไลต์อวัยวะนั้น */
+const HI='#E2622A';
+const ring=(cx,cy,r)=>`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${HI}" stroke-width="2.6" stroke-dasharray="4.5 3"/>`;
+Object.assign(ART,{
+  bookcase:`<svg viewBox="0 0 100 100"><rect x="18" y="6" width="64" height="88" rx="4" fill="#A86A36"/>
+    <rect x="23" y="11" width="54" height="78" rx="2" fill="#D7A66F"/>
+    <rect x="23" y="35" width="54" height="4" fill="#A86A36"/><rect x="23" y="61" width="54" height="4" fill="#A86A36"/>
+    ${[[25,'#E2622A',22],[32,'#3A69B3',19],[38,'#2A877C',22],[45,'#E0B44E',17],[51,'#B94D75',22],[58,'#7355AE',20],[65,'#E2622A',22],[71,'#2A877C',16]].map(([x,c,h])=>`<rect x="${x}" y="${35-h}" width="5.5" height="${h}" rx="1" fill="${c}"/>`).join('')}
+    ${[[25,'#2A877C',20],[31,'#E0B44E',22],[38,'#B94D75',18],[44,'#3A69B3',22],[51,'#E2622A',21],[58,'#7355AE',17]].map(([x,c,h])=>`<rect x="${x}" y="${61-h}" width="5.5" height="${h}" rx="1" fill="${c}"/>`).join('')}
+    <g transform="rotate(-18 66 52)"><rect x="63" y="42" width="5.5" height="19" rx="1" fill="#3A69B3"/></g>
+    ${[[25,'#7355AE',20],[31,'#E2622A',22],[38,'#3A69B3',19],[45,'#2A877C',22],[52,'#E0B44E',20],[59,'#B94D75',22],[66,'#3A69B3',18]].map(([x,c,h])=>`<rect x="${x}" y="${89-h}" width="5.5" height="${h}" rx="1" fill="${c}"/>`).join('')}
+    <rect x="22" y="94" width="6" height="4" fill="#8A5428"/><rect x="72" y="94" width="6" height="4" fill="#8A5428"/></svg>`,
+  lamp:`<svg viewBox="0 0 100 100"><ellipse cx="50" cy="52" rx="34" ry="8" fill="#FFF3C4" opacity=".7"/>
+    <path d="M30 18 L70 18 L80 50 L20 50Z" fill="#F2C24C"/><path d="M30 18 L70 18 L72 24 L28 24Z" fill="#E0A82E"/>
+    <rect x="47" y="50" width="6" height="30" rx="2" fill="#8E9AAE"/><ellipse cx="50" cy="84" rx="20" ry="6" fill="#5F6B80"/>
+    <rect x="30" y="80" width="40" height="5" rx="2.5" fill="#6B778C"/><path d="M58 60 L58 70" stroke="#5F6B80" stroke-width="2" stroke-linecap="round"/><circle cx="58" cy="72" r="2" fill="#5F6B80"/></svg>`,
+  poster:`<svg viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="100" rx="12" fill="#EEF2F7"/>
+    <g transform="rotate(-3 50 50)"><rect x="16" y="12" width="68" height="76" rx="2" fill="#fff" stroke="#D6DAE3" stroke-width="1.5"/>
+    <path d="M26 66 A24 24 0 0 1 74 66" fill="none" stroke="#E2622A" stroke-width="5"/>
+    <path d="M31 66 A19 19 0 0 1 69 66" fill="none" stroke="#E0B44E" stroke-width="5"/>
+    <path d="M36 66 A14 14 0 0 1 64 66" fill="none" stroke="#2A877C" stroke-width="5"/>
+    <path d="M41 66 A9 9 0 0 1 59 66" fill="none" stroke="#3A69B3" stroke-width="5"/>
+    <path d="M50 20 l3 6.5 7 .8 -5.3 4.7 1.5 7 -6.2-3.6 -6.2 3.6 1.5-7 -5.3-4.7 7-.8z" fill="#E0B44E"/>
+    <rect x="26" y="74" width="48" height="4" rx="2" fill="#D6DAE3"/>
+    <circle cx="20" cy="16" r="3" fill="#C8414F"/><circle cx="80" cy="16" r="3" fill="#C8414F"/>
+    <circle cx="20" cy="84" r="3" fill="#C8414F"/><circle cx="80" cy="84" r="3" fill="#C8414F"/></g></svg>`,
+  drawingbook:`<svg viewBox="0 0 100 100"><rect x="14" y="14" width="66" height="76" rx="4" fill="#fff" stroke="#C9CFDA" stroke-width="2"/>
+    ${[22,32,42,52,62,72].map(x=>`<circle cx="${x}" cy="14" r="3.2" fill="none" stroke="#6B778C" stroke-width="2"/>`).join('')}
+    <circle cx="64" cy="32" r="8" fill="#F2C24C"/>${[0,45,90,135,180,225,270,315].map(a=>`<path d="M${64+11*Math.cos(a*Math.PI/180)} ${32+11*Math.sin(a*Math.PI/180)} L${64+14*Math.cos(a*Math.PI/180)} ${32+14*Math.sin(a*Math.PI/180)}" stroke="#F2C24C" stroke-width="2" stroke-linecap="round"/>`).join('')}
+    <path d="M24 70 L38 56 L52 70Z" fill="#E2622A"/><rect x="27" y="70" width="22" height="14" fill="#E9B97B"/><rect x="35" y="74" width="6" height="10" fill="#A86A36"/>
+    <path d="M20 84 H74" stroke="#7FBF67" stroke-width="3"/>
+    <g transform="rotate(-35 80 80)"><rect x="70" y="76" width="26" height="7" rx="2" fill="#3A69B3"/><path d="M96 76 L102 79.5 L96 83Z" fill="#3A69B3"/></g></svg>`,
+  pencilcase:`<svg viewBox="0 0 100 100"><g transform="rotate(-8 30 30)"><rect x="18" y="16" width="8" height="34" rx="1" fill="#F2C24C"/><path d="M18 16 L22 6 L26 16Z" fill="#E9C9A0"/><path d="M20.6 9.5 L22 6 L23.4 9.5Z" fill="#333"/></g>
+    <g transform="rotate(10 70 30)"><rect x="66" y="14" width="8" height="34" rx="1" fill="#C8414F"/><path d="M66 14 L70 4 L74 14Z" fill="#E9C9A0"/><path d="M68.6 7.5 L70 4 L71.4 7.5Z" fill="#333"/></g>
+    <rect x="40" y="18" width="7" height="30" rx="1" fill="#2A877C"/><path d="M40 18 L43.5 9 L47 18Z" fill="#E9C9A0"/>
+    <rect x="8" y="36" width="84" height="46" rx="18" fill="#5B8DD6"/><rect x="8" y="36" width="84" height="12" rx="6" fill="#4A78BF"/>
+    <path d="M14 42 H86" stroke="#DCE6F5" stroke-width="2" stroke-dasharray="2.5 2"/>
+    <rect x="80" y="38" width="6" height="12" rx="2" fill="#E0B44E"/><circle cx="83" cy="52" r="3" fill="#E0B44E"/></svg>`,
+  boardgame:`<svg viewBox="0 0 100 100"><rect x="8" y="8" width="84" height="84" rx="8" fill="#FFF6E0" stroke="#E0B44E" stroke-width="2"/>
+    ${(()=>{const c=['#E2622A','#3A69B3','#2A877C','#E0B44E','#B94D75'];let o='';let i=0;
+      for(let k=0;k<6;k++){o+=`<rect x="${14+k*12}" y="14" width="11" height="11" rx="2" fill="${c[i++%5]}"/>`;}
+      for(let k=1;k<6;k++){o+=`<rect x="74" y="${14+k*12}" width="11" height="11" rx="2" fill="${c[i++%5]}"/>`;}
+      for(let k=4;k>=0;k--){o+=`<rect x="${14+k*12}" y="74" width="11" height="11" rx="2" fill="${c[i++%5]}"/>`;}
+      for(let k=4;k>=1;k--){o+=`<rect x="14" y="${14+k*12}" width="11" height="11" rx="2" fill="${c[i++%5]}"/>`;}
+      return o;})()}
+    <path d="M50 38 l3.5 7.5 8 1 -6 5.5 1.7 8 -7.2-4 -7.2 4 1.7-8 -6-5.5 8-1z" fill="#E2622A"/>
+    <path d="M30 34 L34 24 L38 34Z" fill="#3A69B3"/><circle cx="34" cy="23" r="3" fill="#3A69B3"/>
+    <g transform="rotate(12 62 64)"><rect x="54" y="56" width="17" height="17" rx="3.5" fill="#fff" stroke="#14213D" stroke-width="1.5"/>
+    <circle cx="58.5" cy="60.5" r="1.6" fill="#14213D"/><circle cx="62.5" cy="64.5" r="1.6" fill="#14213D"/><circle cx="66.5" cy="68.5" r="1.6" fill="#14213D"/></g></svg>`,
+  blocks:`<svg viewBox="0 0 100 100">
+    ${[[14,62,'#E2622A','A'],[40,62,'#3A69B3','B'],[66,62,'#2A877C','C'],[27,36,'#E0B44E','D'],[53,36,'#B94D75','E'],[40,10,'#7355AE','F']].map(([x,y,c,l])=>
+      `<rect x="${x}" y="${y}" width="24" height="24" rx="3" fill="${c}"/><rect x="${x}" y="${y}" width="24" height="5" rx="2" fill="#fff" opacity=".25"/>
+       <text x="${x+12}" y="${y+18}" font-family="Andika,Lexend,sans-serif" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">${l}</text>`).join('')}
+    <rect x="8" y="88" width="84" height="4" rx="2" fill="#E1E5EC"/></svg>`,
+  dollhouse:`<svg viewBox="0 0 100 100"><path d="M10 40 L50 8 L90 40Z" fill="#E88AA6"/><rect x="16" y="40" width="68" height="52" fill="#F7E6D0"/>
+    <rect x="20" y="44" width="28" height="20" fill="#CFE6F7"/><rect x="52" y="44" width="28" height="20" fill="#FBE3A6"/>
+    <rect x="20" y="68" width="28" height="20" fill="#E3F1DC"/><rect x="52" y="68" width="28" height="20" fill="#F3DCF0"/>
+    <rect x="16" y="64" width="68" height="4" fill="#C98B52"/><rect x="48" y="40" width="4" height="52" fill="#C98B52"/>
+    <rect x="23" y="56" width="16" height="6" rx="2" fill="#5B8DD6"/><rect x="23" y="54" width="5" height="4" rx="1.5" fill="#fff"/>
+    <rect x="58" y="56" width="16" height="3" fill="#A86A36"/><rect x="60" y="59" width="2" height="5" fill="#A86A36"/><rect x="70" y="59" width="2" height="5" fill="#A86A36"/>
+    <circle cx="34" cy="76" r="3" fill="#F2C9A5"/><rect x="31" y="79" width="6" height="8" rx="2" fill="#E2622A"/>
+    <rect x="56" y="80" width="18" height="8" rx="3" fill="#2A877C"/>
+    <rect x="12" y="90" width="76" height="4" rx="2" fill="#A86A36"/><circle cx="50" cy="28" r="5" fill="#fff"/></svg>`,
+  kitchen:`<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="12" fill="#F6EFE4"/><rect y="74" width="100" height="26" fill="#E2D2BC"/>
+    <rect x="6" y="20" width="24" height="56" rx="3" fill="#DDE6EE"/><rect x="6" y="44" width="24" height="1.6" fill="#B9C6D3"/>
+    <rect x="25" y="26" width="2.2" height="12" rx="1" fill="#9AA9B8"/><rect x="25" y="50" width="2.2" height="14" rx="1" fill="#9AA9B8"/>
+    <rect x="34" y="52" width="60" height="24" fill="#C98B52"/><rect x="33" y="48" width="62" height="5" rx="1.5" fill="#7A5A3F"/>
+    <rect x="38" y="57" width="16" height="15" rx="1.5" fill="#D9A06A"/><rect x="57" y="57" width="16" height="15" rx="1.5" fill="#D9A06A"/><rect x="76" y="57" width="15" height="15" rx="1.5" fill="#D9A06A"/>
+    <rect x="61" y="35" width="22" height="13" rx="3" fill="#3E4B5E"/><rect x="58" y="33" width="28" height="3.5" rx="1.7" fill="#2E3A4C"/><rect x="69" y="29" width="6" height="4" rx="2" fill="#2E3A4C"/>
+    <path d="M66 26 q-3 -4 0 -8 q3 -4 0 -8 M78 26 q-3 -4 0 -8 q3 -4 0 -8" fill="none" stroke="#B9C6D3" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="44" cy="30" r="7" fill="#fff" stroke="#D6DAE3" stroke-width="1.5"/><circle cx="44" cy="30" r="3.5" fill="none" stroke="#E1E5EC"/>
+    <rect x="38" y="40" width="20" height="2" rx="1" fill="#A86A36"/></svg>`,
+  bedroom:`<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="12" fill="#EEF3FA"/><rect y="74" width="100" height="26" fill="#E7D3B8"/>
+    <rect x="56" y="12" width="30" height="24" rx="2" fill="#CFE6F7" stroke="#fff" stroke-width="3"/><path d="M71 12 V36 M56 24 H86" stroke="#fff" stroke-width="2.5"/>
+    <rect x="8" y="38" width="9" height="40" rx="2" fill="#A86A36"/>
+    <rect x="12" y="56" width="68" height="13" rx="3" fill="#fff" stroke="#D6DAE3"/>
+    <ellipse cx="24" cy="55" rx="10" ry="5.5" fill="#fff" stroke="#D6DAE3"/>
+    <rect x="36" y="52" width="46" height="18" rx="5" fill="#5B8DD6"/><path d="M36 58 H82" stroke="#7FA7E2" stroke-width="2"/>
+    <rect x="14" y="69" width="4" height="9" fill="#A86A36"/><rect x="74" y="69" width="4" height="9" fill="#A86A36"/>
+    <rect x="84" y="60" width="13" height="16" rx="2" fill="#C98B52"/><path d="M85 48 L96 48 L98 56 L83 56Z" fill="#F2C24C"/><rect x="89.5" y="56" width="2" height="4" fill="#8E9AAE"/></svg>`,
+  bathroom:`<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="12" fill="#E4F0F7"/>
+    ${[12,24,36,48,60].map(y=>`<path d="M0 ${y} H100" stroke="#fff" stroke-width="1.2"/>`).join('')}${[16,32,48,64,80].map(x=>`<path d="M${x} 0 V70" stroke="#fff" stroke-width="1.2"/>`).join('')}
+    <rect y="72" width="100" height="28" fill="#D3DCE6"/>
+    <path d="M6 52 H60 V62 Q60 76 46 76 H20 Q6 76 6 62Z" fill="#fff" stroke="#B9C6D3" stroke-width="1.5"/><rect x="9" y="53" width="48" height="5" fill="#8FC8EE"/>
+    <rect x="12" y="76" width="4" height="6" fill="#B9C6D3"/><rect x="50" y="76" width="4" height="6" fill="#B9C6D3"/>
+    <path d="M52 52 V36 Q52 32 48 32 H42" fill="none" stroke="#9AA9B8" stroke-width="3" stroke-linecap="round"/><ellipse cx="40" cy="33" rx="5" ry="2.5" fill="#9AA9B8"/>
+    <rect x="72" y="40" width="18" height="15" rx="3" fill="#fff" stroke="#B9C6D3" stroke-width="1.5"/>
+    <ellipse cx="80" cy="62" rx="12" ry="7" fill="#fff" stroke="#B9C6D3" stroke-width="1.5"/><path d="M73 66 Q74 78 80 78 Q86 78 87 66" fill="#fff" stroke="#B9C6D3" stroke-width="1.5"/></svg>`,
+  livingroom:`<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="12" fill="#F6EFE4"/><rect y="72" width="100" height="28" fill="#E2D2BC"/>
+    <rect x="56" y="18" width="36" height="23" rx="2.5" fill="#2E3A4C"/><rect x="59" y="21" width="30" height="17" rx="1.5" fill="#6FA8D6"/>
+    <rect x="71" y="41" width="6" height="4" fill="#2E3A4C"/><rect x="54" y="45" width="40" height="9" rx="2" fill="#A86A36"/>
+    <rect x="6" y="46" width="44" height="16" rx="6" fill="#2A877C"/><rect x="4" y="58" width="48" height="14" rx="5" fill="#3A9D90"/>
+    <rect x="2" y="52" width="8" height="20" rx="4" fill="#2A877C"/><rect x="46" y="52" width="8" height="20" rx="4" fill="#2A877C"/>
+    <rect x="14" y="50" width="10" height="9" rx="3" fill="#E0B44E"/><rect x="32" y="50" width="10" height="9" rx="3" fill="#E88AA6"/>
+    <rect x="8" y="72" width="3" height="5" fill="#1C665D"/><rect x="45" y="72" width="3" height="5" fill="#1C665D"/>
+    <ellipse cx="54" cy="86" rx="36" ry="7" fill="#E8B4A0"/><ellipse cx="54" cy="86" rx="26" ry="4.5" fill="none" stroke="#F3D2C2" stroke-width="2"/></svg>`,
+  garden:`<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="12" fill="#D6ECFA"/><circle cx="18" cy="18" r="9" fill="#F2C24C"/>
+    <rect y="58" width="100" height="42" fill="#8CC66E"/>
+    ${[6,16,26,36,46,56].map(x=>`<path d="M${x} 62 V44 L${x+4} 39 L${x+8} 44 V62Z" fill="#fff" stroke="#E1E5EC"/>`).join('')}<rect x="4" y="47" width="62" height="3" fill="#fff"/><rect x="4" y="56" width="62" height="3" fill="#fff"/>
+    <rect x="80" y="38" width="6" height="24" fill="#A86A36"/><circle cx="83" cy="30" r="13" fill="#5FA34B"/><circle cx="75" cy="36" r="8" fill="#6FB15A"/><circle cx="91" cy="36" r="8" fill="#6FB15A"/>
+    ${[[12,'#C8414F'],[24,'#F2C24C'],[36,'#B94D75'],[48,'#E2622A'],[60,'#7355AE'],[72,'#C8414F'],[84,'#F2C24C']].map(([x,c])=>
+      `<path d="M${x} 90 V76" stroke="#3E7F2E" stroke-width="2"/><circle cx="${x}" cy="73" r="4.5" fill="${c}"/><circle cx="${x}" cy="73" r="1.6" fill="#FFF3C4"/>`).join('')}</svg>`,
+  countryside:`<svg viewBox="0 0 100 100"><rect width="100" height="100" rx="12" fill="#D6ECFA"/><circle cx="82" cy="16" r="8" fill="#F2C24C"/>
+    <path d="M0 50 Q25 30 50 46 Q75 30 100 48 V100 H0Z" fill="#9CCB7E"/>
+    <path d="M0 64 Q40 52 100 62 V100 H0Z" fill="#7FBF67"/>
+    ${[70,76,82,88,94].map((y,i)=>`<path d="M0 ${y} Q50 ${y-6} 100 ${y}" stroke="${i%2?'#6FAE55':'#B9D98F'}" stroke-width="3" fill="none"/>`).join('')}
+    <path d="M58 44 L70 34 L82 44Z" fill="#B23A3A"/><rect x="60" y="44" width="20" height="16" fill="#C8414F"/>
+    <rect x="66" y="50" width="8" height="10" fill="#fff"/><path d="M66 50 L74 60 M74 50 L66 60" stroke="#C8414F" stroke-width="1.4"/>
+    <rect x="20" y="40" width="4" height="14" fill="#A86A36"/><circle cx="22" cy="36" r="8" fill="#5FA34B"/>
+    <ellipse cx="40" cy="60" rx="6" ry="3.6" fill="#fff"/><circle cx="35" cy="58" r="2.6" fill="#fff"/><circle cx="41" cy="59" r="1.4" fill="#14213D"/><rect x="37" y="62" width="1.4" height="4" fill="#14213D"/><rect x="43" y="62" width="1.4" height="4" fill="#14213D"/></svg>`,
+  band:`<svg viewBox="0 0 100 100">
+    <g transform="rotate(-25 26 50)"><rect x="23" y="12" width="6" height="40" rx="2" fill="#7A5A3F"/><ellipse cx="26" cy="62" rx="13" ry="15" fill="#E2622A"/><ellipse cx="26" cy="50" rx="10" ry="9" fill="#E2622A"/><circle cx="26" cy="58" r="4" fill="#5A3A22"/></g>
+    <ellipse cx="62" cy="74" rx="22" ry="7" fill="#3A69B3"/><rect x="40" y="58" width="44" height="16" fill="#5B8DD6"/><ellipse cx="62" cy="58" rx="22" ry="7" fill="#EAF0F9" stroke="#3A69B3" stroke-width="1.5"/>
+    <path d="M44 60 L52 72 L60 60 L68 72 L76 60 L82 70" fill="none" stroke="#F2C24C" stroke-width="2"/>
+    <path d="M50 46 L66 54 M74 46 L60 54" stroke="#A86A36" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M64 12 h14 l-4 8 h-6z" fill="#E0B44E"/><path d="M71 20 V36 Q71 40 76 40 L88 34" fill="none" stroke="#E0B44E" stroke-width="4" stroke-linecap="round"/><path d="M84 30 L94 26 L92 40Z" fill="#E0B44E"/>
+    <circle cx="44" cy="16" r="2" fill="#14213D"/><path d="M46 16 V6 l6 2" fill="none" stroke="#14213D" stroke-width="1.6"/></svg>`
+});
+
+/* ร่างกาย: เด็กทั้งตัว (head/neck/arm/hand/leg/foot) หรือใบหน้าใกล้ (eye/ear/nose/mouth/teeth/hair) */
+function BODY(part){
+  const SK='#F2C9A5', HR='#4A3428', SH='#5B8DD6', PA='#2E4A7A', c=k=>part===k?HI:null;
+  if(['eye','ear','nose','mouth','teeth','hair'].includes(part)){
+    const open=part==='teeth';
+    return `<svg viewBox="0 0 100 100">
+      <ellipse cx="18" cy="56" rx="6" ry="9" fill="${c('ear')||SK}"/><ellipse cx="82" cy="56" rx="6" ry="9" fill="${c('ear')||SK}"/>
+      <circle cx="50" cy="56" r="31" fill="${SK}"/>
+      <path d="M19 52 Q18 18 50 17 Q82 18 81 52 Q76 34 50 33 Q24 34 19 52Z" fill="${c('hair')||HR}"/>
+      <ellipse cx="38" cy="55" rx="6.5" ry="5.5" fill="#fff"/><ellipse cx="62" cy="55" rx="6.5" ry="5.5" fill="#fff"/>
+      <circle cx="38" cy="55.5" r="3.4" fill="${c('eye')||'#14213D'}"/><circle cx="62" cy="55.5" r="3.4" fill="${c('eye')||'#14213D'}"/>
+      <path d="M32 46 Q38 43 44 46 M56 46 Q62 43 68 46" stroke="${HR}" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M50 58 Q45 68 49 70 Q53 71 54 68" fill="${c('nose')||'#E3B08A'}" stroke="${c('nose')||'#D69C76'}" stroke-width="1.2"/>
+      <circle cx="29" cy="67" r="4.5" fill="#F4A7A0" opacity=".6"/><circle cx="71" cy="67" r="4.5" fill="#F4A7A0" opacity=".6"/>
+      ${open
+        ? `<path d="M37 72 Q50 92 63 72Z" fill="#8E2F2F"/><path d="M38.5 72.5 H61.5 L60 77 H40Z" fill="#fff" stroke="${HI}" stroke-width="1.4"/><path d="M44 73 V77 M50 73 V77 M56 73 V77" stroke="#D6DAE3"/>`
+        : `<path d="M39 73 Q50 84 61 73 Q50 78 39 73Z" fill="${c('mouth')||'#C24D4D'}"/>`}
+      ${part==='eye'?ring(38,55,10)+ring(62,55,10):''}${part==='ear'?ring(18,56,11)+ring(82,56,11):''}
+      ${part==='nose'?ring(50,64,10):''}${part==='mouth'?ring(50,76,13):''}${part==='teeth'?ring(50,77,15):''}${part==='hair'?ring(50,30,24):''}
+    </svg>`;
+  }
+  return `<svg viewBox="0 0 100 100">
+    <rect x="40.5" y="56" width="8" height="30" rx="3.5" fill="${c('leg')||PA}"/><rect x="51.5" y="56" width="8" height="30" rx="3.5" fill="${c('leg')||PA}"/>
+    <ellipse cx="43.5" cy="89" rx="6.5" ry="3.4" fill="${c('foot')||'#3A3A3A'}"/><ellipse cx="56.5" cy="89" rx="6.5" ry="3.4" fill="${c('foot')||'#3A3A3A'}"/>
+    <rect x="30.5" y="35" width="8" height="22" rx="4" fill="${c('arm')||SK}"/><rect x="61.5" y="35" width="8" height="22" rx="4" fill="${c('arm')||SK}"/>
+    <rect x="30.5" y="34" width="8" height="10" rx="4" fill="${c('arm')||SH}"/><rect x="61.5" y="34" width="8" height="10" rx="4" fill="${c('arm')||SH}"/>
+    <circle cx="34.5" cy="59" r="4.2" fill="${c('hand')||SK}"/><circle cx="65.5" cy="59" r="4.2" fill="${c('hand')||SK}"/>
+    <rect x="38" y="33" width="24" height="26" rx="6" fill="${SH}"/>
+    <rect x="46" y="27" width="8" height="8" rx="2" fill="${c('neck')||SK}"/>
+    <g>
+      <ellipse cx="38.8" cy="18" rx="2.4" ry="3.4" fill="${SK}"/><ellipse cx="61.2" cy="18" rx="2.4" ry="3.4" fill="${SK}"/>
+      <circle cx="50" cy="17" r="11.2" fill="${SK}"/>
+      <path d="M38.8 16 Q38.8 4.5 50 4.5 Q61.2 4.5 61.2 16 Q57 10.5 50 10.5 Q43 10.5 38.8 16Z" fill="${HR}"/>
+      <circle cx="46" cy="18" r="1.3" fill="#14213D"/><circle cx="54" cy="18" r="1.3" fill="#14213D"/>
+      <path d="M46.5 22.5 Q50 25 53.5 22.5" stroke="#14213D" stroke-width="1.2" fill="none" stroke-linecap="round"/></g>
+    ${part==='head'?ring(50,15,17)+'<path d="M76 8 L66 12" stroke="'+HI+'" stroke-width="2.6" stroke-linecap="round"/><path d="M66 7.5 L65.5 12.6 L70.5 13.6" fill="none" stroke="'+HI+'" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>':''}${part==='neck'?ring(50,31,7.5):''}
+    ${part==='arm'?ring(34.5,45,13)+ring(65.5,45,13):''}${part==='hand'?ring(34.5,59,7)+ring(65.5,59,7):''}
+    ${part==='leg'?`<ellipse cx="50" cy="71" rx="16" ry="19" fill="none" stroke="${HI}" stroke-width="2.6" stroke-dasharray="4.5 3"/>`:''}
+    ${part==='foot'?ring(43.5,89,8.5)+ring(56.5,89,8.5):''}
+  </svg>`;
+}
+
+/* ครอบครัว: แผนผังย่อที่เน้นเฉพาะความสัมพันธ์ (3–5 คน ตัวใหญ่) มี "me" = มิลิน เป็นจุดอ้างอิงเสมอ
+   คนที่เป็นคำตอบมีวงประสีส้มและเสื้อสีส้ม */
+function FAM(target){
+  const P=(x,y,kind,hi,s)=>{ s=s||1.5;
+    const skin='#F2C9A5', body={man:'#3A69B3',woman:'#D86F95',boy:'#5B8DD6',girl:'#EE9DB8',gpa:'#7A8597',gma:'#A889C9'}[kind];
+    const grey=kind==='gpa'||kind==='gma', hair=grey?'#C9CFDA':'#4A3428';
+    const kid=kind==='boy'||kind==='girl', r=(kid?4.4:5.2)*s, by=y+r+(kid?6.2:7.6)*s, bw=(kid?6.2:7.6)*s;
+    const longHair=kind==='woman'||kind==='girl'||kind==='gma';
+    return `${hi?ring(x,y+(kid?4:5)*s,(kid?10.5:12.5)*s):''}
+      ${longHair?`<ellipse cx="${x}" cy="${y+1.6*s}" rx="${r+1.7*s}" ry="${r+2.8*s}" fill="${hair}"/>`:''}
+      <path d="M${x-bw} ${by} Q${x} ${by-(kid?11:13.6)*s} ${x+bw} ${by}Z" fill="${hi?HI:body}"/>
+      <circle cx="${x}" cy="${y}" r="${r}" fill="${skin}"/>
+      <path d="M${x-r} ${y-0.6*s} Q${x} ${y-r-2.4*s} ${x+r} ${y-0.6*s} Q${x} ${y-r*0.45} ${x-r} ${y-0.6*s}Z" fill="${hair}"/>
+      <circle cx="${x-1.7*s}" cy="${y+0.3*s}" r="${0.55*s}" fill="#14213D"/><circle cx="${x+1.7*s}" cy="${y+0.3*s}" r="${0.55*s}" fill="#14213D"/>
+      ${kind==='gma'?`<circle cx="${x}" cy="${y-r-1.6*s}" r="${2.2*s}" fill="${hair}"/>`:''}
+      ${kind==='gpa'?`<path d="M${x-3.2*s} ${y+0.3*s} h${2.4*s} M${x+0.8*s} ${y+0.3*s} h${2.4*s}" stroke="#14213D" stroke-width="${0.7*s}"/>`:''}`;
+  };
+  const L=d=>`<path d="${d}" fill="none" stroke="#B9C2D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const ME=(x,y)=>`<rect x="${x-8}" y="${y}" width="16" height="9" rx="4.5" fill="#14213D"/><text x="${x}" y="${y+6.6}" font-family="Lexend,sans-serif" font-size="6.2" font-weight="600" fill="#fff" text-anchor="middle">me</text>`;
+  const T=target, svg=b=>`<svg viewBox="0 0 100 100">${b}</svg>`;
+  /* พ่อ แม่ ลูก (มี me) */
+  if(T==='dad'||T==='mom') return svg(
+    L('M38 30 H62 M50 30 V54')+P(28,20,'man',T==='dad')+P(72,20,'woman',T==='mom')+P(50,64,'girl',false,1.6)+ME(50,88));
+  /* พี่น้อง */
+  if(T==='brother'||T==='sister') return svg(
+    L('M40 22 H60 M50 22 V40 M30 40 H70 M30 40 V54 M70 40 V54')+P(32,12,'man',false,1.2)+P(68,12,'woman',false,1.2)
+    +P(30,64,T==='brother'?'boy':'girl',true,1.6)+P(70,64,'girl',false,1.6)+ME(70,88));
+  /* ปู่ย่าตายาย → พ่อ → me */
+  if(T==='grandpa'||T==='grandma'||T==='grandparents') return svg(
+    L('M38 22 H62 M50 22 V40 M50 54 V62')+P(28,12,'gpa',T!=='grandma')+P(72,12,'gma',T!=='grandpa')
+    +P(50,40,'man',false,1.15)+P(50,70,'girl',false,1.3)+ME(50,89));
+  /* ป้า/น้า (พี่น้องของแม่) · ลุง/อา (พี่น้องของพ่อ) */
+  if(T==='aunt'||T==='uncle'){ const k=T==='aunt'?'woman':'man';
+    return svg(L('M28 10 V6 H72 V10 M28 40 V54')+P(28,20,k,false)+P(72,20,k,true)+P(28,64,'girl',false,1.6)+ME(28,88)
+      +``); }
+  /* ลูกพี่ลูกน้อง = ลูกของป้า/น้า */
+  if(T==='cousins') return svg(
+    L('M26 10 V6 H74 V10 M26 40 V54 M74 40 V48 M62 48 H86 M62 48 V54 M86 48 V54')+P(26,20,'woman',false,1.35)+P(74,20,'woman',false,1.35)
+    +P(26,64,'girl',false,1.5)+ME(26,88)+P(62,64,'boy',true,1.5)+P(86,64,'girl',true,1.5));
+  /* ลูกชาย / ลูกสาว ของพ่อแม่ */
+  return svg(L('M38 30 H62 M50 30 V50')+P(28,20,'man',false)+P(72,20,'woman',false)
+    +`<path d="M45 47 L50 53 L55 47" fill="none" stroke="${HI}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`
+    +P(50,66,T==='son'?'boy':'girl',true,1.75));
+}
+
+/* คำที่ภาพคล้ายกัน — จะไม่ถูกสุ่มมาเป็นตัวเลือกในข้อ “ภาพ” เดียวกัน */
+const CONFUSE=[['book','bookcase','notebook','drawing book'],['pen','pencil','highlighter','crayon'],['son','brother'],['daughter','sister'],
+  ['cousins','children'],['mouth','teeth'],['hair','head'],['leg','foot'],['hand','clap','arm'],['band','guitar','piano','sing','dance'],
+  ['locker','bookcase'],['grandparents','grandpa','grandma'],['bedroom','living room'],['hat','head'],['house','dollhouse','basement'],
+  ['school bag','pencil case'],['television','computer'],['chalkboard','poster']];
+const confuses=(a,b)=>CONFUSE.some(g=>g.includes(a)&&g.includes(b));
 
 /* ---- แบบฝึกเติมคำในช่องว่าง (คำศัพท์ในประโยค) — ตัวเลือกกำหนดเองเพื่อไม่ให้กำกวม ---- */
 const BLANKS = [
@@ -1794,7 +2010,9 @@ function star(n){
 /* ภาพประจำคำ: emoji / ภาพวาด SVG / ช่องสี / ตัวอักษร */
 function pic(w, size){
   size=size||64;
-  if(w.svg) return `<span class="pic" style="width:${size}px;height:${size}px">${ART[w.svg]}</span>`;
+  if(w.svg){ const art = w.svg.startsWith('body:') ? BODY(w.svg.slice(5)) : w.svg.startsWith('fam:') ? FAM(w.svg.slice(4)) : ART[w.svg];
+    const scene = /^(fam:|body:)/.test(w.svg) || ['kitchen','bedroom','bathroom','livingroom','garden','countryside','hallway','basement','poster'].includes(w.svg);
+    return `<span class="pic${scene?' scene-pic':''}" style="width:${size}px;height:${size}px">${art}</span>`; }
   if(w.sw)  return `<span class="pic swatch" style="width:${size*.82}px;height:${size*.82}px;background:${w.sw}"></span>`;
   if(w.e){ const many=[...w.e].filter(ch=>/\p{Extended_Pictographic}/u.test(ch)).length>1;
     return `<span class="pic" style="width:${size}px;height:${size}px;font-size:${Math.round(size*(many?.4:.6))}px;letter-spacing:-.06em">${w.e}</span>`; }
@@ -2197,14 +2415,14 @@ VIEWS.unit = ()=>{
         ${set.words.map((x,i)=>{ const on=i===S.uWord, ok=mastered(x); return `
           <button data-act="uword" data-i="${i}" style="position:relative;border-radius:18px;border:2px solid ${on?col:'var(--line)'};
             background:${on?tint:'#fff'};padding:${P_?'12px 6px':'8px 6px 9px'};display:flex;flex-direction:column;align-items:center;gap:4px;min-height:${P_?62:118}px;justify-content:center">
-            ${P_?'':pic(x,many?54:70)}
+            ${P_?'':pic(x,many?54:92)}
             <span style="font-size:${x.w.length>12?14.5:x.w.length>8?16.5:19}px;font-weight:600;line-height:1.1;text-align:center;color:${on?dark:'var(--ink)'}">${esc(x.w)}</span>
             ${ok?`<span style="position:absolute;top:6px;right:8px;font-size:13px;color:var(--ok)">✔</span>`:''}
           </button>`; }).join('')}
       </div>
     </div>
     <div class="card col g10 unitdetail" data-side style="width:340px;flex:0 0 auto;align-items:center;text-align:center;justify-content:center">
-      ${P_?'':`<div class="pop" style="margin-bottom:2px">${pic(w,120)}</div>`}
+      ${P_?'':`<div class="pop" style="margin-bottom:2px">${pic(w,150)}</div>`}
       <div style="font-size:${w.w.length>12?34:44}px;font-weight:600;color:${dark};line-height:1.05">${esc(w.w)}</div>
       ${showMean
         ? `<div class="thai" style="font-size:21px;font-weight:600;color:var(--ink2)">${esc(w.th)}</div>`
@@ -2259,19 +2477,22 @@ ACT.umode=d=>{
    6C. QUIZ ENGINE — ใช้ร่วมกันทั้งแบบฝึก, Unit Test, ข้อสอบจำลอง
    ═════════════════════════════════════════════════════════════════════ */
 /* เลือกตัวลวง: คำอื่นที่ความหมายไม่ซ้ำกัน */
-function distract(w, pool, n){
+function distract(w, pool, n, visual){
   const out=[], seen=new Set([w.w.toLowerCase(), w.th]);
   for(const x of shuffle(pool)){
     if(out.length>=n) break;
     if(seen.has(x.w.toLowerCase())||seen.has(x.th)) continue;
+    if(visual && (confuses(w.w,x.w) || out.some(o=>confuses(o.w,x.w)))) continue;
     seen.add(x.w.toLowerCase()); seen.add(x.th); out.push(x);
   }
   return out;
 }
-function optsFor(w,pool,n){ const o=shuffle([w].concat(distract(w,pool.length>=n?pool:CORE,n-1))); return {opts:o, a:o.indexOf(w)}; }
+function optsFor(w,pool,n,visual){ let d=distract(w,pool.length>=n?pool:CORE,n-1,visual);
+  if(d.length<n-1) d=d.concat(distract(w,CORE.filter(x=>!d.includes(x)),n-1-d.length,visual));
+  const o=shuffle([w].concat(d)); return {opts:o, a:o.indexOf(w)}; }
 function mkListen(w,pool){ const usePic=hasPic(w); const p=(pool||CORE).filter(x=>usePic?hasPic(x):true);
-  const {opts,a}=optsFor(w,p,4); return {type:'listen',word:w,opts:opts.map(x=>({w:x,pic:usePic})),a,say:w.w}; }
-function mkPic(w,pool){ const {opts,a}=optsFor(w,pool||CORE,4); return {type:'pic',word:w,opts:opts.map(x=>({w:x})),a}; }
+  const {opts,a}=optsFor(w,p,4,usePic); return {type:'listen',word:w,opts:opts.map(x=>({w:x,pic:usePic})),a,say:w.w}; }
+function mkPic(w,pool){ const {opts,a}=optsFor(w,pool||CORE,4,true); return {type:'pic',word:w,opts:opts.map(x=>({w:x})),a}; }
 function mkMean(w,pool){ const {opts,a}=optsFor(w,pool||CORE,4); return {type:'mean',word:w,opts:opts.map(x=>({t:x.th,thai:true})),a,say:w.w}; }
 function mkTh2En(w,pool){ const {opts,a}=optsFor(w,pool||CORE,4); return {type:'th2en',word:w,opts:opts.map(x=>({w:x})),a}; }
 function mkBlank(b){ const o=shuffle(b.o); return {type:'blank',s:b.s,opts:o.map(t=>({t})),a:o.indexOf(b.a),word:coreWord(b.a),full:b.s.replace('___',b.a)}; }
@@ -2759,7 +2980,7 @@ VIEWS.spelling = ()=>{
   </div>
   <div class="row g8" style="margin:16px 0 8px"><div class="eyebrow">Spell by unit · สะกดคำทีละ Unit</div></div>
   <div class="hubgrid" data-rg="4" style="grid-template-columns:repeat(4,1fr)">
-    ${UNITS.map(u=>hcard({act:'unitspell',k:u.key,ic:u.words.find(w=>w.e).e,title:'Unit '+u.n,sub:u.title,c:u.c})).join('')}
+    ${UNITS.map(u=>hcard({act:'unitspell',k:u.key,ic:({u4:'👪',u5:'🧍'})[u.key]||(u.words.find(w=>w.e)||{e:'✏️'}).e,title:'Unit '+u.n,sub:u.title,c:u.c})).join('')}
   </div>
   <div class="hubgrid" data-rg="2" style="grid-template-columns:repeat(2,1fr);margin-top:14px">
     ${hcard({act:'drill',k:'missing',ic:'🔤',title:'Missing Letters',sub:'เติมตัวอักษรที่หายไป · 10 ข้อ',c:'gold'})}
@@ -4049,7 +4270,20 @@ fitStage();
 loadScramble(0); loadMatch('animal'); loadSort(0); loadSight(0); loadColour();
 /* ลิงก์ตรงไปยังบทเรียน (เช่น #exam, #unit=u3, #drill=blank, #grammar=g2, #spell=u4, #phonics)
    ใช้บุ๊กมาร์กบทเรียนที่ต้องการ และใช้ทดสอบหน้าจอ */
+/* #sheet = แผ่นตรวจภาพคำศัพท์ทั้ง 90 คำ (ใช้ตรวจว่าภาพตรงกับคำทุกคำ) */
+function showSheet(){
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;inset:0;z-index:99;background:#fff;overflow:auto;padding:24px;font-family:var(--f-ui)';
+  el.innerHTML=`<div style="font-size:22px;font-weight:600;margin-bottom:14px">Final vocabulary · 90 words · picture check</div>
+    ${UNITS.map(u=>`<div style="margin:14px 0 6px;font-weight:600;color:${C(u.c+'-d')}">Unit ${u.n} · ${esc(u.title)}</div>
+      <div style="display:grid;grid-template-columns:repeat(12,1fr);gap:8px">${u.words.map(w=>`
+        <div style="border:1px solid var(--line);border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:4px">
+          ${pic(w,82)}<div style="font-family:var(--f-word);font-size:14px;font-weight:600">${esc(w.w)}</div>
+          <div class="thai" style="font-size:10.5px;color:var(--ink3);text-align:center">${esc(w.th)}</div></div>`).join('')}</div>`).join('')}`;
+  document.body.appendChild(el);
+}
 function openFromHash(){
+  if(location.hash==='#sheet'){ render(); showSheet(); return true; }
   const m=(location.hash||'').match(/^#\/?([a-zA-Z]+)(?:=([\w-]+))?/); if(!m) return false;
   const [,k,v]=m;
   try{
