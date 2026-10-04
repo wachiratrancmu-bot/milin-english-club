@@ -2571,6 +2571,7 @@ function mkFix(right, wrong){
 function startQuiz(cfg){
   S.quiz=Object.assign({i:0,picks:[],done:false,exam:false},cfg);
   S.quiz.picks=new Array(cfg.items.length).fill(null);
+  saveExamState();
   Voice.stop(); S.screen='quiz'; render(); quizAuto();
 }
 function quizAuto(){
@@ -2723,8 +2724,21 @@ ACT.qznext=()=>{
   if(q.i<q.items.length-1){ q.i++; render(); quizAuto(); return; }
   finishQuiz();
 };
+const EXAM_SAVE='milin.exam.v1';
+function saveExamState(){ const q=S.quiz; try{
+  if(q&&q.exam&&!q.done) localStorage.setItem(EXAM_SAVE, JSON.stringify(Object.assign({},q,{rebuild:undefined,savedAt:Date.now()})));
+}catch(e){} }
+const savedExam=()=>{ try{ const q=JSON.parse(localStorage.getItem(EXAM_SAVE)||'null'); return q&&!q.done&&q.items&&q.items.length?q:null; }catch(e){ return null; } };
+const clearExamState=()=>{ try{ localStorage.removeItem(EXAM_SAVE); }catch(e){} };
+function resumeCard(){ const q=savedExam(); if(!q) return '';
+  const done=q.picks.filter(p=>p!==null).length;
+  return `<div class="soft row g10" style="padding:10px 14px;flex-wrap:wrap;border-color:var(--orange-t)">
+    <div class="col f1" style="min-width:200px"><div style="font-weight:600">${esc(q.title)} · ทำค้างไว้</div>
+      <div class="hint">ตอบแล้ว ${done} / ${q.items.length} ข้อ · ถึงข้อที่ ${q.i+1}</div></div>
+    <button class="btn" data-act="examresume">Continue ▶</button></div>`; }
+ACT.examresume=()=>{ const q=savedExam(); if(!q) return render(); S.quiz=q; Voice.stop(); S.screen='quiz'; render(); quizAuto(); };
 function finishQuiz(){
-  const q=S.quiz; q.done=true;
+  const q=S.quiz; q.done=true; if(q.exam) clearExamState();
   const finalOk=q.picks.filter((p,i)=>p===q.items[i].a).length;
   /* แบบฝึก: คะแนน = ถูกในครั้งแรก · ถูกในครั้งที่สองแสดงแยก */
   q.score = q.exam ? finalOk : q.items.filter((_,i)=>(q.first||{})[i]===true).length;
@@ -2733,7 +2747,7 @@ function finishQuiz(){
     q.items.forEach((it,i)=>record(it.word,it.type,q.picks[i]===it.a));
     const parts={}; q.items.forEach((it,i)=>{ const k=it.part; parts[k]=parts[k]||[0,0]; parts[k][1]++; if(q.picks[i]===it.a) parts[k][0]++; });
     const rec={d:Date.now(),score:q.score,n:q.items.length,parts}; q.rec=rec; (q.store?(P[q.store]=P[q.store]||[]):P.exams).push(rec); saveProg();
-    star(Math.round(q.score/3));
+    star(Math.round(10*q.score/q.items.length));
   }
   if(q.test){ P.unitTest[q.setKey]=Math.max(P.unitTest[q.setKey]||0,Math.round(100*q.score/q.items.length)); saveProg(); }
   if(q.gramKey){ P.gram[q.gramKey]=Math.max(P.gram[q.gramKey]||0,Math.round(100*q.score/q.items.length)); saveProg(); }
@@ -2790,6 +2804,8 @@ function quizResults(){
 }
 ACT.qzretry=()=>{
   const q=S.quiz;
+  if(q.examKind) return ACT.examstart({k:q.examKind});
+  if(q.store==='skills4') return ACT.s4test();
   if(q.rebuild) return q.rebuild();
   startQuiz(Object.assign({},q,{items:shuffle(q.items),i:0,done:false}));
 };
@@ -2805,21 +2821,32 @@ const EXAM_PARTS=[
   {k:'E',label:'E · Grammar',        th:'ไวยากรณ์'},
   {k:'F',label:'F · Reading',        th:'อ่านเรื่องแล้วตอบคำถาม'}
 ];
-function buildExam(){
-  const used=new Set(), take=(pool,n)=>{ const out=[]; for(const w of shuffle(pool)){ if(out.length>=n) break; if(used.has(w.w)) continue; used.add(w.w); out.push(w); } return out; };
+/* จำนวนข้อต่อตอน: ฉบับเต็ม 80 ข้อ · ฉบับย่อ 30 ข้อ */
+const EXAM_PLAN={
+  full: {n:80,A:10,pic:6,miss:4,mean:8,th2en:7,D:15,E:15,F:3},
+  quick:{n:30,A:5, pic:3,miss:2,mean:3,th2en:2,D:5, E:5, F:1}};
+const partCount=(pl,k)=>({A:pl.A,B:pl.pic+pl.miss,C:pl.mean+pl.th2en,D:pl.D,E:pl.E,F:pl.F*5})[k];
+function buildExam(kind){
+  const pl=EXAM_PLAN[kind]||EXAM_PLAN.full;
+  /* สุ่มคำแบบกระจายทุก Unit: สลับหยิบทีละ Unit เพื่อให้ทุกบทได้ออกสอบใกล้เคียงกัน */
+  const spread=pool=>{ const by={}; for(const w of shuffle(pool)) (by[w.set]=by[w.set]||[]).push(w);
+    const g=shuffle(Object.values(by)), out=[]; for(let i=0; out.length<pool.length; i++) for(const a of g) if(a[i]) out.push(a[i]); return out; };
+  const used=new Set(), take=(pool,n)=>{ const out=[]; for(const w of spread(pool)){ if(out.length>=n) break; if(used.has(w.w)) continue; used.add(w.w); out.push(w); } return out; };
   const picPool=CORE.filter(hasPic);
   const tag=(arr,k)=>arr.map(it=>Object.assign(it,{part:k,partLabel:EXAM_PARTS.find(p=>p.k===k).label}));
-  const A=tag(take(picPool,5).map(w=>mkListen(w,CORE)),'A');
-  const B=tag(take(picPool,3).map(w=>mkPic(w,CORE)).concat(take(CORE.filter(w=>w.w.length<=9),2).map(mkMissing)),'B');
-  const C_=tag(take(CORE,3).map(w=>mkMean(w,CORE)).concat(take(CORE,2).map(w=>mkTh2En(w,CORE))),'C');
-  const D=tag(pickN(BLANKS.filter(b=>!used.has(b.a)),5).map(mkBlank),'D');
-  const E=tag(pickN(GRAMMAR,5).map(g=>mkGram(g,pickN(g.items,1)[0])),'E');
-  const p=pickN(PASSAGES,1)[0];
-  const F=tag(p.q.map((_,i)=>mkRead(p,i)),'F');
+  const A=tag(take(picPool,pl.A).map(w=>mkListen(w,CORE)),'A');
+  const B=tag(take(picPool,pl.pic).map(w=>mkPic(w,CORE)).concat(take(CORE.filter(w=>w.w.length<=9),pl.miss).map(mkMissing)),'B');
+  const C_=tag(take(CORE,pl.mean).map(w=>mkMean(w,CORE)).concat(take(CORE,pl.th2en).map(w=>mkTh2En(w,CORE))),'C');
+  const freeB=BLANKS.filter(b=>!used.has(b.a));
+  const D=tag(spread(freeB.map(b=>Object.assign({set:b.u,w:b.s},{b}))).slice(0,pl.D).map(x=>mkBlank(x.b)),'D');
+  /* ไวยากรณ์: ครบทั้ง 8 เรื่องก่อน แล้วจึงเพิ่มข้อที่สอง */
+  const E=tag(shuffle(GRAMMAR).flatMap(g=>pickN(g.items,2).map((it,r)=>({g,it,r}))).sort((x,y)=>x.r-y.r).slice(0,pl.E).map(x=>mkGram(x.g,x.it)),'E');
+  const F=tag(pickN(PASSAGES,pl.F).flatMap(p=>p.q.map((_,i)=>mkRead(p,i))),'F');
   return A.concat(B,C_,D,E,F);
 }
-ACT.examstart=()=>startQuiz({title:'Mock Final Exam',sub:'ข้อสอบจำลองปลายภาค 30 ข้อ · 6 ตอน',items:buildExam(),exam:true,
-  section:'exam',back:'exam',rebuild:()=>ACT.examstart()});
+ACT.examstart=d=>{ const kind=(d&&d.k)==='quick'?'quick':'full', pl=EXAM_PLAN[kind];
+  startQuiz({title:kind==='quick'?'Mock Final · Quick':'Mock Final Exam',sub:'ข้อสอบจำลองปลายภาค '+pl.n+' ข้อ · 6 ตอน',items:buildExam(kind),exam:true,
+    section:'exam',back:'exam',examKind:kind}); };
 const DRILLS=[
   {k:'listen', ic:'🎧', t:'Listening',        th:'ฟังแล้วเลือกภาพ',          c:'cyan',   make:()=>pickN(CORE.filter(hasPic),10).map(w=>mkListen(w,CORE))},
   {k:'pic',    ic:'🖼️', t:'Look & Choose',    th:'ดูภาพเลือกคำ',             c:'blue',   make:()=>pickN(CORE.filter(hasPic),10).map(w=>mkPic(w,CORE))},
@@ -2839,13 +2866,15 @@ VIEWS.exam = ()=>{
     <div class="card f1 col g10" style="padding:20px 24px">
       <div class="row g12"><div class="ic" style="width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:var(--orange-t);color:var(--orange-d)">${I('exam')}</div>
         <div class="col f1"><div class="eyebrow">Mock Final Exam · ข้อสอบจำลอง</div>
-          <div style="font-size:28px;font-weight:600">30 questions · 6 parts</div></div>
-        <button class="btn lg" data-act="examstart">Start ▶</button></div>
+          <div style="font-size:28px;font-weight:600">80 questions · 6 parts</div></div>
+        <button class="btn lg" data-act="examstart" data-k="full">Start ▶</button></div>
+      ${resumeCard()}
       <div data-rg="3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
         ${EXAM_PARTS.map(p=>`<div class="soft" style="padding:9px 12px"><div style="font-size:15px;font-weight:600">${p.label}</div>
-          <div class="hint" style="font-size:13px">${p.th} · 5 ข้อ</div></div>`).join('')}
+          <div class="hint" style="font-size:13px">${p.th} · ${partCount(EXAM_PLAN.full,p.k)} ข้อ</div></div>`).join('')}
       </div>
-      <div class="hint">สุ่มข้อใหม่ทุกครั้ง · ไม่เฉลยระหว่างทำเหมือนสอบจริง · จบแล้วดูคะแนนรายตอนและทบทวนข้อที่ผิด</div>
+      <div class="row g10" style="flex-wrap:wrap"><div class="hint f1" style="min-width:220px">สุ่มข้อใหม่ทุกครั้ง กระจายครบ 8 Unit · ไม่เฉลยระหว่างทำเหมือนสอบจริง · ออกกลางคันแล้วกลับมาทำต่อได้ · จบแล้วดูคะแนนรายตอนและทบทวนข้อที่ผิด</div>
+        <button class="btn ghost" data-act="examstart" data-k="quick">Quick test · 30 ข้อ</button></div>
     </div>
     <div class="card col g10" data-side style="width:300px;flex:0 0 auto;align-items:center;justify-content:center;text-align:center">
       ${ringHTML(best,130,C('orange'),'best')}
@@ -3281,6 +3310,8 @@ ACT.ordtap=d=>{
 ACT.ordundo=()=>{ const q=S.quiz, it=q.items[q.i]; it.built=[]; if(q.exam) q.picks[q.i]=null; render(); };
 { const base=VIEWS.quiz;
   VIEWS.quiz=()=>{ const q=S.quiz; if(q&&!q.done&&SK_TYPES.includes(q.items[q.i].type)) return skQuizView(); return base(); }; }
+/* บันทึกแบบทดสอบทุกครั้งที่ตอบ/เลื่อนข้อ เพื่อกลับมาทำต่อได้ */
+for(const k of ['qzpick','qznext','ordtap','ordundo']){ const fn=ACT[k]; ACT[k]=(...a)=>{ const r=fn(...a); saveExamState(); return r; }; }
 
 /* ═════════════════════════════════════════════════════════════════════
    6E. GRAMMAR
