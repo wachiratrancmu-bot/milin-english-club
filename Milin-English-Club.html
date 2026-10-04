@@ -228,6 +228,24 @@ button:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-r
 .listenbtn:active{transform:scale(.96)}
 .listenbtn svg{width:46px;height:46px}
 
+/* ---------- 4 ทักษะ ---------- */
+.skpic{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:18px;overflow:hidden;flex:0 0 auto;
+  box-shadow:inset 0 0 0 1px var(--line)}
+.skpic>svg,.skbg,.skbg svg{position:absolute;inset:0;width:100%;height:100%}
+.skfig{position:relative;display:flex;align-items:flex-end;gap:2px}
+.skfig.on{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.88);border-radius:999px;padding:4px 10px;
+  box-shadow:0 4px 12px -6px rgba(20,33,61,.35)}
+.skgrid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;padding:8%}
+.skground{position:absolute;left:0;right:0;bottom:0;height:12%;background:#E9EDF3}
+.skart{display:inline-flex}.skart svg{width:100%;height:100%;border-radius:14px}
+.qopt .badge{font-size:13px}
+.bubble{background:#fff;border:1.5px solid var(--line2);border-radius:20px 20px 20px 6px;padding:12px 18px;line-height:1.3}
+.sbuild{min-height:64px;width:100%;max-width:860px;border:2px dashed var(--line2);border-radius:16px;padding:10px 12px;display:flex;flex-wrap:wrap;
+  gap:8px;align-items:center;justify-content:center}
+.stile{font-family:var(--f-word);font-size:24px;font-weight:600;padding:9px 16px;border-radius:14px;background:#fff;border:1.5px solid var(--line2);
+  box-shadow:0 2px 0 var(--line2);min-width:44px}
+.stile.on{background:#F2F4F8;box-shadow:none}
+body.xs .stile{font-size:19px;padding:7px 11px}
 /* ---------- แป้นพิมพ์ ---------- */
 .kbd{display:flex;flex-direction:column;gap:7px;align-items:center}
 .kbd .krow{display:flex;gap:7px}
@@ -1117,7 +1135,8 @@ const BONUS = [
     {w:'pretty',th:'น่ารัก, สวย',e:'🌸',s:'The flower is pretty.'},
     {w:'beautiful',th:'สวยงาม',e:'🦋',s:'The butterfly is beautiful.'},
     {w:'funny',th:'ตลก',e:'🤡',s:'The clown is funny.'},
-    {w:'happy',th:'มีความสุข',e:'😊',s:'I am happy.'}
+    {w:'happy',th:'มีความสุข',e:'😊',s:'I am happy.'},
+    {w:'sad',th:'เศร้า',e:'😢',s:'The boy is sad.'}
   ]},
   { key:'actions', title:'Action Words', th:'คำกริยา (ท่าทาง)', c:'orange', words:[
     {w:'play',th:'เล่น',e:'🛝',s:'I play with my friends.'},
@@ -1130,7 +1149,13 @@ const BONUS = [
     {w:'like',th:'ชอบ',e:'👍',s:'I like ice cream.'},
     {w:'sing',th:'ร้องเพลง',e:'🎤',s:'She sings a song.'},
     {w:'dance',th:'เต้นรำ',e:'💃',s:'He dances.'},
-    {w:'clap',th:'ปรบมือ',e:'👏',s:'We clap our hands.'}
+    {w:'clap',th:'ปรบมือ',e:'👏',s:'We clap our hands.'},
+    {w:'run',th:'วิ่ง',e:'🏃',s:'I can run fast.'},
+    {w:'eat',th:'กิน',e:'🍽️',s:'We eat in the kitchen.'},
+    {w:'drink',th:'ดื่ม',e:'🥤',s:'I drink water.'},
+    {w:'read',th:'อ่าน',e:'📖',s:'I read a book.'},
+    {w:'sleep',th:'นอนหลับ',e:'😴',s:'I sleep in my bedroom.'},
+    {w:'swim',th:'ว่ายน้ำ',e:'🏊',s:'I can swim.'}
   ]},
   { key:'people', title:'People & Places', th:'คนและสถานที่', c:'lime', words:[
     {w:'friend',th:'เพื่อน',e:'🧑‍🤝‍🧑',s:'She is my friend.'},
@@ -1153,6 +1178,20 @@ const BONUS = [
     {w:'party',th:'งานเลี้ยง',e:'🎉',s:'We have a party.'},
     {w:'weekend',th:'วันหยุดสุดสัปดาห์',e:'🗓️',s:'I play on the weekend.'},
     {w:'ice cream',th:'ไอศกรีม',e:'🍦',s:'I like ice cream.'}
+  ]},
+  { key:'around', title:'Animals & Things', th:'สัตว์และสิ่งของรอบตัว', c:'teal', words:[
+    {w:'cat',th:'แมว',e:'🐱',s:'The cat is on the box.'},
+    {w:'dog',th:'สุนัข',e:'🐶',s:'The dog is big.'},
+    {w:'bird',th:'นก',e:'🐦',s:'The bird can fly.'},
+    {w:'fish',th:'ปลา',e:'🐟',s:'The fish can swim.'},
+    {w:'rabbit',th:'กระต่าย',e:'🐰',s:'The rabbit can jump.'},
+    {w:'cup',th:'ถ้วย',e:'☕',s:'This is my cup.'},
+    {w:'pan',th:'กระทะ',e:'🍳',s:'Mom cooks in a pan.'},
+    {w:'apple',th:'แอปเปิ้ล',e:'🍎',s:'The apple is red.'},
+    {w:'milk',th:'นม',e:'🥛',s:'I drink milk.'},
+    {w:'tree',th:'ต้นไม้',e:'🌳',s:'The boy is under the tree.'},
+    {w:'box',th:'กล่อง',e:'📦',s:'The teddy bear is in the box.'},
+    {w:'bike',th:'จักรยาน',e:'🚲',s:'Grandpa is riding a bike.'}
   ]},
   { key:'little', title:'Little Words', th:'คำเล็ก ๆ ที่ใช้บ่อย', c:'grape', noPic:true, words:[
     {w:'is',th:'เป็น / อยู่ / คือ (1 สิ่ง)',s:'It is a cat.'},
@@ -1912,7 +1951,7 @@ const SPEEDS=[{k:.55,ic:'🐢',n:'ช้ามาก'},{k:.72,ic:'🐇',n:'ช�
 
 const S=Object.assign({
   screen:'home', stars:0,
-  kidName:'Milin', showThai:false, rate:.72, voiceURI:'',
+  kidName:'Milin', kidAge:7, showThai:false, rate:.72, voiceURI:'',
   famIdx:0, wordIdx:0,
   wallIdx:0, wallKey:'',
   chantIdx:0, chantLine:-1,
@@ -1936,7 +1975,7 @@ const S=Object.assign({
 
 function load(){
   try{
-    const pick=d=>({stars:d.stars|0, kidName:d.kidName||'Milin', showThai:d.showThai===true,
+    const pick=d=>({stars:d.stars|0, kidName:d.kidName||'Milin', kidAge:d.kidAge||7, showThai:d.showThai===true,
                     rate:d.rate||.72, voiceURI:d.voiceURI||''});
     for(const k of [SAVE_KEY,'milin.club.v3']){
       const d=JSON.parse(localStorage.getItem(k)||'null'); if(d) return pick(d);
@@ -1948,7 +1987,7 @@ function load(){
 }
 function save(){
   try{ localStorage.setItem(SAVE_KEY, JSON.stringify({
-    stars:S.stars, kidName:S.kidName, showThai:S.showThai, rate:S.rate, voiceURI:S.voiceURI })); }catch(e){}
+    stars:S.stars, kidName:S.kidName, kidAge:S.kidAge, showThai:S.showThai, rate:S.rate, voiceURI:S.voiceURI })); }catch(e){}
 }
 
 /* ---- ความคืบหน้า: คำที่จำได้, ความแม่นยำรายทักษะ, คะแนนสอบ ---- */
@@ -2693,7 +2732,7 @@ function finishQuiz(){
   if(q.exam){
     q.items.forEach((it,i)=>record(it.word,it.type,q.picks[i]===it.a));
     const parts={}; q.items.forEach((it,i)=>{ const k=it.part; parts[k]=parts[k]||[0,0]; parts[k][1]++; if(q.picks[i]===it.a) parts[k][0]++; });
-    P.exams.push({d:Date.now(),score:q.score,n:q.items.length,parts}); saveProg();
+    const rec={d:Date.now(),score:q.score,n:q.items.length,parts}; q.rec=rec; (q.store?(P[q.store]=P[q.store]||[]):P.exams).push(rec); saveProg();
     star(Math.round(q.score/3));
   }
   if(q.test){ P.unitTest[q.setKey]=Math.max(P.unitTest[q.setKey]||0,Math.round(100*q.score/q.items.length)); saveProg(); }
@@ -2712,11 +2751,11 @@ function quizResults(){
     .filter(x=> q.exam ? x.p!==x.it.a : (q.first||{})[x.i]!==true);
   const ansText=(it,k)=>{ const o=it.opts[k]; return o.w? o.w.w : o.t; };
   const qText=it=>({listen:'🔊 '+(it.word&&it.word.w),pic:'🖼️ '+(it.word&&it.word.w),mean:it.word&&it.word.w,th2en:it.word&&it.word.th,
-    blank:it.s,gram:it.s==='Which is correct?'?'Which is correct?':it.s,missing:it.word&&it.word.w,odd:'Odd one out',read:it.q,fix:'Spelling: '+it.say})[it.type]||'';
+    blank:it.s,gram:it.s==='Which is correct?'?'Which is correct?':it.s,missing:it.word&&it.word.w,odd:'Odd one out',read:it.q,fix:'Spelling: '+it.say,slisten:'🔊 '+it.say,cmd:'🔊 '+it.say,reply:it.q,sread:it.q,order:'✍️ '+it.ans,punct:'✍️ '+it.full})[it.type]||'';
   let partBars='';
   if(q.exam){
-    const last=P.exams[P.exams.length-1];
-    partBars=`<div class="col g8">${EXAM_PARTS.map(pt=>{ const r=last.parts[pt.k]||[0,0], pp=r[1]?Math.round(100*r[0]/r[1]):0; return `
+    const last=q.rec||P.exams[P.exams.length-1];
+    partBars=`<div class="col g8">${(q.partsDef||EXAM_PARTS).map(pt=>{ const r=last.parts[pt.k]||[0,0], pp=r[1]?Math.round(100*r[0]/r[1]):0; return `
       <div class="row g10"><span style="width:200px;font-size:15px;font-weight:600">${pt.label}</span>
         <div class="f1">${barHTML(pp,pp>=80?'var(--ok)':pp>=60?C('gold'):'var(--bad)')}</div><span style="width:46px;text-align:right;font-weight:600">${r[0]}/${r[1]}</span></div>`; }).join('')}</div>`;
   }
@@ -2814,6 +2853,19 @@ VIEWS.exam = ()=>{
       <div class="hint">${last?'ครั้งล่าสุด '+last.score+'/'+last.n+' ข้อ':'ยังไม่เคยทำข้อสอบจำลอง'}</div>
     </div>
   </div>
+  <div class="row g8" style="margin:16px 0 8px"><div class="eyebrow">4 Skills · ฟัง พูด อ่าน เขียน (กรอบการประเมิน ป.1–3)</div></div>
+  <div class="row g14 split" style="align-items:stretch">
+    <div class="card col g8" data-side style="width:300px;flex:0 0 auto;justify-content:center">
+      <div class="row g10"><div class="ic" style="width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex:0 0 auto;background:var(--cyan-t);color:var(--cyan-d)">${I('target')}</div>
+        <div class="col f1"><div style="font-size:21px;font-weight:600">4-Skills Test</div><div class="hint" style="font-size:13px">20 ข้อ · 4 ตอน ตอนละ 5 ข้อ</div></div></div>
+      <div class="hint">${(P.skills4||[]).length?'ครั้งล่าสุด '+P.skills4[P.skills4.length-1].score+'/'+P.skills4[P.skills4.length-1].n+' ข้อ':'แบบทดสอบตามรูปแบบข้อสอบวัดสมรรถนะ ไม่เฉลยระหว่างทำ'}</div>
+      <button class="btn" data-act="s4test">Start ▶</button>
+    </div>
+    <div class="hubgrid f1" data-rg="4" style="grid-template-columns:repeat(4,1fr)">
+      ${SK4.map(d=>{ const sp=skillPct({s4listen:'s4L',s4speak:'s4S',s4read:'s4R',s4write:'s4W'}[d.k]); return hcard({act:'s4drill',k:d.k,ic:d.ic,title:d.t,sub:d.th,c:d.c,
+        foot:`<div class="row g6"><div class="f1">${barHTML(sp,C(d.c))}</div><span class="hint" style="font-size:12px">${sp==null?'–':sp+'%'}</span></div>`}); }).join('')}
+    </div>
+  </div>
   <div class="row g8" style="margin:16px 0 8px"><div class="eyebrow">Practice by skill · แบบฝึกรายทักษะ (ข้อละทักษะ 10 ข้อ เฉลยทันที)</div></div>
   <div class="hubgrid" data-rg="5" style="grid-template-columns:repeat(5,1fr)">
     ${DRILLS.map(d=>{ const sp=skillPct(SKILL_OF[d.k]); return hcard({act:'drill',k:d.k,ic:d.ic,title:d.t,sub:d.th,c:d.c,
@@ -2842,6 +2894,393 @@ VIEWS.exam = ()=>{
 };
 ACT.drill=d=>{ const dr=DRILLS.find(x=>x.k===d.k);
   startQuiz({title:dr.t,sub:dr.th+' · เฉลยทันทีทุกข้อ',items:dr.make(),section:'exam',back:'exam',rebuild:()=>ACT.drill(d)}); };
+
+/* ═════════════════════════════════════════════════════════════════════
+   6D-2. FOUR SKILLS — ตามกรอบการประเมินสมรรถนะภาษาอังกฤษ ช่วงชั้นที่ 1 (ป.1–3)
+   ฟัง  : ฟังประโยคบรรยายสั้น ๆ แล้วเลือกภาพที่ตรง (3 ภาพ ต่างกันทีละจุด)
+   พูด  : โต้ตอบในชีวิตประจำวัน/ห้องเรียน (ทักทาย แนะนำตนเอง) + ทำตามคำสั่งครู
+   อ่าน : อ่านประโยคเดี่ยว 1–3 ประโยค แล้วตอบ Who / What / Where / How many
+   เขียน: เรียงคำเป็นประโยคตามภาพ + ตัวพิมพ์ใหญ่ต้นประโยคและจุด (full stop)
+   ภาพทุกภาพสร้างจากข้อมูลชุดเดียวกับประโยค → เสียง ประโยค และภาพตรงกันเสมอ
+   ═════════════════════════════════════════════════════════════════════ */
+const SK_WHO=[
+  {k:'boy',e:'👦',t:'The boy',p:'he'},{k:'girl',e:'👧',t:'The girl',p:'she'},
+  {k:'grandma',e:'👵',t:'Grandma',p:'she'},{k:'grandpa',e:'👴',t:'Grandpa',p:'he'}];
+const SK_DO=[ /* io: in = ในบ้าน · out = กลางแจ้ง · any = ได้ทั้งสองแบบ */
+  {k:'apple',e:'🍎',v:'is eating',o:'an apple',io:'any'},{k:'book',e:'📖',v:'is reading',o:'a book',io:'any'},
+  {k:'milk',e:'🥛',v:'is drinking',o:'milk',io:'any'},{k:'football',e:'⚽',v:'is playing',o:'football',io:'out'},
+  {k:'guitar',e:'🎸',v:'is playing',o:'the guitar',io:'any'},{k:'piano',e:'🎹',v:'is playing',o:'the piano',io:'in'},
+  {k:'kite',e:'🪁',v:'is flying',o:'a kite',io:'out'},{k:'bike',e:'🚲',v:'is riding',o:'a bike',io:'out'},
+  {k:'icecream',e:'🍦',v:'is eating',o:'ice cream',io:'any'},{k:'paint',e:'🎨',v:'is painting',o:'a picture',io:'any'},
+  {k:'song',e:'🎤',v:'is singing',o:'a song',io:'any'},{k:'teddy',e:'🧸',v:'is playing with',o:'a teddy bear',io:'in'},
+  {k:'robot',e:'🤖',v:'is playing with',o:'a robot',io:'in'}];
+const SK_WHERE=[
+  {k:'tree',t:'under the tree',io:'out'},{k:'garden',t:'in the garden',io:'out',art:'garden'},
+  {k:'bedroom',t:'in the bedroom',io:'in',art:'bedroom'},{k:'kitchen',t:'in the kitchen',io:'in',art:'kitchen'},
+  {k:'livingroom',t:'in the living room',io:'in',art:'livingroom'}];
+const SK_THING=[
+  {k:'cat',e:'🐱',sg:'cat',pl:'cats'},{k:'dog',e:'🐶',sg:'dog',pl:'dogs'},{k:'bird',e:'🐦',sg:'bird',pl:'birds'},
+  {k:'fish',e:'🐟',sg:'fish',pl:'fish'},{k:'apple',e:'🍎',sg:'apple',pl:'apples'},{k:'pencil',e:'✏️',sg:'pencil',pl:'pencils'},
+  {k:'chair',e:'🪑',sg:'chair',pl:'chairs'},{k:'car',e:'🚗',sg:'car',pl:'cars'},{k:'teddy',e:'🧸',sg:'teddy bear',pl:'teddy bears'},
+  {k:'balloon',bal:1,sg:'balloon',pl:'balloons'}];
+const SK_COL={red:'#E53935',blue:'#1E6FD9',green:'#3FA34D',yellow:'#FBC52D',pink:'#EE6FA8'};
+const SK_NUM=['zero','one','two','three','four','five'];
+const SK_A=[{k:'cat',e:'🐱',t:'The cat'},{k:'dog',e:'🐶',t:'The dog'},{k:'ball',e:'⚽',t:'The ball'},{k:'teddy',e:'🧸',t:'The teddy bear'}];
+const SK_B=[{k:'box',t:'the box',rel:['on','in','next to']},{k:'table',t:'the table',rel:['on','under','next to']},
+  {k:'chair',t:'the chair',rel:['on','under','next to']},{k:'bed',t:'the bed',rel:['on','under','next to']}];
+const SK_FUR={
+  box:open=>open
+    ? `<path d="M24 52 L8 40 L24 46Z M76 52 L92 40 L76 46Z" fill="#B97A42"/><rect x="24" y="50" width="52" height="42" rx="3" fill="#D9A066"/><rect x="24" y="50" width="52" height="6" fill="#C98B4F"/>`
+    : `<rect x="24" y="50" width="52" height="42" rx="3" fill="#D9A066"/><rect x="22" y="45" width="56" height="9" rx="2" fill="#C98B4F"/><rect x="46" y="45" width="8" height="47" fill="#E8C08F"/>`,
+  table:()=>`<rect x="8" y="46" width="84" height="7" rx="2" fill="#B9773F"/><rect x="13" y="53" width="6" height="39" fill="#9A612C"/><rect x="81" y="53" width="6" height="39" fill="#9A612C"/>`,
+  chair:()=>`<rect x="24" y="14" width="6" height="78" rx="2" fill="#9A612C"/><rect x="24" y="16" width="6" height="40" fill="#B9773F"/><rect x="29" y="22" width="4" height="6" fill="#9A612C"/>
+    <rect x="22" y="54" width="54" height="7" rx="2" fill="#B9773F"/><rect x="68" y="61" width="6" height="31" fill="#9A612C"/>`,
+  bed:()=>`<rect x="6" y="32" width="8" height="60" rx="2" fill="#7A5A8E"/><rect x="10" y="50" width="84" height="14" rx="3" fill="#F4F6FA"/><rect x="40" y="48" width="54" height="16" rx="3" fill="#3B6FD1"/>
+    <ellipse cx="24" cy="49" rx="10" ry="5" fill="#fff" stroke="#D9DEE7"/><rect x="10" y="64" width="84" height="5" fill="#7A5A8E"/><rect x="10" y="69" width="5" height="23" fill="#7A5A8E"/><rect x="89" y="69" width="5" height="23" fill="#7A5A8E"/>`
+};
+/* [x, baseline y, ขนาด] ของสัตว์/ของ ในแต่ละตำแหน่ง */
+const SK_POS={
+  box:  {on:[50,48,30], in:[50,52,30], 'next to':[80,92,28]},
+  table:{on:[50,48,30], under:[50,92,30], 'next to':[83,92,26]},
+  chair:{on:[49,56,26], under:[49,92,24], 'next to':[82,92,26]},
+  bed:  {on:[66,52,26], under:[52,92,20], 'next to':[84,92,26]}
+};
+const SK_BIG=[{k:'dog',e:'🐶',t:'The dog'},{k:'cat',e:'🐱',t:'The cat'},{k:'fish',e:'🐟',t:'The fish'},{k:'bird',e:'🐦',t:'The bird'}];
+
+/* ---- ภาพประกอบประโยค ---- */
+const skTree=`<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="#EAF6FF"/>
+  <rect y="78" width="100" height="22" fill="#8CCB6B"/><rect x="45" y="34" width="10" height="46" rx="3" fill="#8D5A2B"/>
+  <circle cx="50" cy="26" r="24" fill="#4FA35A"/><circle cx="30" cy="34" r="15" fill="#5DB467"/><circle cx="70" cy="34" r="15" fill="#5DB467"/></svg>`;
+const skBalloon=(col,s)=>`<svg viewBox="0 0 40 60" style="width:${s}px;height:${s*1.5}px"><path d="M20 40 Q16 50 21 58" stroke="#8A93A6" stroke-width="1.4" fill="none"/>
+  <ellipse cx="20" cy="20" rx="15" ry="18" fill="${SK_COL[col]}"/><path d="M17 38 L23 38 L20 42Z" fill="${SK_COL[col]}"/>
+  <ellipse cx="14" cy="13" rx="3.5" ry="5.5" fill="#fff" opacity=".35"/></svg>`;
+function skScene(sc, size){
+  size=size||150; const box=(inner,bg)=>`<span class="skpic" style="width:${size}px;height:${size}px;${bg?'':'background:#F6F8FB'}">${bg||''}${inner}</span>`;
+  const em=(e,f,st)=>`<span style="font-size:${Math.round(size*f)}px;line-height:1;${st||''}">${e}</span>`;
+  if(sc.kind==='act'){
+    const bg = sc.where ? (sc.where==='tree'? skTree : `<span class="skbg">${ART[SK_WHERE.find(p=>p.k===sc.where).art]}</span>`) : '';
+    const who=SK_WHO.find(x=>x.k===sc.who), d=SK_DO.find(x=>x.k===sc.act);
+    return box(`<span class="skfig${sc.where?' on':''}">${em(who.e,.3)}${em(d.e,.25)}</span>`, bg);
+  }
+  if(sc.kind==='count'){
+    const t=SK_THING.find(x=>x.k===sc.thing), n=sc.n, f=n<=1?.4:n<=2?.3:n<=4?.24:.2;
+    const one = t.bal ? skBalloon(sc.col, Math.round(size*f*.8)) : em(t.e,f);
+    return box(`<span class="skgrid">${Array.from({length:n},()=>one).join('')}</span>`);
+  }
+  if(sc.kind==='pos'){ /* ภาพวาดเฟอร์นิเจอร์ด้านหน้า กำหนดตำแหน่งได้แม่นยำ: บน / ใต้ / ใน / ข้าง ๆ */
+    const a=SK_A.find(x=>x.k===sc.a), L=SK_POS[sc.b][sc.rel]||SK_POS[sc.b].on, nx=sc.rel==='next to';
+    const fur=SK_FUR[sc.b](sc.rel==='in'), em=(x,y,f)=>`<text x="${x}" y="${y}" font-size="${f}" text-anchor="middle">${a.e}</text>`;
+    const g=nx?`<g transform="translate(-3 25.8) scale(.72)">${fur}</g>${em(L[0],L[1],L[2])}`
+      : sc.rel==='in' ? em(L[0],L[1],L[2])+fur : fur+em(L[0],L[1],L[2]);
+    return box(`<svg viewBox="0 0 100 100"><rect y="92" width="100" height="8" fill="#E3E8EF"/>${g}</svg>`);
+  }
+  if(sc.kind==='size'){ const a=SK_BIG.find(x=>x.k===sc.a); return box(em(a.e, sc.big?.62:.22)); }
+  if(sc.kind==='cmd'){ const c=SK_CMD.find(x=>x.t===sc.c[0]), c2=sc.c[1]&&SK_CMD.find(x=>x.t===sc.c[1]);
+    const one=(c,f)=>c.pic ? `<span class="skart" style="width:${Math.round(size*f*1.3)}px;height:${Math.round(size*f*1.3)}px">${c.pic.startsWith('body:')?BODY(c.pic.slice(5)):ART[c.pic]}</span>` : em(c.e,f);
+    return box(c2 ? `<span class="row g4">${one(c,.34)}<span style="font-size:${Math.round(size*.14)}px;color:var(--ink3)">+</span>${one(c2,.34)}</span>` : one(c,.52));
+  }
+  if(sc.kind==='word') return pic(sc.w, size);
+  return box('');
+}
+/* ---- ประโยค (และชิ้นคำสำหรับเรียงประโยค) จากฉากเดียวกัน ---- */
+function skSentence(sc){
+  let ch=[];
+  if(sc.kind==='act'){ const who=SK_WHO.find(x=>x.k===sc.who), d=SK_DO.find(x=>x.k===sc.act);
+    ch=[who.t,d.v,d.o]; if(sc.where) ch.push(SK_WHERE.find(p=>p.k===sc.where).t); }
+  if(sc.kind==='count'){ const t=SK_THING.find(x=>x.k===sc.thing), noun=(sc.col?sc.col+' ':'')+(sc.n===1?t.sg:t.pl);
+    ch=[sc.n===1?'There is':'There are', SK_NUM[sc.n], noun]; }
+  if(sc.kind==='pos'){ ch=[SK_A.find(x=>x.k===sc.a).t,'is',sc.rel,SK_B.find(x=>x.k===sc.b).t]; }
+  if(sc.kind==='size'){ ch=[SK_BIG.find(x=>x.k===sc.a).t,'is',sc.big?'big':'small']; }
+  return {chunks:ch.concat('.'), text:ch.join(' ')+'.'};
+}
+const skKey=sc=>JSON.stringify(sc);
+const rnd=a=>a[(Math.random()*a.length)|0];
+function skMakeScene(kind){
+  kind=kind||rnd(['act','act','act','count','count','pos','pos','size']);
+  if(kind==='act'){ const d=rnd(SK_DO), withPlace=Math.random()<.6;
+    const places=SK_WHERE.filter(p=>d.io==='any'||p.io===d.io);
+    return {kind,who:rnd(SK_WHO).k,act:d.k,where:withPlace?rnd(places).k:null}; }
+  if(kind==='count'){ const t=rnd(SK_THING); return {kind,thing:t.k,n:1+((Math.random()*5)|0),col:t.bal?rnd(Object.keys(SK_COL)):null}; }
+  if(kind==='pos'){ const b=rnd(SK_B); return {kind,a:rnd(SK_A).k,b:b.k,rel:rnd(b.rel)}; }
+  return {kind:'size',a:rnd(SK_BIG).k,big:Math.random()<.5};
+}
+/* ตัวลวง: เปลี่ยนทีละองค์ประกอบ (ใคร / ทำอะไร / ที่ไหน / จำนวน / สี / ตำแหน่ง) — ต้องฟังทั้งประโยคจึงตอบได้ */
+function skVariants(sc){
+  const out=[], add=v=>{ if(skKey(v)!==skKey(sc)&&!out.some(o=>skKey(o)===skKey(v))) out.push(v); };
+  const d=SK_DO.find(x=>x.k===sc.act);
+  for(let g=0; g<40 && out.length<6; g++){
+    const v=Object.assign({},sc);
+    if(sc.kind==='act'){ const r=(Math.random()*(sc.where?3:2))|0;
+      if(r===0) v.who=rnd(SK_WHO).k;
+      if(r===1){ const nd=rnd(SK_DO.filter(x=>!sc.where||x.io==='any'||x.io===SK_WHERE.find(p=>p.k===sc.where).io)); v.act=nd.k; }
+      if(r===2) v.where=rnd(SK_WHERE.filter(p=>d.io==='any'||p.io===d.io)).k; }
+    if(sc.kind==='count'){ if(sc.col&&Math.random()<.5) v.col=rnd(Object.keys(SK_COL)); else v.n=Math.max(1,Math.min(5,sc.n+rnd([-2,-1,1,2]))); }
+    if(sc.kind==='pos'){ v.rel=rnd(SK_B.find(x=>x.k===sc.b).rel); }
+    if(sc.kind==='size'){ if(Math.random()<.5) v.big=!sc.big; else v.a=rnd(SK_BIG).k; }
+    add(v);
+  }
+  return out;
+}
+function mkSListen(kind){
+  const sc=skMakeScene(kind), opts=shuffle([sc].concat(skVariants(sc).slice(0,2)));
+  const s=skSentence(sc);
+  return {type:'slisten',say:s.text,full:s.text,opts:opts.map(o=>({sc:o,t:skSentence(o).text})),a:opts.indexOf(sc)};
+}
+
+/* ---- พูด: คำสั่งในห้องเรียน (ฟังแล้วทำ) ---- */
+const SK_CMD=[
+  {t:'Stand up.',e:'🧍'},{t:'Sit down.',e:'🪑'},{t:'Raise your hand.',e:'🙋'},{t:'Clap your hands.',e:'👏'},
+  {t:'Be quiet.',e:'🤫'},{t:'Listen.',e:'👂'},{t:'Open your book.',e:'📖'},{t:'Close your book.',e:'📕'},
+  {t:'Write your name.',e:'✍️'},{t:'Wave goodbye.',e:'👋'},{t:'Look at the board.',pic:'chalkboard'},
+  {t:'Touch your nose.',pic:'body:nose',body:1},{t:'Touch your ears.',pic:'body:ear',body:1},{t:'Touch your mouth.',pic:'body:mouth',body:1},
+  {t:'Touch your head.',pic:'body:head',body:1},{t:'Touch your hair.',pic:'body:hair',body:1}];
+const SK_CMD_CONFUSE=[['Touch your head.','Touch your hair.'],['Stand up.','Raise your hand.']];
+const cmdClash=(a,b)=>SK_CMD_CONFUSE.some(g=>g.includes(a)&&g.includes(b));
+function mkCmd(){
+  if(Math.random()<.4){ /* คำสั่งสองขั้น เช่น Stand up and clap your hands. */
+    const base=SK_CMD.filter(c=>!c.body), a=rnd(base), b=rnd(base.filter(c=>c!==a&&!cmdClash(a.t,c.t)));
+    const lo=s=>s[0].toLowerCase()+s.slice(1);
+    const say=a.t.replace('.','')+' and '+lo(b.t);
+    const a2=rnd(base.filter(c=>c!==a&&c!==b&&!cmdClash(c.t,a.t))), b2=rnd(base.filter(c=>c!==a&&c!==b&&c!==a2&&!cmdClash(c.t,b.t)));
+    const o=shuffle([[a.t,b.t],[a2.t,b.t],[a.t,b2.t]]);
+    return {type:'cmd',say,full:say,opts:o.map(c=>({sc:{kind:'cmd',c},t:c[0].replace('.','')+' + '+c[1]})),a:o.findIndex(c=>c[0]===a.t&&c[1]===b.t)};
+  }
+  const c=rnd(SK_CMD), pool=SK_CMD.filter(x=>x!==c&&!cmdClash(x.t,c.t)&&(!!x.body===!!c.body||Math.random()<.3));
+  const o=shuffle([c].concat(pickN(pool,2)));
+  return {type:'cmd',say:c.t,full:c.t,opts:o.map(x=>({sc:{kind:'cmd',c:[x.t]},t:x.t})),a:o.indexOf(c)};
+}
+
+/* ---- พูด: ฟังคำถามครู แล้วเลือกคำตอบที่เหมาะสม → พูดตาม ---- */
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const skAgeWord=()=>['five','six','seven','eight','nine','ten'][Math.max(0,Math.min(5,(S.kidAge||7)-5))];
+const pluralOf=w=>/(s|sh|ch|x)$/.test(w)?w+'es':w+'s';
+const art=w=>(/^[aeiou]/i.test(w)?'an ':'a ')+w;
+const SK_NOT_THING=new Set(['garden','kitchen','bedroom','bathroom','living room','basement','hallway','countryside','teacher','jeans','shorts',
+  'building blocks','children','sing','dance','clap','band','funfair','clown','window','door','plant']);
+const skThings=()=>CORE.filter(w=>hasPic(w)&&w.e&&!SK_NOT_THING.has(w.w)&&!/^(fam|body):/.test(w.svg||''));
+const SK_REPLY=[
+  ()=>({q:`Good morning, ${S.kidName}.`,a:'Good morning, teacher.',d:['Good night, teacher.','Goodbye, teacher.']}),
+  ()=>({q:'What is your name?',a:`My name is ${S.kidName}.`,d:['I am fine, thank you.','It is a book.']}),
+  ()=>({q:'How old are you?',a:`I am ${skAgeWord()} years old.`,d:['I am fine, thank you.','My name is '+S.kidName+'.']}),
+  ()=>({q:'How are you?',a:'I am fine, thank you.',d:[`I am ${skAgeWord()} years old.`,'It is red.']}),
+  ()=>({q:'Nice to meet you.',a:'Nice to meet you, too.',d:['Good night.','You are welcome.']}),
+  ()=>({q:'Thank you!',a:'You are welcome.',d:['Good morning.','I am seven.']}),
+  ()=>({q:`Goodbye, ${S.kidName}!`,a:'Goodbye! See you tomorrow.',d:['Good morning!','Nice to meet you.']}),
+  ()=>({q:'Please sit down.',a:'Thank you, teacher.',d:['You are welcome.','Good night, teacher.']}),
+  ()=>({q:'What day is it today?',a:`It is ${DAYS[new Date().getDay()]}.`,d:['It is red.','I am at school.']}),
+  ()=>({q:'Do you like ice cream?',a:'Yes, I do.',d:['Yes, I am.','Yes, it is.'],sc:{kind:'word',w:{e:'🍦'}}}),
+  ()=>({q:'Can you swim?',a:'Yes, I can.',d:['Yes, I do.','Yes, it is.'],sc:{kind:'word',w:{e:'🏊'}}}),
+  ()=>({q:'Are you a student?',a:'Yes, I am.',d:['Yes, I do.','Yes, it is.']}),
+  ()=>{ const w=rnd(skThings()), o=rnd(skThings().filter(x=>x!==w&&!confuses(x.w,w.w)));
+    return {q:'What is this?',a:`It is ${art(w.w)}.`,d:[`It is ${art(o.w)}.`,`They are ${pluralOf(w.w)}.`],sc:{kind:'word',w}}; },
+  ()=>{ const w=rnd(skThings());
+    return {q:`Is this ${art(w.w)}?`,a:'Yes, it is.',d:['Yes, I am.','Yes, I do.'],sc:{kind:'word',w}}; },
+  ()=>{ const w=rnd(skThings()), o=rnd(skThings().filter(x=>x!==w&&!confuses(x.w,w.w)));
+    return {q:`Is this ${art(o.w)}?`,a:`No, it is not. It is ${art(w.w)}.`,d:['Yes, it is.',`No, I am not. I am ${art(w.w)}.`],sc:{kind:'word',w}}; },
+  ()=>{ const c=rnd(Object.keys(SK_COL)), o=rnd(Object.keys(SK_COL).filter(x=>x!==c));
+    return {q:'What colour is the balloon?',a:`It is ${c}.`,d:[`It is ${o}.`,'It is a balloon.'],sc:{kind:'count',thing:'balloon',n:1,col:c}}; },
+  ()=>{ const t=rnd(SK_THING.filter(x=>!x.bal)), n=2+((Math.random()*4)|0), m=n===5?4:n+1;
+    return {q:`How many ${t.pl} are there?`,a:`There are ${SK_NUM[n]} ${t.pl}.`,d:[`There are ${SK_NUM[m]} ${t.pl}.`,`There is one ${t.sg}.`],sc:{kind:'count',thing:t.k,n}}; },
+  ()=>{ const b=rnd(SK_B), rels=shuffle(b.rel), sc={kind:'pos',a:'cat',b:b.k,rel:rels[0]};
+    return {q:'Where is the cat?',a:`It is ${rels[0]} ${b.t}.`,d:[`It is ${rels[1]} ${b.t}.`,`It is ${rels[2]} ${b.t}.`],sc}; },
+  ()=>{ const sc=skMakeScene('act'); sc.where=null; const who=SK_WHO.find(x=>x.k===sc.who), d=SK_DO.find(x=>x.k===sc.act);
+    const o=rnd(SK_DO.filter(x=>x.e!==d.e&&x.v+x.o!==d.v+d.o)), P=who.p[0].toUpperCase()+who.p.slice(1);
+    return {q:`What is ${who.p} doing?`,a:`${P} ${d.v} ${d.o}.`,d:[`${P} ${o.v} ${o.o}.`,`I am ${d.v.slice(3)} ${d.o}.`],sc}; },
+  ()=>{ const fam=[['dad','he'],['mom','she'],['grandpa','he'],['grandma','she'],['brother','he'],['sister','she'],['uncle','he'],['aunt','she']];
+    const [w,p]=rnd(fam), same=rnd(fam.filter(f=>f[1]===p&&f[0]!==w)), other=rnd(fam.filter(f=>f[1]!==p));
+    const Pp=p==='he'?'He':'She', Po=other[1]==='he'?'He':'She';
+    return {q:`Who is ${p}?`,a:`${Pp} is my ${w}.`,d:[`${Pp} is my ${same[0]}.`,`${Po} is my ${other[0]}.`],sc:{kind:'word',w:CORE.find(x=>x.w===w)}}; }
+];
+function mkReply(i){
+  const r=(i!=null?SK_REPLY[i]:rnd(SK_REPLY))(), o=shuffle([r.a].concat(r.d));
+  return {type:'reply',q:r.q,say:r.q,sc:r.sc||null,opts:o.map(t=>({t})),a:o.indexOf(r.a),full:r.a};
+}
+
+/* ---- อ่าน: ประโยคเดี่ยว 1–3 ประโยค + คำถาม Wh- (ใช้คำศัพท์ Unit 1–8) ---- */
+const SK_READ=[
+  {t:'Tom has a red ball. The ball is under the chair.',q:[['What does Tom have?',['a red ball','a red kite','a blue ball'],0],['Where is the ball?',['on the chair','under the chair','next to the bed'],1]]},
+  {t:'This is my grandma. She is in the kitchen. She is cooking.',q:[['Who is in the kitchen?',['my grandma','my sister','my dad'],0],['Where is Grandma?',['in the garden','in the bedroom','in the kitchen'],2]]},
+  {t:'There are three books on the desk. The pencil case is in my school bag.',q:[['How many books are on the desk?',['two','three','four'],1],['Where is the pencil case?',['on the desk','in my school bag','in the locker'],1]]},
+  {t:'Ben is my brother. He is playing the guitar in the living room.',q:[['Who is Ben?',['my brother','my uncle','my cousin'],0],['What is Ben playing?',['the piano','the guitar','football'],1]]},
+  {t:'I have a stuffed toy. It is a brown teddy bear.',q:[['What colour is the teddy bear?',['brown','black','pink'],0],['What is my stuffed toy?',['a robot','a teddy bear','a puppet'],1]]},
+  {t:'Lily has long hair. She has two small ears.',q:[['Who has long hair?',['Lily','Tom','Dad'],0],['How many ears does Lily have?',['one','two','three'],1]]},
+  {t:'The lamp is next to the bed. The rug is on the floor.',q:[['Where is the lamp?',['next to the bed','under the bed','on the rug'],0],['What is on the floor?',['the lamp','the rug','the mirror'],1]]},
+  {t:'My dad has a blue shirt. My mom has a green skirt.',q:[['What does Dad have?',['a blue shirt','a green shirt','a blue jacket'],0],['Who has a green skirt?',['my sister','my mom','my aunt'],1]]},
+  {t:'We go to the funfair on Saturday. A funny clown has a yellow balloon.',q:[['Who has a yellow balloon?',['the clown','my dad','the teacher'],0],['When do we go to the funfair?',['on Monday','on Saturday','on Sunday'],1]]},
+  {t:'Anna is in the garden. She is flying a kite with her cousins.',q:[['What is Anna doing?',['reading a book','flying a kite','playing the piano'],1],['Who is Anna with?',['her cousins','her teacher','her grandpa'],0]]},
+  {t:'The teacher is in the classroom. She writes on the chalkboard.',q:[['Where is the teacher?',['in the classroom','in the hallway','in the garden'],0],['What does she write on?',['the poster','the chalkboard','the window'],1]]},
+  {t:'I have a dollhouse. There are four small dolls in it.',q:[['How many dolls are there?',['three','four','five'],1],['What do I have?',['a dollhouse','a board game','a robot'],0]]},
+  {t:'Max is a big brown dog. He sleeps under the table.',q:[['What colour is Max?',['black','white','brown'],2],['Where does Max sleep?',['on the sofa','under the table','in the box'],1]]},
+  {t:'Grandpa is in the countryside. He is riding a bike.',q:[['Who is riding a bike?',['Grandpa','Grandma','my sister'],0],['Where is Grandpa?',['in the countryside','in the kitchen','at school'],0]]},
+  {t:'My skateboard is in the basement. My soccer ball is in the garden.',q:[['Where is my skateboard?',['in the garden','in the basement','in the bedroom'],1],['What is in the garden?',['my soccer ball','my skateboard','my kite'],0]]},
+  {t:'Kim has a jacket and jeans. Her jacket is purple.',q:[['What colour is the jacket?',['purple','pink','blue'],0],['Who has jeans?',['Kim','Ben','Dad'],0]]}
+];
+function mkSRead(p,qi){ const q=p.q[qi], o=shuffle(q[1]); return {type:'sread',text:p.t,q:q[0],opts:o.map(t=>({t})),a:o.indexOf(q[1][q[2]]),full:q[1][q[2]]}; }
+const skReadItems=n=>{ const out=[]; for(const p of shuffle(SK_READ)){ if(out.length>=n) break; out.push(mkSRead(p,0)); if(out.length<n) out.push(mkSRead(p,1)); } return out; };
+
+/* ---- เขียน: เรียงคำเป็นประโยคตามภาพ · เลือกประโยคที่เขียนถูก (ตัวพิมพ์ใหญ่ + full stop) ---- */
+function mkOrder(){
+  const sc=skMakeScene(rnd(['act','act','count','pos','pos'])); if(sc.kind==='act') sc.where=null; /* กันคำตอบซ้อน เช่น The boy under the tree is ... */
+  const s=skSentence(sc);
+  const tiles=shuffle(s.chunks.map((t,i)=>({t,i})));
+  return {type:'order',sc,ans:s.text,say:null,full:s.text,tiles,built:[],opts:[{t:s.text},{t:''}],a:0};
+}
+function mkPunct(){
+  const sc=skMakeScene(rnd(['act','act','count','pos'])), s=skSentence(sc), t=s.text;
+  const lower=t[0].toLowerCase()+t.slice(1), nodot=t.slice(0,-1);
+  const o=shuffle([t,lower,nodot]);
+  return {type:'punct',sc,opts:o.map(x=>({t:x})),a:o.indexOf(t),full:t};
+}
+
+/* ---- ชุดฝึก + แบบทดสอบ 4 ทักษะ ---- */
+const SK4=[
+  {k:'s4listen',ic:'🎧',t:'Listening',th:'ฟังประโยค แล้วเลือกภาพ',c:'cyan',
+    make:()=>['act','act','act','act','count','count','pos','pos','size','count'].map(k=>mkSListen(k))},
+  {k:'s4speak',ic:'💬',t:'Speaking',th:'ตอบคำถามครู · ทำตามคำสั่ง',c:'purple',
+    make:()=>shuffle(pickN(SK_REPLY.map((_,i)=>i),6).map(i=>mkReply(i)).concat([mkCmd(),mkCmd(),mkCmd(),mkCmd()]))},
+  {k:'s4read',ic:'📄',t:'Reading',th:'อ่านประโยค ตอบ Who / What / Where',c:'pink',make:()=>skReadItems(10)},
+  {k:'s4write',ic:'✍️',t:'Writing',th:'เรียงคำเป็นประโยค · ตัวใหญ่และจุด',c:'orange',
+    make:()=>shuffle([mkOrder(),mkOrder(),mkOrder(),mkOrder(),mkOrder(),mkOrder(),mkPunct(),mkPunct(),mkPunct(),mkPunct()])}
+];
+const SK4_PARTS=[
+  {k:'L',label:'1 · Listening',th:'ฟังประโยค เลือกภาพ'},{k:'S',label:'2 · Speaking',th:'ตอบคำถาม · ทำตามคำสั่ง'},
+  {k:'R',label:'3 · Reading',th:'อ่านแล้วตอบคำถาม'},{k:'W',label:'4 · Writing',th:'เรียงประโยค · วรรคตอน'}];
+function buildSkills4(){
+  const tag=(arr,k)=>arr.map(it=>Object.assign(it,{part:k,partLabel:SK4_PARTS.find(p=>p.k===k).label}));
+  const L=tag(['act','act','count','pos','size'].map(k=>mkSListen(k)),'L');
+  const Sp=tag(pickN(SK_REPLY.map((_,i)=>i),3).map(i=>mkReply(i)).concat([mkCmd(),mkCmd()]),'S');
+  const R=tag(skReadItems(5),'R');
+  const W=tag([mkOrder(),mkOrder(),mkOrder(),mkPunct(),mkPunct()],'W');
+  return L.concat(Sp,R,W);
+}
+ACT.s4drill=d=>{ const dr=SK4.find(x=>x.k===d.k);
+  startQuiz({title:dr.t,sub:dr.th+' · เฉลยทันทีทุกข้อ',items:dr.make(),section:'exam',back:'exam',rebuild:()=>ACT.s4drill(d)}); };
+ACT.s4test=()=>startQuiz({title:'4-Skills Test',sub:'แบบทดสอบ 4 ทักษะ ป.1–3 · 20 ข้อ',items:buildSkills4(),exam:true,
+  partsDef:SK4_PARTS,store:'skills4',section:'exam',back:'exam',rebuild:()=>ACT.s4test()});
+
+/* ---- หน้าจอคำถามแบบใหม่ ---- */
+const SK_TYPES=['slisten','cmd','reply','sread','order','punct'];
+Object.assign(PROMPT_LABEL,{slisten:'Listen and choose the picture',cmd:'Listen and do',reply:'Listen and answer',
+  sread:'Read and answer',order:'Look and make the sentence',punct:'Which sentence is written correctly?'});
+Object.assign(PROMPT_TH,{slisten:'ฟังประโยค แล้วเลือกภาพที่ตรงกับประโยค',cmd:'ฟังคำสั่งครู แล้วเลือกภาพท่าทางที่ถูกต้อง',
+  reply:'ฟังคำถามครู แล้วเลือกคำตอบที่เหมาะสม',sread:'อ่านประโยค แล้วตอบคำถาม',order:'แตะคำเรียงเป็นประโยคให้ตรงกับภาพ',
+  punct:'ประโยคต้องขึ้นต้นด้วยตัวพิมพ์ใหญ่ และจบด้วยจุด (.)'});
+Object.assign(PRAISE,{slisten:['Great listening!','ตั้งใจฟังดีมาก'],cmd:['Great listening!','ฟังคำสั่งได้ดีมาก'],
+  reply:['Good answer!','ตอบได้เหมาะสม'],sread:['You read carefully!','อ่านอย่างตั้งใจ'],
+  order:['Well built!','เรียงประโยคได้ถูกต้อง'],punct:['Careful writing!','สังเกตตัวใหญ่และจุดได้ดี']});
+Object.assign(SKILL_OF,{slisten:'s4L',cmd:'s4S',reply:'s4S',sread:'s4R',order:'s4W',punct:'s4W'});
+
+function skQuizView(){
+  const q=S.quiz, it=q.items[q.i], pick=q.picks[q.i], answered=pick!==null, reveal=answered&&!q.exam;
+  const n=q.items.length, pct=Math.round(100*(q.i+(answered?1:0))/n);
+  const score=q.picks.filter((p,i)=>p!==null&&p===q.items[i].a).length, xs=isXs();
+  const tried=(q.tries&&q.tries[q.i])||[];
+  const head=`<div class="row g12 f0 nowrap" style="margin-bottom:10px">
+      ${it.partLabel?`<span class="tag" style="background:var(--ink);color:#fff;font-size:13.5px;padding:5px 11px">${esc(it.partLabel)}</span>`:''}
+      <span style="font-size:15px;font-weight:600;white-space:nowrap">Question ${q.i+1} / ${n}</span>
+      <div class="progress"><i style="width:${pct}%"></i></div>
+      ${q.exam?`<span class="hint lg-only">แบบทดสอบ · ไม่เฉลยระหว่างทำ</span>`:`<span class="tag" style="background:var(--ok-t);color:var(--ok)">✔ ${score}</span>`}</div>`;
+  const listenBig=t=>`<button class="listenbtn" data-act="say" data-t="${esc(t)}" data-r="0.74" aria-label="Listen">${I('speaker',1.6)}</button>`;
+  const cls=i=>{ if(reveal){ if(i===it.a) return 'ok'; if(i===pick||tried.includes(i)) return 'bad'; return ''; }
+    if(tried.includes(i)) return 'bad'; return answered&&i===pick?'sel':''; };
+  const P=xs?96:(LAYOUT==='lg'?190:150);
+  let prompt='', opts='';
+  if(it.type==='slisten'||it.type==='cmd'){
+    prompt=`<div class="col g8 center">${listenBig(it.say)}${reveal?`<div class="qsent" style="font-size:24px;font-weight:600">${esc(it.say)}</div>`:'<div class="hint">แตะเพื่อฟังอีกครั้ง</div>'}</div>`;
+    opts=`<div data-rg="3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">${it.opts.map((o,i)=>
+      `<button class="qopt ${cls(i)}" data-act="qzpick" data-i="${i}" style="padding:10px">${skScene(o.sc,P)}</button>`).join('')}</div>`;
+  }
+  if(it.type==='reply'){
+    prompt=`<div class="row g16 center skq" style="flex-wrap:wrap">
+      ${it.sc?skScene(it.sc,xs?110:150):''}
+      <div class="col g10" style="align-items:flex-start;max-width:520px">
+        <div class="row g10"><span class="tag" style="background:var(--purple-t);color:var(--purple-d)">Teacher</span>
+          <button class="chip" data-act="say" data-t="${esc(it.say)}" data-r="0.78">🔊 Listen</button></div>
+        <div class="bubble" style="font-size:${xs?26:32}px;font-weight:600">${esc(it.q)}</div></div></div>`;
+    opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
+      <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1" style="font-size:${xs?19:22}px">${esc(o.t)}</span></button>`).join('')}</div>`;
+    if(reveal) opts+=speakBox(it.full);
+  }
+  if(it.type==='sread'){
+    prompt=`<div class="col g12" style="width:100%;max-width:820px">
+      <div class="soft row g10" style="padding:14px 18px;align-items:flex-start"><div class="f1" style="font-size:${xs?21:26}px;line-height:1.6;font-weight:500">${esc(it.text)}</div>
+        <button class="chip" data-act="say" data-t="${esc(it.text)}" data-r="0.74">🔊</button></div>
+      <div style="font-size:${xs?22:26}px;font-weight:600">${esc(it.q)}</div></div>`;
+    opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
+      <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1" style="font-size:${xs?19:22}px">${esc(o.t)}</span></button>`).join('')}</div>`;
+  }
+  if(it.type==='punct'){
+    prompt=`<div class="center">${skScene(it.sc,xs?120:LAYOUT==='lg'?190:160)}</div>`;
+    opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
+      <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1 qsent" style="font-size:${xs?20:24}px;font-family:var(--f-word)">${esc(o.t)}</span></button>`).join('')}</div>`;
+  }
+  if(it.type==='order'){
+    const done=it.built.length===it.tiles.length, used=new Set(it.built);
+    const col=reveal?(pick===it.a?'var(--ok)':'var(--bad)'):'var(--ink)';
+    prompt=`<div class="col g12 center" style="width:100%">${skScene(it.sc,xs?110:LAYOUT==='lg'?180:150)}
+      <div class="sbuild" style="border-color:${answered?col:'var(--line2)'}">${it.built.length?it.built.map(i=>`<span class="stile on" style="color:${col}">${esc(it.tiles[i].t)}</span>`).join(''):'<span class="hint">แตะคำด้านล่างตามลำดับ</span>'}</div>
+      ${reveal&&pick!==it.a?`<div class="qsent" style="font-size:22px;color:var(--ok);font-weight:600">✔ ${esc(it.ans)}</div>`:''}</div>`;
+    opts=`<div class="row g10 center" style="flex-wrap:wrap">${it.tiles.map((t,i)=>`<button class="stile" data-act="ordtap" data-i="${i}" ${used.has(i)||(answered&&!q.exam)?'disabled':''} style="${used.has(i)?'opacity:.25':''}">${esc(t.t)}</button>`).join('')}
+      ${it.built.length&&!(answered&&!q.exam)?`<button class="chip" data-act="ordundo">↺ Clear</button>`:''}</div>`;
+  }
+  let fb='';
+  if(reveal){
+    const ok=pick===it.a, second=ok&&tried.length>0, pr=praiseFor(it.type);
+    const ct=it.type==='order'?it.ans:it.opts[it.a].t;
+    fb=`<div class="msg" style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?(second?'✔ You got it! <span class="thai hint">ถูกต้องในครั้งที่สอง — ตั้งใจดีมาก</span>':'✔ '+pr[0]+' <span class="thai hint">'+pr[1]+'</span>')
+      :'✘ Not quite. '+(it.type==='order'?'':'The answer is “'+esc(ct)+'” ')+'<span class="thai hint">ดูคำตอบที่ถูกแล้วลองจำไว้นะ</span>'}</div>`;
+  } else if(tried.length && !q.exam){
+    fb=`<div class="msg" style="color:var(--gold-d)">↺ Try again! <span class="thai hint">${it.type==='order'?'ลำดับยังไม่ถูก ลองเรียงใหม่':'ยังไม่ถูก ลองอีกครั้ง — ตัวเลือกที่ผิดถูกปิดไว้แล้ว'}</span></div>`;
+  }
+  const nextBtn=`<button class="btn ${answered?'':'ghost'}" data-act="qznext" ${answered?'':'disabled style="opacity:.45"'}>${q.i===n-1?'Finish ✓':'Next ▶'}</button>`;
+  return head+`<div class="card f1 col g12" style="justify-content:space-between;padding:${xs?'14px 14px':'18px 26px'};min-height:0">
+    <div class="col g4 center"><div style="font-size:21px;font-weight:600;color:var(--ink2)">${PROMPT_LABEL[it.type]}</div><div class="hint">${PROMPT_TH[it.type]}</div></div>
+    <div class="f1 center" style="min-height:0">${prompt}</div>${opts}
+    <div class="row g10" style="min-height:48px">${fb}<span class="spacer"></span>${nextBtn}</div></div>`;
+}
+function optStyle(i,c){ return c==='ok'?'border-color:var(--ok);background:var(--ok-t)':c==='bad'?'border-color:var(--bad);background:var(--bad-t)':c==='sel'?'border-color:var(--ink);background:#F2F4F8':''; }
+/* ฝึกพูดตาม: ฟังประโยคตัวอย่าง แล้วพูด (ถ้าเครื่องรองรับไมค์ จะบอกว่าได้ยินอะไร) */
+function speakBox(t){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition, h=S.skHeard;
+  return `<div class="soft row g10" style="padding:10px 14px;flex-wrap:wrap">
+    <span style="font-weight:600">Your turn — say it!</span><span class="hint">พูดประโยคนี้ออกเสียงดัง ๆ</span><span class="spacer"></span>
+    <button class="chip" data-act="say" data-t="${esc(t)}" data-r="0.62">🐢 Listen slowly</button>
+    ${SR?`<button class="chip" data-act="sksay" data-t="${esc(t)}">🎤 ${S.skListening?'Listening…':'Say it'}</button>`:''}
+    ${h&&h.t===t?`<span class="f1" style="min-width:100%;color:${h.ok?'var(--ok)':'var(--gold-d)'}">${h.ok?'✔ Great speaking!':'↺ Try again.'} <span class="hint">ได้ยินว่า: “${esc(h.heard||'…')}”</span></span>`:''}</div>`;
+}
+ACT.sksay=d=>{
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition; if(!SR||S.skListening) return;
+  const norm=s=>String(s).toLowerCase().replace(/[^a-z' ]/g,' ').split(/\s+/).filter(Boolean);
+  try{ const r=new SR(); r.lang='en-US'; r.interimResults=false; r.maxAlternatives=3;
+    r.onresult=e=>{ const alts=[...e.results[0]].map(x=>x.transcript), want=norm(d.t);
+      const best=alts.map(a=>{ const got=new Set(norm(a)); return {a,sc:want.filter(w=>got.has(w)).length/want.length}; }).sort((x,y)=>y.sc-x.sc)[0];
+      S.skHeard={t:d.t,heard:best.a,ok:best.sc>=.7}; if(best.sc>=.7) star(1); };
+    r.onerror=()=>{ S.skHeard={t:d.t,heard:'',ok:false}; };
+    r.onend=()=>{ S.skListening=false; render(); };
+    S.skListening=true; S.skHeard=null; render(); r.start();
+  }catch(e){ S.skListening=false; render(); }
+};
+/* เรียงประโยค: แตะชิ้นคำ → ครบแล้วตรวจอัตโนมัติ */
+ACT.ordtap=d=>{
+  const q=S.quiz, it=q.items[q.i], i=+d.i;
+  if(it.built.includes(i)) return; if(q.picks[q.i]!==null && !q.exam) return;
+  it.built.push(i); Voice.utter(it.tiles[i].t==='.'?'full stop':it.tiles[i].t, Math.max(.5,S.rate));
+  if(it.built.length<it.tiles.length){ if(q.exam) q.picks[q.i]=null; render(); return; }
+  const made=it.built.map(k=>it.tiles[k].t).join(' ').replace(' .','.'), ok=made===it.ans;
+  it.opts[1].t=made;
+  if(q.exam){ q.picks[q.i]=ok?0:1; render(); return; }
+  q.tries=q.tries||{}; q.first=q.first||{};
+  if(!ok && !(q.tries[q.i]||[]).length){
+    q.tries[q.i]=[1]; q.first[q.i]=false; record(null,it.type,false); it.built=[];
+    Voice.say('Try again.',.85); render(); return;
+  }
+  q.picks[q.i]=ok?0:1;
+  if(!(q.tries[q.i]||[]).length){ record(null,it.type,ok); q.first[q.i]=ok; if(ok) star(1); }
+  Voice.say(ok?praiseFor('order')[0]+' '+it.ans:it.ans,.78); render();
+};
+ACT.ordundo=()=>{ const q=S.quiz, it=q.items[q.i]; it.built=[]; if(q.exam) q.picks[q.i]=null; render(); };
+{ const base=VIEWS.quiz;
+  VIEWS.quiz=()=>{ const q=S.quiz; if(q&&!q.done&&SK_TYPES.includes(q.items[q.i].type)) return skQuizView(); return base(); }; }
 
 /* ═════════════════════════════════════════════════════════════════════
    6E. GRAMMAR
@@ -4204,6 +4643,8 @@ ACT.settings=()=>{
         </div>
       </div>
       <div class="field"><label>ชื่อเด็ก</label><input type="text" id="setName" value="${esc(S.kidName)}" maxlength="16"></div>
+      <div class="field"><label>อายุ</label><select id="setAge">${[5,6,7,8,9].map(a=>`<option value="${a}" ${a===S.kidAge?'selected':''}>${a} ปี</option>`).join('')}</select>
+        <span class="hint">ใช้ในบทพูด “How old are you?”</span></div>
       <div class="field"><label>แสดงคำแปลไทย</label>
         <button class="switch ${S.showThai?'on':''}" data-act="togthai"><i></i></button>
         <span class="hint">ปิดไว้เพื่อฝึกอ่านอังกฤษล้วน</span></div>
@@ -4230,6 +4671,7 @@ ACT.settings=()=>{
   const nameEl=$('#setName'), rateEl=$('#setRate'), voiceEl=$('#setVoice');
   nameEl.oninput  =()=>{ S.kidName=nameEl.value.trim()||'Milin'; save(); render(); };
   rateEl.oninput  =()=>{ S.rate=+rateEl.value; $('#rateLbl').textContent=S.rate.toFixed(2)+'x'; save(); renderTop(); };
+  $('#setAge').onchange=e=>{ S.kidAge=+e.target.value; save(); };
   voiceEl.onchange=()=>{ S.voiceURI=voiceEl.value; save(); Voice.refresh(); ACT.testvoice(); };
 };
 /* ปิดได้เมื่อแตะพื้นหลังนอกกล่อง หรือแตะปุ่ม "เสร็จแล้ว" (ปุ่มในกล่องอื่นๆ ยังทำงานปกติ) */
@@ -4239,7 +4681,7 @@ ACT.resetstars=()=>{ S.stars=0; save(); render(); };
 /* ล้างคำที่จำได้ คะแนนสอบ และความแม่นยำรายทักษะ — กดสองครั้งเพื่อยืนยัน */
 ACT.resetprog =(d,t)=>{
   if(!t.dataset.armed){ t.dataset.armed='1'; t.textContent='แตะอีกครั้งเพื่อยืนยัน'; t.style.color='var(--bad)'; return; }
-  P.w={}; P.skill={}; P.unitTest={}; P.gram={}; P.exams=[]; saveProg();
+  P.w={}; P.skill={}; P.unitTest={}; P.gram={}; P.exams=[]; P.skills4=[]; saveProg();
   t.textContent='ล้างแล้ว ✓'; delete t.dataset.armed; render();
 };
 
@@ -4282,8 +4724,26 @@ function showSheet(){
           <div class="thai" style="font-size:10.5px;color:var(--ink3);text-align:center">${esc(w.th)}</div></div>`).join('')}</div>`).join('')}`;
   document.body.appendChild(el);
 }
+/* ตรวจภาพประโยคทั้งหมดของส่วน 4 ทักษะ (#sheet4) */
+function showSheet4(){
+  const cell=(sc,t)=>`<div style="border:1px solid var(--line);border-radius:12px;padding:8px;display:flex;flex-direction:column;align-items:center;gap:6px">
+    ${skScene(sc,120)}<div style="font-family:var(--f-word);font-size:13px;font-weight:600;text-align:center">${esc(t||skSentence(sc).text)}</div></div>`;
+  const grid=a=>`<div style="display:grid;grid-template-columns:repeat(8,1fr);gap:8px">${a.join('')}</div>`, h=t=>`<div style="margin:14px 0 6px;font-weight:600">${t}</div>`;
+  const pos=SK_B.flatMap(b=>b.rel.flatMap(rel=>['cat','ball'].map(a=>({kind:'pos',a,b:b.k,rel}))));
+  const act=SK_DO.map((d,i)=>({kind:'act',who:SK_WHO[i%4].k,act:d.k,where:SK_WHERE.filter(p=>d.io==='any'||p.io===d.io)[i%2]?.k||null}));
+  const cnt=SK_THING.map((t,i)=>({kind:'count',thing:t.k,n:1+i%5,col:t.bal?'blue':null}));
+  const size=SK_BIG.flatMap(a=>[true,false].map(big=>({kind:'size',a:a.k,big})));
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;inset:0;z-index:99;background:#fff;overflow:auto;padding:24px;font-family:var(--f-ui)';
+  el.innerHTML=`<div style="font-size:22px;font-weight:600">4 Skills · sentence pictures</div>`
+    +h('Where (on / under / in / next to)')+grid(pos.map(sc=>cell(sc)))+h('Who · doing what · where')+grid(act.map(sc=>cell(sc)))
+    +h('How many · colour')+grid(cnt.map(sc=>cell(sc)))+h('big / small')+grid(size.map(sc=>cell(sc)))
+    +h('Classroom commands')+grid(SK_CMD.map(c=>cell({kind:'cmd',c:[c.t]},c.t)));
+  document.body.appendChild(el);
+}
 function openFromHash(){
   if(location.hash==='#sheet'){ render(); showSheet(); return true; }
+  if(location.hash==='#sheet4'){ render(); showSheet4(); return true; }
   const m=(location.hash||'').match(/^#\/?([a-zA-Z]+)(?:=([\w-]+))?/); if(!m) return false;
   const [,k,v]=m;
   try{
@@ -4292,6 +4752,7 @@ function openFromHash(){
     if(k==='grammar'){ if(v&&GRAMMAR.find(g=>g.key===v)) S.gram=v; go('grammar'); return true; }
     if(k==='spell'&&SETBY[v]){ ACT.unitspell({k:v}); return true; }
     if(k==='mock'){ ACT.examstart(); return true; }
+    if(k==='skills'){ if(v==='test') ACT.s4test(); else if(SK4.find(d=>d.k===v)) ACT.s4drill({k:v}); else go('exam'); return true; }
     if(k==='memory'&&SETBY[v]){ startMemory(v,'vocab','unit'); return true; }
     if(VIEWS[k]&&!['quiz','spell','memory','unit'].includes(k)){ go(k); return true; }
   }catch(e){}
