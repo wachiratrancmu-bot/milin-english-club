@@ -1951,7 +1951,7 @@ const SPEEDS=[{k:.55,ic:'🐢',n:'ช้ามาก'},{k:.72,ic:'🐇',n:'ช�
 
 const S=Object.assign({
   screen:'home', stars:0,
-  kidName:'Milin', kidAge:7, showThai:false, rate:.72, voiceURI:'',
+  kidName:'Milin', kidAge:7, kidFamily:3, showThai:false, rate:.72, voiceURI:'',
   famIdx:0, wordIdx:0,
   wallIdx:0, wallKey:'',
   chantIdx:0, chantLine:-1,
@@ -1975,7 +1975,7 @@ const S=Object.assign({
 
 function load(){
   try{
-    const pick=d=>({stars:d.stars|0, kidName:d.kidName||'Milin', kidAge:d.kidAge||7, showThai:d.showThai===true,
+    const pick=d=>({stars:d.stars|0, kidName:d.kidName||'Milin', kidAge:d.kidAge||7, kidFamily:d.kidFamily||3, showThai:d.showThai===true,
                     rate:d.rate||.72, voiceURI:d.voiceURI||''});
     for(const k of [SAVE_KEY,'milin.club.v3']){
       const d=JSON.parse(localStorage.getItem(k)||'null'); if(d) return pick(d);
@@ -1987,7 +1987,7 @@ function load(){
 }
 function save(){
   try{ localStorage.setItem(SAVE_KEY, JSON.stringify({
-    stars:S.stars, kidName:S.kidName, kidAge:S.kidAge, showThai:S.showThai, rate:S.rate, voiceURI:S.voiceURI })); }catch(e){}
+    stars:S.stars, kidName:S.kidName, kidAge:S.kidAge, kidFamily:S.kidFamily, showThai:S.showThai, rate:S.rate, voiceURI:S.voiceURI })); }catch(e){}
 }
 
 /* ---- ความคืบหน้า: คำที่จำได้, ความแม่นยำรายทักษะ, คะแนนสอบ ---- */
@@ -2765,7 +2765,7 @@ function quizResults(){
     .filter(x=> q.exam ? x.p!==x.it.a : (q.first||{})[x.i]!==true);
   const ansText=(it,k)=>{ const o=it.opts[k]; return o.w? o.w.w : o.t; };
   const qText=it=>({listen:'🔊 '+(it.word&&it.word.w),pic:'🖼️ '+(it.word&&it.word.w),mean:it.word&&it.word.w,th2en:it.word&&it.word.th,
-    blank:it.s,gram:it.s==='Which is correct?'?'Which is correct?':it.s,missing:it.word&&it.word.w,odd:'Odd one out',read:it.q,fix:'Spelling: '+it.say,slisten:'🔊 '+it.say,cmd:'🔊 '+it.say,reply:it.q,sread:it.q,rpic:it.text,order:'✍️ '+it.ans,punct:'✍️ '+it.full})[it.type]||'';
+    blank:it.s,gram:it.s==='Which is correct?'?'Which is correct?':it.s,missing:it.word&&it.word.w,odd:'Odd one out',read:it.q,fix:'Spelling: '+it.say,slisten:'🔊 '+it.say,cmd:'🔊 '+it.say,reply:it.q,sread:it.q,rpic:it.text,instr:'🔊 '+it.en,ynpic:it.text,spellord:'✍️ '+it.ans,gfix:'✍️ '+it.full,order:'✍️ '+it.ans,punct:'✍️ '+it.full})[it.type]||'';
   let partBars='';
   if(q.exam){
     const last=q.rec||P.exams[P.exams.length-1];
@@ -2862,7 +2862,7 @@ const DRILLS=[
 VIEWS.exam = ()=>{
   const best=bestExam(), last=P.exams.length?P.exams[P.exams.length-1]:null;
   const s4=P.skills4||[], s4best=s4.length?Math.max(...s4.map(e=>Math.round(100*e.score/e.n))):null, s4last=s4.length?s4[s4.length-1]:null;
-  const SK4_TH={L:'ฟังประโยค เลือกภาพ',S:'ดูภาพตอบครู · ทำตามคำสั่ง',R:'อ่านประโยค · อ่านเรื่อง',W:'เรียงประโยค · วรรคตอน · สะกด'};
+  const SK4_TH={L:'ฟังประโยค · ฟังคำสั่งครู',S:'ดูภาพตอบครู · พูดเรื่องตัวเอง',R:'เลือกภาพ · Yes/No · อ่านเรื่อง',W:'เรียงประโยค · เรียงตัวอักษร · ลืม is/a'};
   return `<div class="scrolly f1" style="padding:2px 2px 8px">
   <div class="row g14 split" style="align-items:stretch">
     <div class="card f1 col g10" style="padding:20px 24px">
@@ -2893,7 +2893,8 @@ VIEWS.exam = ()=>{
     <div class="col" style="min-width:0"><div style="font-size:17px;font-weight:600">Review every word · ทบทวนครบทุกคำ ทีละ Unit</div>
       <div class="hint">คำละ 1 ข้อ หมุนเวียน ฟัง → อ่าน → พูด → เขียน · เฉลยทันที</div></div>
     <div class="row g8" style="flex-wrap:wrap">${UNITS.map(u=>`<button class="chip" data-act="s4unit" data-k="${u.key}">
-      <span style="width:10px;height:10px;border-radius:3px;background:${C(u.c)};display:inline-block"></span>&nbsp;Unit ${u.n} · ${u.words.length} คำ</button>`).join('')}</div>
+      <span style="width:10px;height:10px;border-radius:3px;background:${C(u.c)};display:inline-block"></span>&nbsp;Unit ${u.n} · ${u.words.length} คำ</button>`).join('')}
+      <button class="chip" data-act="s4extra">Extra words · 20 ข้อ</button></div>
   </div>
   <div class="row g8" style="margin:16px 0 8px"><div class="eyebrow">Vocabulary & Grammar Mock · ข้อสอบคำศัพท์และไวยากรณ์</div></div>
   <div class="card col g10" style="padding:16px 20px">
@@ -3266,20 +3267,6 @@ SK4.splice(0,SK4.length,
     make:()=>shuffle(fill(spreadUnits(PIC_CORE()),5,mkWOrder).concat([mkOrder(),mkOrder()],fill(shuffle(PIC_CORE()),2,mkWPunct),
       pickN(CORE.filter(w=>w.w.length<=9),2).map(mkMissing),[(m=>mkFix(m.right,m.wrong))(rnd(MISTAKES))]))});
 const SK4_PLAN={full:{n:80,L:[14,3,3],S:[12,5,3],R:[10,2,4,4],W:[10,2,4,2,2]},quick:{n:20,L:[4,0,1],S:[3,1,1],R:[3,0,2,0],W:[3,0,1,0,1]}};
-function buildSkills4(kind){
-  const pl=SK4_PLAN[kind]||SK4_PLAN.full, used=new Set();
-  const take=(n,make)=>{ const out=[]; for(const w of spreadUnits(PIC_CORE())){ if(out.length>=n) break; if(used.has(w.w)) continue; const it=make(w); if(it){ used.add(w.w); out.push(it); } } return out; };
-  const tag=(arr,k)=>arr.map(it=>Object.assign(it,{part:k,partLabel:SK4_PARTS.find(p=>p.k===k).label}));
-  const L=tag(shuffle(take(pl.L[0],mkWListen).concat(fill(shuffle(BONUS_PIC()),pl.L[1],mkWListen),
-    Array.from({length:pl.L[2]},(_,i)=>mkSListen(['act','count','pos'][i%3])))),'L');
-  const Sp=tag(shuffle(take(pl.S[0],mkLookSay).concat(pickN(SK_REPLY.map((_,i)=>i),pl.S[1]).map(i=>mkReply(i)),Array.from({length:pl.S[2]},mkCmd))),'S');
-  const p=pickN(PASSAGES,1)[0];
-  const R=tag(shuffle(take(pl.R[0],mkWReadPic).concat(Array.from({length:pl.R[1]},mkSceneRead))).concat(skReadItems(pl.R[2]),
-    pickN(p.q.map((_,i)=>i),pl.R[3]).sort().map(i=>mkRead(p,i))),'R');
-  const W=tag(shuffle(take(pl.W[0],mkWOrder).concat(Array.from({length:pl.W[1]},mkOrder),take(pl.W[2],mkWPunct),take(pl.W[3],mkMissing),
-    shuffle(MISTAKES).slice(0,pl.W[4]).map(m=>mkFix(m.right,m.wrong)))),'W');
-  return L.concat(Sp,R,W);
-}
 ACT.s4drill=d=>{ const dr=SK4.find(x=>x.k===d.k);
   startQuiz({title:dr.t,sub:dr.th+' · เฉลยทันทีทุกข้อ',items:dr.make(),section:'exam',back:'exam',rebuild:()=>ACT.s4drill(d)}); };
 ACT.s4test=d=>{ const kind=(d&&d.k)==='quick'?'quick':'full', pl=SK4_PLAN[kind];
@@ -3289,19 +3276,112 @@ ACT.s4test=d=>{ const kind=(d&&d.k)==='quick'?'quick':'full', pl=SK4_PLAN[kind];
 ACT.s4unit=d=>{ const u=SETBY[d.k]; const mk=[mkWListen,mkWReadPic,mkLookSay,writeOf];
   const items=shuffle(u.words.filter(hasPic)).map((w,i)=>mk[i%4](w)||writeOf(w));
   startQuiz({title:'Unit '+u.n+' · 4 Skills',sub:'ทบทวนครบทุกคำ · '+u.title,items,section:'exam',back:'exam',rebuild:()=>ACT.s4unit(d)}); };
+/* ---- เพิ่มให้ครบตามสรุปเนื้อหาสอบ: คำสั่งในข้อสอบ · Yes/No · เรียงตัวอักษร · ลืม is / a · คำเสริมจากบทอ่าน ---- */
+const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve'];
+/* คำสั่งที่ครูและข้อสอบใช้ — ฟังแล้วเลือกความหมาย */
+const INSTR=[['Look at the picture.','ดูภาพ'],['Tick (✓) the correct word.','ทำเครื่องหมาย ✓ ที่คำที่ถูกต้อง'],['Circle Yes or No.','วงกลม Yes หรือ No'],
+  ['Circle the correct word.','วงกลมคำที่ถูกต้อง'],['Point to the door.','ชี้ไปที่ประตู'],['Touch your nose.','แตะจมูก'],['Listen and choose.','ฟังแล้วเลือกคำตอบ'],
+  ['Read and match.','อ่านแล้วจับคู่'],['Draw a line.','ลากเส้นโยง'],['Write the missing letters.','เขียนตัวอักษรที่หายไป'],
+  ['Put the words in order.','เรียงคำให้เป็นประโยค'],['Look and write.','ดูภาพแล้วเขียน'],['Colour the picture.','ระบายสีภาพ'],
+  ['Stand up.','ยืนขึ้น'],['Sit down.','นั่งลง'],['Open your book.','เปิดหนังสือ'],['Close your book.','ปิดหนังสือ'],['Raise your hand.','ยกมือ']];
+function mkInstr(){ const c=rnd(INSTR), o=shuffle([c].concat(pickN(INSTR.filter(x=>x!==c),2)));
+  return {type:'instr',say:c[0].replace(' (✓)',''),full:c[0].replace(' (✓)',''),en:c[0],opts:o.map(x=>({t:x[1],thai:true})),a:o.indexOf(c)}; }
+/* อ่านประโยค ดูภาพ แล้ววง Yes / No */
+function mkYesNo(w){
+  const yes=Math.random()<.5; let s=sentOf(w);
+  if(!yes){ const st=x=>tokSet(sentOf(x)), wt=[...tokSet(w.w)];
+    const c=shuffle(PIC_CORE()).find(x=>x.w!==w.w&&!confuses(x.w,w.w)&&!sentClash(x.w,w.w)&&!wt.some(t=>t.length>=3&&st(x).has(t)));
+    if(!c) return null; s=sentOf(c); }
+  return {type:'ynpic',text:s,full:yes?'Yes.':'No.',sc:{kind:'word',w},opts:[{t:'Yes'},{t:'No'}],a:yes?0:1,word:w};
+}
+/* เรียงตัวอักษรเป็นคำ เช่น k s i t r → skirt */
+function mkLetters(w){ if(!/^[a-z]{3,8}$/.test(w.w)) return null;
+  const tiles=shuffleNot(w.w.split('').map((t,i)=>({t,i})), a=>a.map(x=>x.t).join('')===w.w);
+  return {type:'spellord',joiner:'',sc:{kind:'word',w},ans:w.w,full:w.w,tiles,built:[],opts:[{t:w.w},{t:''}],a:0,word:w}; }
+/* ประโยคไหนถูก — ระวังลืม is / a (ข้อผิดพลาดที่น้องเคยทำ) */
+function mkIsA(w){ const s=sentOf(w); if(!/[.]$/.test(s)) return null;
+  const v=[s.replace(/\bis /,''),s.replace(/\b(a|an) /,''),s.replace(/\bis\b/,'are'),s.replace(/\bhas\b/,'have')].filter((x,i,a)=>x!==s&&a.indexOf(x)===i);
+  if(v.length<2) return null; const o=shuffle([s].concat(pickN(v,2)));
+  return {type:'gfix',sc:{kind:'word',w},opts:o.map(x=>({t:x})),a:o.indexOf(s),full:s,word:w}; }
+/* คำเสริมจากบทอ่าน (คำบอกลักษณะ คำกริยา คำนามอื่น ๆ วัน สี ตัวเลข) — ความหมาย */
+const EXTRA_SETS=['describe','actions','people','days','colours','numbers','around'];
+const EXTRA=()=>EXTRA_SETS.flatMap(k=>SETBY[k]?SETBY[k].words:[]);
+const mkExtra=w=>mkMean(w,SETBY[w.set].words);
+/* พูด: ประโยคที่ควรพูดได้คล่อง */
+const famWord=()=>NUMW[Math.max(2,Math.min(12,S.kidFamily||3))];
+SK_REPLY.push(
+  ()=>({q:'How many people are in your family?',a:`There are ${famWord()} people in my family.`,d:[`I am ${famWord()} people.`,`There is ${famWord()} people in my family.`]}),
+  ()=>{ const w=rnd(SETBY.u7.words.filter(x=>x.w!=='building blocks'));
+    return {q:'What is your favorite toy?',a:`My favorite toy is ${art(w.w)}.`,d:[`My favorite toy are ${art(w.w)}.`,`My favorite toy is ${w.w}.`],sc:{kind:'word',w}}; },
+  ()=>{ const w=rnd(SETBY.u3.words.filter(x=>x.w!=='school bag'||true));
+    return {q:'What do you have?',a:`I have ${art(w.w)}.`,d:[`I has ${art(w.w)}.`,`I have ${w.w}.`],sc:{kind:'word',w}}; },
+  ()=>{ const w=rnd(SETBY.u3.words);
+    return {q:'What does she have?',a:`She has ${art(w.w)}.`,d:[`She have ${art(w.w)}.`,`She has ${w.w}.`],sc:{kind:'word',w}}; },
+  ()=>{ const w=rnd(SETBY.u3.words.concat(SETBY.u7.words.filter(x=>x.w!=='building blocks')));
+    return {q:`Do you have ${art(w.w)}?`,a:'Yes, I do.',d:['Yes, I am.','Yes, it is.'],sc:{kind:'word',w}}; },
+  ()=>{ const t=rnd(SK_THING.filter(x=>!x.bal&&x.pl!==x.sg)), n=2+((Math.random()*4)|0), m=n===5?4:n+1;
+    return {q:`How many ${t.pl}?`,a:`${cap(SK_NUM[n])} ${t.pl}.`,d:[`${cap(SK_NUM[m])} ${t.pl}.`,`${cap(SK_NUM[n])} ${t.sg}.`],sc:{kind:'count',thing:t.k,n}}; },
+  ()=>({q:'How many eyes do you have?',a:'I have two eyes.',d:['I have two eye.','I has two eyes.'],sc:{kind:'word',w:CORE.find(x=>x.w==='eye')}}),
+  ()=>{ const c=rnd(Object.keys(SK_COL)), o=rnd(Object.keys(SK_COL).filter(x=>x!==c));
+    return {q:'What color is it?',a:`It is ${c}.`,d:[`It is ${o}.`,`It is a ${c}.`],sc:{kind:'count',thing:'balloon',n:1,col:c}}; }
+);
+SK_CMD.push({t:'Point to the door.',e:'👉🚪'},{t:'Look at the picture.',e:'👀🖼️'});
+MISTAKES.push({wrong:'beautifull',right:'beautiful',e:'🦋',s:'The butterfly is beautiful.',note:'มี l ตัวเดียวท้ายคำ'});
+
+/* ---- ชุดฝึกและแบบทดสอบ (แทนชุดเดิม) ---- */
+const tk=(n,make,pool)=>{ const out=[]; for(const w of spreadUnits(pool||PIC_CORE())){ if(out.length>=n) break; const it=make(w); if(it) out.push(it); } return out; };
+const gramN=n=>shuffle(GRAMMAR).flatMap(g=>pickN(g.items,1).map(it=>mkGram(g,it))).slice(0,n);
+SK4.splice(0,SK4.length,
+  {k:'s4listen',ic:'🎧',t:'Listening',th:'ฟังประโยคเลือกภาพ · ฟังคำสั่ง',c:'cyan',
+    make:()=>shuffle(tk(7,mkWListen).concat(tk(2,mkWListen,BONUS_PIC()),[mkSListen()],[mkInstr(),mkInstr()]))},
+  {k:'s4speak',ic:'💬',t:'Speaking',th:'ดูภาพตอบครู · พูดเรื่องตัวเอง · ทำตามคำสั่ง',c:'purple',
+    make:()=>shuffle(tk(5,mkLookSay).concat(pickN(SK_REPLY.map((_,i)=>i),5).map(i=>mkReply(i)),[mkCmd(),mkCmd()]))},
+  {k:'s4read',ic:'📄',t:'Reading',th:'อ่านเลือกภาพ · Yes/No · ความหมาย · อ่านเรื่อง',c:'pink',
+    make:()=>shuffle(tk(4,mkWReadPic).concat(tk(3,mkYesNo),tk(2,mkExtra,EXTRA()))).concat(skReadItems(3))},
+  {k:'s4write',ic:'✍️',t:'Writing',th:'เรียงประโยค · เรียงตัวอักษร · ลืม is/a · สะกด',c:'orange',
+    make:()=>shuffle(tk(3,mkWOrder).concat(tk(2,mkLetters),tk(2,mkIsA),tk(1,mkWPunct),tk(1,mkMissing),gramN(2),[(m=>mkFix(m.right,m.wrong))(rnd(MISTAKES))]))});
+/* ส่วนละ 20 ข้อ (ฉบับย่อ 5) */
+const SK4_MIX={
+  full:{L:[[12,'w'],[3,'b'],[2,'scene'],[3,'instr']], S:[[10,'look'],[7,'reply'],[3,'cmd']],
+        R:[[7,'rpic'],[3,'yn'],[4,'extra'],[3,'sread'],[3,'pass']], W:[[6,'order'],[3,'letters'],[2,'missing'],[3,'punct'],[2,'isa'],[2,'fix'],[2,'gram']]},
+  quick:{L:[[3,'w'],[1,'b'],[1,'instr']], S:[[3,'look'],[1,'reply'],[1,'cmd']], R:[[2,'rpic'],[1,'yn'],[1,'extra'],[1,'sread']],
+        W:[[2,'order'],[1,'letters'],[1,'isa'],[1,'fix']]}};
+function buildSkills4(kind){
+  const plan=SK4_MIX[kind]||SK4_MIX.full, used=new Set();
+  const take=(n,make,pool)=>{ const out=[]; for(const w of spreadUnits(pool||PIC_CORE())){ if(out.length>=n) break; if(used.has(w.w)) continue; const it=make(w); if(it){ used.add(w.w); out.push(it); } } return out; };
+  const p=pickN(PASSAGES,1)[0], mistakes=shuffle(MISTAKES);
+  const MK={w:n=>take(n,mkWListen), b:n=>take(n,mkWListen,BONUS_PIC()), scene:n=>Array.from({length:n},(_,i)=>mkSListen(['act','count','pos'][i%3])),
+    instr:n=>{ const o=[], seen=new Set(); for(let g=0;o.length<n&&g<50;g++){ const it=mkInstr(); if(!seen.has(it.en)){ seen.add(it.en); o.push(it); } } return o; },
+    look:n=>take(n,mkLookSay), reply:n=>pickN(SK_REPLY.map((_,i)=>i),n).map(i=>mkReply(i)), cmd:n=>Array.from({length:n},mkCmd),
+    rpic:n=>take(n,mkWReadPic), yn:n=>take(n,mkYesNo), extra:n=>take(n,mkExtra,EXTRA()), sread:n=>skReadItems(n),
+    pass:n=>pickN(p.q.map((_,i)=>i),n).sort().map(i=>mkRead(p,i)),
+    order:n=>take(n,mkWOrder), letters:n=>take(n,mkLetters), missing:n=>take(n,mkMissing), punct:n=>take(n,mkWPunct), isa:n=>take(n,mkIsA),
+    fix:n=>mistakes.slice(0,n).map(m=>mkFix(m.right,m.wrong)), gram:n=>gramN(n)};
+  const tag=(arr,k)=>arr.map(it=>Object.assign(it,{part:k,partLabel:SK4_PARTS.find(x=>x.k===k).label}));
+  const part=k=>{ const items=plan[k].flatMap(([n,t])=>MK[t](n)); const tail=items.filter(x=>x.type==='read'||x.type==='sread');
+    return tag(shuffle(items.filter(x=>!tail.includes(x))).concat(tail),k); };
+  return ['L','S','R','W'].flatMap(part);
+}
+SK4_PLAN.full.n=80; SK4_PLAN.quick.n=20;
+/* ทบทวนครบทุกคำ: หมุนเวียน 6 แบบ ฟัง → อ่าน → พูด → เขียน → Yes/No → เรียงตัวอักษร */
+ACT.s4unit=d=>{ const u=SETBY[d.k]; const mk=[mkWListen,mkWReadPic,mkLookSay,writeOf,mkYesNo,mkLetters];
+  const items=shuffle(u.words.filter(hasPic)).map((w,i)=>mk[i%mk.length](w)||writeOf(w));
+  startQuiz({title:'Unit '+u.n+' · 4 Skills',sub:'ทบทวนครบทุกคำ · '+u.title,items,section:'exam',back:'exam',rebuild:()=>ACT.s4unit(d)}); };
+ACT.s4extra=()=>startQuiz({title:'Extra words',sub:'คำเสริมจากบทอ่าน · สี ตัวเลข คำบอกลักษณะ คำกริยา คำนามอื่น ๆ',
+  items:pickN(EXTRA(),20).map(mkExtra),section:'exam',back:'exam',rebuild:()=>ACT.s4extra()});
 
 
 /* ---- หน้าจอคำถามแบบใหม่ ---- */
-const SK_TYPES=['slisten','cmd','reply','sread','order','punct','rpic'];
-Object.assign(PROMPT_LABEL,{rpic:'Read and choose the picture',slisten:'Listen and choose the picture',cmd:'Listen and do',reply:'Listen and answer',
+const SK_TYPES=['slisten','cmd','reply','sread','order','punct','rpic','instr','ynpic','spellord','gfix'];
+Object.assign(PROMPT_LABEL,{instr:'Listen. What does the teacher say?',ynpic:'Read and circle Yes or No',spellord:'Look and spell the word',gfix:'Which sentence is correct?',rpic:'Read and choose the picture',slisten:'Listen and choose the picture',cmd:'Listen and do',reply:'Listen and answer',
   sread:'Read and answer',order:'Look and make the sentence',punct:'Which sentence is written correctly?'});
-Object.assign(PROMPT_TH,{rpic:'อ่านประโยค แล้วเลือกภาพที่ตรงกับประโยค',slisten:'ฟังประโยค แล้วเลือกภาพที่ตรงกับประโยค',cmd:'ฟังคำสั่งครู แล้วเลือกภาพท่าทางที่ถูกต้อง',
+Object.assign(PROMPT_TH,{instr:'ฟังคำสั่งครู แล้วเลือกความหมายที่ถูกต้อง',ynpic:'อ่านประโยค ดูภาพ ถ้าตรงกันตอบ Yes ไม่ตรงตอบ No',spellord:'แตะตัวอักษรเรียงเป็นคำให้ตรงกับภาพ',gfix:'เลือกประโยคที่ถูกต้อง · ระวังลืม is / a / has',rpic:'อ่านประโยค แล้วเลือกภาพที่ตรงกับประโยค',slisten:'ฟังประโยค แล้วเลือกภาพที่ตรงกับประโยค',cmd:'ฟังคำสั่งครู แล้วเลือกภาพท่าทางที่ถูกต้อง',
   reply:'ฟังคำถามครู แล้วเลือกคำตอบที่เหมาะสม',sread:'อ่านประโยค แล้วตอบคำถาม',order:'แตะคำเรียงเป็นประโยคให้ตรงกับภาพ',
   punct:'ประโยคต้องขึ้นต้นด้วยตัวพิมพ์ใหญ่ และจบด้วยจุด (.)'});
-Object.assign(PRAISE,{rpic:['You read carefully!','อ่านอย่างตั้งใจ'],slisten:['Great listening!','ตั้งใจฟังดีมาก'],cmd:['Great listening!','ฟังคำสั่งได้ดีมาก'],
+Object.assign(PRAISE,{instr:['Great listening!','เข้าใจคำสั่งครู'],ynpic:['You read carefully!','อ่านอย่างตั้งใจ'],spellord:['Careful spelling!','สะกดอย่างตั้งใจ'],gfix:['Careful writing!','สังเกตได้ดีมาก'],rpic:['You read carefully!','อ่านอย่างตั้งใจ'],slisten:['Great listening!','ตั้งใจฟังดีมาก'],cmd:['Great listening!','ฟังคำสั่งได้ดีมาก'],
   reply:['Good answer!','ตอบได้เหมาะสม'],sread:['You read carefully!','อ่านอย่างตั้งใจ'],
   order:['Well built!','เรียงประโยคได้ถูกต้อง'],punct:['Careful writing!','สังเกตตัวใหญ่และจุดได้ดี']});
-Object.assign(SKILL_OF,{rpic:'s4R',slisten:'s4L',cmd:'s4S',reply:'s4S',sread:'s4R',order:'s4W',punct:'s4W'});
+Object.assign(SKILL_OF,{instr:'s4L',ynpic:'s4R',spellord:'s4W',gfix:'s4W',rpic:'s4R',slisten:'s4L',cmd:'s4S',reply:'s4S',sread:'s4R',order:'s4W',punct:'s4W'});
 
 function skQuizView(){
   const q=S.quiz, it=q.items[q.i], pick=q.picks[q.i], answered=pick!==null, reveal=answered&&!q.exam;
@@ -3342,12 +3422,20 @@ function skQuizView(){
     opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
       <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1" style="font-size:${xs?19:22}px">${esc(o.t)}</span></button>`).join('')}</div>`;
   }
-  if(it.type==='punct'){
+  if(it.type==='instr'){
+    prompt=`<div class="col g8 center">${listenBig(it.say)}${reveal?`<div class="qsent" style="font-size:24px;font-weight:600">${esc(it.en)}</div>`:'<div class="hint">แตะเพื่อฟังอีกครั้ง</div>'}</div>`;
+    opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}"><span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1 thai" style="font-size:${xs?19:22}px">${esc(o.t)}</span></button>`).join('')}</div>`;
+  }
+  if(it.type==='ynpic'){
+    prompt=`<div class="row g16 center" style="flex-wrap:wrap">${skScene(it.sc,xs?120:170)}<div class="soft" style="padding:14px 20px;max-width:560px"><div class="qsent" style="font-family:var(--f-word);font-size:${xs?24:32}px;font-weight:600;line-height:1.35">${esc(it.text)}</div></div></div>`;
+    opts=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">${it.opts.map((o,i)=>`<button class="qopt ${cls(i)}" data-act="qzpick" data-i="${i}" style="font-size:${xs?26:32}px;font-weight:600">${i?'✘':'✔'} ${esc(o.t)}</button>`).join('')}</div>`;
+  }
+  if(it.type==='punct'||it.type==='gfix'){
     prompt=`<div class="center">${skScene(it.sc,xs?120:LAYOUT==='lg'?190:160)}</div>`;
     opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
       <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1 qsent" style="font-size:${xs?20:24}px;font-family:var(--f-word)">${esc(o.t)}</span></button>`).join('')}</div>`;
   }
-  if(it.type==='order'){
+  if(it.type==='order'||it.type==='spellord'){
     const done=it.built.length===it.tiles.length, used=new Set(it.built);
     const col=reveal?(pick===it.a?'var(--ok)':'var(--bad)'):'var(--ink)';
     prompt=`<div class="col g12 center" style="width:100%">${skScene(it.sc,xs?110:LAYOUT==='lg'?180:150)}
@@ -3359,11 +3447,11 @@ function skQuizView(){
   let fb='';
   if(reveal){
     const ok=pick===it.a, second=ok&&tried.length>0, pr=praiseFor(it.type);
-    const ct=it.type==='order'?it.ans:it.opts[it.a].t;
+    const isOrd=it.type==='order'||it.type==='spellord', ct=isOrd?it.ans:it.opts[it.a].t;
     fb=`<div class="msg" style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?(second?'✔ You got it! <span class="thai hint">ถูกต้องในครั้งที่สอง — ตั้งใจดีมาก</span>':'✔ '+pr[0]+' <span class="thai hint">'+pr[1]+'</span>')
-      :'✘ Not quite. '+(it.type==='order'?'':'The answer is “'+esc(ct)+'” ')+'<span class="thai hint">ดูคำตอบที่ถูกแล้วลองจำไว้นะ</span>'}</div>`;
+      :'✘ Not quite. '+(isOrd?'':'The answer is “'+esc(ct)+'” ')+'<span class="thai hint">ดูคำตอบที่ถูกแล้วลองจำไว้นะ</span>'}</div>`;
   } else if(tried.length && !q.exam){
-    fb=`<div class="msg" style="color:var(--gold-d)">↺ Try again! <span class="thai hint">${it.type==='order'?'ลำดับยังไม่ถูก ลองเรียงใหม่':'ยังไม่ถูก ลองอีกครั้ง — ตัวเลือกที่ผิดถูกปิดไว้แล้ว'}</span></div>`;
+    fb=`<div class="msg" style="color:var(--gold-d)">↺ Try again! <span class="thai hint">${(it.type==='order'||it.type==='spellord')?'ลำดับยังไม่ถูก ลองเรียงใหม่':'ยังไม่ถูก ลองอีกครั้ง — ตัวเลือกที่ผิดถูกปิดไว้แล้ว'}</span></div>`;
   }
   const nextBtn=`<button class="btn ${answered?'':'ghost'}" data-act="qznext" ${answered?'':'disabled style="opacity:.45"'}>${q.i===n-1?'Finish ✓':'Next ▶'}</button>`;
   return head+`<div class="card f1 col g12" style="justify-content:space-between;padding:${xs?'14px 14px':'18px 26px'};min-height:0">
@@ -3397,9 +3485,9 @@ ACT.sksay=d=>{
 ACT.ordtap=d=>{
   const q=S.quiz, it=q.items[q.i], i=+d.i;
   if(it.built.includes(i)) return; if(q.picks[q.i]!==null && !q.exam) return;
-  it.built.push(i); Voice.utter(it.tiles[i].t==='.'?'full stop':it.tiles[i].t, Math.max(.5,S.rate));
+  it.built.push(i); if(it.joiner!=='') Voice.utter(it.tiles[i].t==='.'?'full stop':it.tiles[i].t, Math.max(.5,S.rate));
   if(it.built.length<it.tiles.length){ if(q.exam) q.picks[q.i]=null; render(); return; }
-  const made=it.built.map(k=>it.tiles[k].t).join(' ').replace(' .','.'), ok=made===it.ans;
+  const made=it.built.map(k=>it.tiles[k].t).join(it.joiner==null?' ':it.joiner).replace(' .','.'), ok=made===it.ans;
   it.opts[1].t=made;
   if(q.exam){ q.picks[q.i]=ok?0:1; render(); return; }
   q.tries=q.tries||{}; q.first=q.first||{};
@@ -3409,7 +3497,7 @@ ACT.ordtap=d=>{
   }
   q.picks[q.i]=ok?0:1;
   if(!(q.tries[q.i]||[]).length){ record(null,it.type,ok); q.first[q.i]=ok; if(ok) star(1); }
-  Voice.say(ok?praiseFor('order')[0]+' '+it.ans:it.ans,.78); render();
+  Voice.say(ok?praiseFor(it.type)[0]+' '+it.ans:it.ans,.78); render();
 };
 ACT.ordundo=()=>{ const q=S.quiz, it=q.items[q.i]; it.built=[]; if(q.exam) q.picks[q.i]=null; render(); };
 { const base=VIEWS.quiz;
@@ -4780,6 +4868,8 @@ ACT.settings=()=>{
       <div class="field"><label>ชื่อเด็ก</label><input type="text" id="setName" value="${esc(S.kidName)}" maxlength="16"></div>
       <div class="field"><label>อายุ</label><select id="setAge">${[5,6,7,8,9].map(a=>`<option value="${a}" ${a===S.kidAge?'selected':''}>${a} ปี</option>`).join('')}</select>
         <span class="hint">ใช้ในบทพูด “How old are you?”</span></div>
+      <div class="field"><label>คนในครอบครัว</label><select id="setFam">${[2,3,4,5,6,7,8].map(a=>`<option value="${a}" ${a===S.kidFamily?'selected':''}>${a} คน</option>`).join('')}</select>
+        <span class="hint">“There are … people in my family.”</span></div>
       <div class="field"><label>แสดงคำแปลไทย</label>
         <button class="switch ${S.showThai?'on':''}" data-act="togthai"><i></i></button>
         <span class="hint">ปิดไว้เพื่อฝึกอ่านอังกฤษล้วน</span></div>
@@ -4807,6 +4897,7 @@ ACT.settings=()=>{
   nameEl.oninput  =()=>{ S.kidName=nameEl.value.trim()||'Milin'; save(); render(); };
   rateEl.oninput  =()=>{ S.rate=+rateEl.value; $('#rateLbl').textContent=S.rate.toFixed(2)+'x'; save(); renderTop(); };
   $('#setAge').onchange=e=>{ S.kidAge=+e.target.value; save(); };
+  $('#setFam').onchange=e=>{ S.kidFamily=+e.target.value; save(); };
   voiceEl.onchange=()=>{ S.voiceURI=voiceEl.value; save(); Voice.refresh(); ACT.testvoice(); };
 };
 /* ปิดได้เมื่อแตะพื้นหลังนอกกล่อง หรือแตะปุ่ม "เสร็จแล้ว" (ปุ่มในกล่องอื่นๆ ยังทำงานปกติ) */
