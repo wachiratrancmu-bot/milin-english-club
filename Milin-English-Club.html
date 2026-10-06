@@ -245,6 +245,7 @@ button:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-r
 .stile{font-family:var(--f-word);font-size:24px;font-weight:600;padding:9px 16px;border-radius:14px;background:#fff;border:1.5px solid var(--line2);
   box-shadow:0 2px 0 var(--line2);min-width:44px}
 .stile.on{background:#F2F4F8;box-shadow:none}
+.wfb{display:inline-block;min-width:.75em;border-bottom:4px solid var(--orange);text-align:center;margin:0 1px}
 body.xs .stile{font-size:19px;padding:7px 11px}
 /* ---------- แป้นพิมพ์ ---------- */
 .kbd{display:flex;flex-direction:column;gap:7px;align-items:center}
@@ -2765,7 +2766,7 @@ function quizResults(){
     .filter(x=> q.exam ? x.p!==x.it.a : (q.first||{})[x.i]!==true);
   const ansText=(it,k)=>{ const o=it.opts[k]; return o.w? o.w.w : o.t; };
   const qText=it=>({listen:'🔊 '+(it.word&&it.word.w),pic:'🖼️ '+(it.word&&it.word.w),mean:it.word&&it.word.w,th2en:it.word&&it.word.th,
-    blank:it.s,gram:it.s==='Which is correct?'?'Which is correct?':it.s,missing:it.word&&it.word.w,odd:'Odd one out',read:it.q,fix:'Spelling: '+it.say,slisten:'🔊 '+it.say,cmd:'🔊 '+it.say,reply:it.q,sread:it.q,rpic:it.text,instr:'🔊 '+it.en,ynpic:it.text,spellord:'✍️ '+it.ans,gfix:'✍️ '+it.full,order:'✍️ '+it.ans,punct:'✍️ '+it.full})[it.type]||'';
+    blank:it.s,gram:it.s==='Which is correct?'?'Which is correct?':it.s,missing:it.word&&it.word.w,odd:'Odd one out',read:it.q,fix:'Spelling: '+it.say,slisten:'🔊 '+it.say,cmd:'🔊 '+it.say,reply:it.q,sread:it.q,rpic:it.text,wfill:'✍️ '+it.pattern+' ('+it.th+')',dict:'🔊 '+it.ans,instr:'🔊 '+it.en,ynpic:it.text,spellord:'✍️ '+it.ans,gfix:'✍️ '+it.full,order:'✍️ '+it.ans,punct:'✍️ '+it.full})[it.type]||'';
   let partBars='';
   if(q.exam){
     const last=q.rec||P.exams[P.exams.length-1];
@@ -2896,6 +2897,11 @@ VIEWS.exam = ()=>{
       <span style="width:10px;height:10px;border-radius:3px;background:${C(u.c)};display:inline-block"></span>&nbsp;Unit ${u.n} · ${u.words.length} คำ</button>`).join('')}
       <button class="chip" data-act="s4extra">Extra words · 20 ข้อ</button></div>
   </div>
+  <div class="card col g10" style="margin-top:14px;padding:16px 20px">
+    <div class="col" style="min-width:0"><div style="font-size:17px;font-weight:600">Worksheets · ใบงานทบทวน 3 ชุด (ทำบน iPad)</div>
+      <div class="hint">ข้อเดียวกับใบงานที่พิมพ์ ชุดละ 50 ข้อ · เฉลยทันที · ตอบผิดได้ลองใหม่ 1 ครั้ง</div></div>
+    <div class="row g8" style="flex-wrap:wrap">${WS.map(w=>`<button class="btn ghost" data-act="wsstart" data-k="${w.k}">${w.t} · ${w.sub}</button>`).join('')}</div>
+  </div>
   <div class="row g8" style="margin:16px 0 8px"><div class="eyebrow">Vocabulary & Grammar Mock · ข้อสอบคำศัพท์และไวยากรณ์</div></div>
   <div class="card col g10" style="padding:16px 20px">
     <div class="row g12" style="flex-wrap:wrap"><div class="col f1" style="min-width:220px"><div style="font-size:20px;font-weight:600">80 questions · 6 parts</div>
@@ -2992,6 +2998,7 @@ const skBalloon=(col,s)=>`<svg viewBox="0 0 40 60" style="width:${s}px;height:${
   <ellipse cx="20" cy="20" rx="15" ry="18" fill="${SK_COL[col]}"/><path d="M17 38 L23 38 L20 42Z" fill="${SK_COL[col]}"/>
   <ellipse cx="14" cy="13" rx="3.5" ry="5.5" fill="#fff" opacity=".35"/></svg>`;
 function skScene(sc, size){
+  if(!sc) return '';
   size=size||150; const box=(inner,bg)=>`<span class="skpic" style="width:${size}px;height:${size}px;${bg?'':'background:#F6F8FB'}">${bg||''}${inner}</span>`;
   const em=(e,f,st)=>`<span style="font-size:${Math.round(size*f)}px;line-height:1;${st||''}">${e}</span>`;
   if(sc.kind==='act'){
@@ -3339,11 +3346,13 @@ SK4.splice(0,SK4.length,
   {k:'s4read',ic:'📄',t:'Reading',th:'อ่านเลือกภาพ · Yes/No · ความหมาย · อ่านเรื่อง',c:'pink',
     make:()=>shuffle(tk(4,mkWReadPic).concat(tk(3,mkYesNo),tk(2,mkExtra,EXTRA()))).concat(skReadItems(3))},
   {k:'s4write',ic:'✍️',t:'Writing',th:'เรียงประโยค · เรียงตัวอักษร · ลืม is/a · สะกด',c:'orange',
-    make:()=>shuffle(tk(3,mkWOrder).concat(tk(2,mkLetters),tk(2,mkIsA),tk(1,mkWPunct),tk(1,mkMissing),gramN(2),[(m=>mkFix(m.right,m.wrong))(rnd(MISTAKES))]))});
+    make:()=>shuffle(tk(2,mkWOrder).concat([mkDict(rnd(DICT_SENT))],tk(2,mkLetters),tk(2,mkIsA),tk(1,mkWPunct),tk(1,mkMissing),gramN(2),[(m=>mkFix(m.right,m.wrong))(rnd(MISTAKES))]))});
 /* ส่วนละ 20 ข้อ (ฉบับย่อ 5) */
+const DICT_SENT=['This is my house.','The skirt is red.','There are three ice creams.','I have a beautiful garden.','My mom is a teacher.','He has a pencil case.',
+  'Milin has a red skirt.','The butterfly is beautiful.','There is a house.','I like ice creams.'];
 const SK4_MIX={
   full:{L:[[12,'w'],[3,'b'],[2,'scene'],[3,'instr']], S:[[10,'look'],[7,'reply'],[3,'cmd']],
-        R:[[7,'rpic'],[3,'yn'],[4,'extra'],[3,'sread'],[3,'pass']], W:[[6,'order'],[3,'letters'],[2,'missing'],[3,'punct'],[2,'isa'],[2,'fix'],[2,'gram']]},
+        R:[[7,'rpic'],[3,'yn'],[4,'extra'],[3,'sread'],[3,'pass']], W:[[5,'order'],[1,'dict'],[3,'letters'],[2,'missing'],[3,'punct'],[2,'isa'],[2,'fix'],[2,'gram']]},
   quick:{L:[[3,'w'],[1,'b'],[1,'instr']], S:[[3,'look'],[1,'reply'],[1,'cmd']], R:[[2,'rpic'],[1,'yn'],[1,'extra'],[1,'sread']],
         W:[[2,'order'],[1,'letters'],[1,'isa'],[1,'fix']]}};
 function buildSkills4(kind){
@@ -3356,7 +3365,7 @@ function buildSkills4(kind){
     rpic:n=>take(n,mkWReadPic), yn:n=>take(n,mkYesNo), extra:n=>take(n,mkExtra,EXTRA()), sread:n=>skReadItems(n),
     pass:n=>pickN(p.q.map((_,i)=>i),n).sort().map(i=>mkRead(p,i)),
     order:n=>take(n,mkWOrder), letters:n=>take(n,mkLetters), missing:n=>take(n,mkMissing), punct:n=>take(n,mkWPunct), isa:n=>take(n,mkIsA),
-    fix:n=>mistakes.slice(0,n).map(m=>mkFix(m.right,m.wrong)), gram:n=>gramN(n)};
+    dict:n=>pickN(DICT_SENT,n).map(mkDict), fix:n=>mistakes.slice(0,n).map(m=>mkFix(m.right,m.wrong)), gram:n=>gramN(n)};
   const tag=(arr,k)=>arr.map(it=>Object.assign(it,{part:k,partLabel:SK4_PARTS.find(x=>x.k===k).label}));
   const part=k=>{ const items=plan[k].flatMap(([n,t])=>MK[t](n)); const tail=items.filter(x=>x.type==='read'||x.type==='sread');
     return tag(shuffle(items.filter(x=>!tail.includes(x))).concat(tail),k); };
@@ -3369,19 +3378,123 @@ ACT.s4unit=d=>{ const u=SETBY[d.k]; const mk=[mkWListen,mkWReadPic,mkLookSay,wri
   startQuiz({title:'Unit '+u.n+' · 4 Skills',sub:'ทบทวนครบทุกคำ · '+u.title,items,section:'exam',back:'exam',rebuild:()=>ACT.s4unit(d)}); };
 ACT.s4extra=()=>startQuiz({title:'Extra words',sub:'คำเสริมจากบทอ่าน · สี ตัวเลข คำบอกลักษณะ คำกริยา คำนามอื่น ๆ',
   items:pickN(EXTRA(),20).map(mkExtra),section:'exam',back:'exam',rebuild:()=>ACT.s4extra()});
+/* ---- ใบงาน 3 ชุด (ฉบับทำบน iPad) — ตรงกับใบงานที่พิมพ์ ข้อต่อข้อ · เฉลยทันที ---- */
+const wordObj=t=>SETS.flatMap(s=>s.words).find(x=>x.w===t)||{w:t};
+/* เติมตัวอักษรที่หายไป (หลายช่อง) + คำใบ้ภาษาไทยตามใบงาน */
+const LSWAP={a:'e',e:'a',i:'e',o:'u',u:'o',l:'r',r:'l',c:'k',k:'c',n:'m',m:'n',t:'d',d:'t',s:'z',h:'n',p:'b',b:'d',g:'j',w:'v',y:'i',f:'v',x:'s',j:'g',v:'w',z:'s',q:'k'};
+function mkWFill(word,th,pattern){
+  const ans=[...pattern].map((c,i)=>c==='_'?word[i]:'').join('');
+  const sw=s=>s.split('').map(c=>LSWAP[c]||c).join(''), v=new Set();
+  [ans.split('').reverse().join(''), sw(ans), LSWAP[ans[0]]?LSWAP[ans[0]]+ans.slice(1):'', ans.length>1?ans.slice(0,-1)+(LSWAP[ans.slice(-1)]||'e'):'',
+   ans.length>1?ans[0]+ans[0]+ans.slice(2):'', 'a'+ans.slice(1), ans.slice(0,-1)+'e'].forEach(x=>{ if(x&&x!==ans&&x.length===ans.length) v.add(x); });
+  if(ans.length===1) 'aeiou'.split('').forEach(x=>{ if(x!==ans) v.add(x); });
+  const o=shuffle([ans].concat(pickN([...v],2)));
+  return {type:'wfill',word:wordObj(word).id?wordObj(word):null,shown:wordObj(word),th,pattern,ans,opts:o.map(t=>({t})),a:o.indexOf(ans),full:word,say:null};
+}
+/* เรียงตัวอักษรตามที่ใบงานสลับไว้ */
+function mkWSLetters(word,scr){ const w=wordObj(word);
+  return {type:'spellord',joiner:'',sc:hasPic(w)?{kind:'word',w}:null,ans:word,full:word,tiles:scr.split('').map(t=>({t,i:-2})).map((x,k)=>x),built:[],opts:[{t:word},{t:''}],a:0,word:w.id?w:null,_fix:1}; }
+const fixTiles=it=>{ const used=new Set(); it.tiles.forEach(x=>{ for(let i=0;i<it.ans.length;i++) if(!used.has(i)&&it.ans[i]===x.t){ used.add(i); x.i=i; break; } }); return it; };
+/* ข้อเลือกคำเติม (has/have · This/That · He/She ...) */
+const mkG=(s,o,a,h)=>{ const oo=shuffle(o); return {type:'gram',s,h:h||'',opts:oo.map(t=>({t})),a:oo.indexOf(a),full:s.replace('___',a)}; };
+/* ข้อเลือกประโยคที่ถูก */
+const mkPick=(right,wrongs,w)=>{ const o=shuffle([right].concat(wrongs)); return {type:'gfix',sc:w&&hasPic(wordObj(w))?{kind:'word',w:wordObj(w)}:null,opts:o.map(t=>({t})),a:o.indexOf(right),full:right}; };
+/* เรียงคำตามใบงาน (ชิ้นคำตามที่ใบงานให้) */
+function mkWSOrder(chunks,ans,w){ const at=ans.split(' '), used=new Set();
+  const tiles=chunks.map(t=>{ const i=at.findIndex((x,j)=>x===t&&!used.has(j)); used.add(i); return {t,i}; });
+  return {type:'order',sc:w?{kind:'word',w:wordObj(w)}:null,ans,full:ans,tiles,built:[],opts:[{t:ans},{t:''}],a:0}; }
+/* ฟังแล้วเขียน: ฟังประโยค แตะคำเรียง — มีคำสะกดผิดปนเป็นตัวลวง */
+const WRONG_SP={skirt:'skitr',house:'horse',creams:'crems',beautiful:'beautifull',teacher:'teacher',pencil:'pencel',garden:'gardan',red:'rad',mom:'mon'};
+function mkDict(sent){
+  const toks=sent.slice(0,-1).split(' ').concat('.');
+  const wrong=[...new Set(toks.map(t=>WRONG_SP[t.toLowerCase()]).filter(x=>x&&!toks.includes(x)))];
+  while(wrong.length<2){ const long=toks.filter(t=>t.length>=4); const m=long.length?misspell(rnd(long).toLowerCase()):[]; const x=m[0]; if(x&&!toks.includes(x)&&!wrong.includes(x)) wrong.push(x); else if(!long.length) break; }
+  const tiles=shuffle(toks.map((t,i)=>({t,i})).concat(wrong.slice(0,2).map(t=>({t,i:-1}))));
+  return {type:'dict',say:sent,ans:sent,full:sent,tiles,built:[],need:toks.length,silent:true,opts:[{t:sent},{t:''}],a:0};
+}
+const WS_PASS={
+  ploy:{key:'ploy',title:"Ploy's house",c:'u1',emoji:'🏠',text:['Hello, I am Ploy. I am seven years old.','This is my house.','It has a living room, a kitchen, two bedrooms, and a bathroom.',
+    'My bedroom is small.','There is a desk, a lamp, and a pink rug.','There are three posters on the wall.','My mom is a teacher.','My dad has a red car.',
+    'I have one brother. His name is Pete.','He is five years old.','I love my family!'],
+    q:[{q:'Ploy is seven years old.',o:['Yes','No'],a:0},{q:'There are three bedrooms in the house.',o:['Yes','No'],a:1},{q:"Ploy's bedroom is big.",o:['Yes','No'],a:1},
+      {q:'There is a pink rug in her bedroom.',o:['Yes','No'],a:0},{q:"Ploy's mom is a doctor.",o:['Yes','No'],a:1},{q:'Ploy has a brother.',o:['Yes','No'],a:0},
+      {q:'There are ___ posters on the wall.',o:['two','three','four','five'],a:1},{q:"Ploy's dad has a ___ car.",o:['red','blue','black','green'],a:0},
+      {q:"Ploy's brother is ___ years old.",o:['three','four','five','seven'],a:2},{q:"What is in Ploy's bedroom?",o:['a bathtub','a lamp','a piano','a computer'],a:1}]},
+  toy:{key:'toy',title:'Toy Day at school',c:'u7',emoji:'🧸',text:['My name is Toby.','Today is Toy Day at school.','I have a robot and a kite.',
+    'My friend Mia has a stuffed toy and a dollhouse.','Mia has long brown hair.','She wears a yellow dress.','I wear a blue shirt and black shorts.',
+    'We play a board game.','Then we sing and dance.','It is a fun day!'],
+    q:[{q:'Toby has a robot.',o:['Yes','No'],a:0},{q:'Mia has short hair.',o:['Yes','No'],a:1},{q:'Mia wears a yellow dress.',o:['Yes','No'],a:0},
+      {q:'Toby wears a red shirt.',o:['Yes','No'],a:1},{q:'They play a board game.',o:['Yes','No'],a:0}]}
+};
+const thOf=(w,th)=>Object.assign({},wordObj(w),{th});
+function mkMatch(list){ const pool=list.map(([w,th])=>thOf(w,th)); return list.map(([w,th])=>{ const it=mkMean(thOf(w,th),pool); it.word=wordObj(w).id?wordObj(w):null; it.say=w; return it; }); }
+function mkWriteTh(list){ const pool=list.map(([w,th])=>thOf(w,th)); return list.map(([w,th])=>{ const it=mkTh2En(thOf(w,th),pool); it.word=wordObj(w).id?wordObj(w):null; return it; }); }
+const WS=[
+  {k:'ws1',t:'ชุดที่ 1',sub:'ทั้งเล่ม · 50 ข้อ',make:()=>[].concat(
+    mkMatch([['mirror','กระจก'],['bookcase','ตู้หนังสือ'],['chalkboard','กระดานดำ'],['eraser','ยางลบ'],['grandma','ย่า / ยาย'],['teeth','ฟัน'],['neck','คอ'],['countryside','ชนบท'],['puppet','หุ่นมือ'],['jacket','เสื้อแจ็กเก็ต']]),
+    [['skirt','กระโปรง','sk__t'],['house','บ้าน','h__se'],['beautiful','สวยงาม','bea_ti_ul'],['kitchen','ห้องครัว','ki__hen'],['basement','ห้องใต้ดิน','b_sem_nt'],['hallway','ทางเดิน','h_llw_y'],
+     ['pencil sharpener','กบเหลาดินสอ','pencil sh_rpen_r'],['grandparents','ปู่ย่าตายาย','gr_ndp_rents'],['cousins','ลูกพี่ลูกน้อง','c__sins'],['balloon','ลูกโป่ง','ba__oon']].map(x=>mkWFill(...x)),
+    [['skirt','tkirs'],['house','esuoh'],['jeans','naejs'],['clock','kcolc'],['clown','nwolc']].map(x=>fixTiles(mkWSLetters(...x))),
+    [mkPick('There are three ice creams.',['There is three ice cream.','There are three ice cream.'],'ice cream'),mkPick('There is a house.',['There are a house.','There is a houses.'],'house'),
+     mkPick('There are two bookcases in the tree house.',['There is two bookcase in the tree house.','There are two bookcase in the tree house.'],'bookcase'),
+     mkPick('There is a big television in the living room.',['There are a big television in the living room.','There is a big televisions in the living room.'],'television'),
+     mkPick('There are four windows in the classroom.',['There is four window in the classroom.','There are four window in the classroom.'],'window')],
+    [mkG('Jill ___ a small school bag.',['has','have'],'has'),mkG('Ken and Elle ___ big school bags.',['has','have'],'have'),mkG('Pat ___ one big eye.',['has','have'],'has'),
+     mkG('They ___ crayons and pencils.',['has','have'],'have'),mkG('I ___ two brown eyes.',['has','have'],'have')],
+    [mkG('___ is a chalkboard.',['This','That','These','Those'],'This','ใกล้ 1 อัน'),mkG('___ is a door.',['This','That','These','Those'],'That','ไกล 1 อัน'),
+     mkG('___ are books.',['This','That','These','Those'],'These','ใกล้หลายอัน'),mkG('___ are lockers.',['This','That','These','Those'],'Those','ไกลหลายอัน'),
+     mkG('___ is a clock.',['This','That','These','Those'],'That','ไกล 1 อัน')],
+    [mkG('This is Sue. ___ is my grandma.',['She','They'],'She'),mkG('I have one sister. ___ name is Mary.',['His','Her'],'Her'),
+     mkG('Tim and Will are my brothers. I love ___.',['they','them'],'them'),mkG('Tom has a dad. ___ name is Charlie.',['His','Her'],'His'),
+     mkG('Leo is my brother. ___ is five years old.',['He','She'],'He')],
+    [mkWSOrder(['red.','dream','is','house','My'],'My dream house is red.'),mkWSOrder(['a','are','There','two','chairs','table.','and'],'There are two chairs and a table.'),
+     mkWSOrder(['garden','There','is','a','with','beautiful','flowers.'],'There is a garden with beautiful flowers.','garden'),
+     mkWSOrder(['the','plays','He','guitar.'],'He plays the guitar.','guitar'),mkWSOrder(['white','has','She','teeth.','three'],'She has three white teeth.','teeth')])},
+  {k:'ws2',t:'ชุดที่ 2',sub:'Unit 1–4 · 50 ข้อ',make:()=>[].concat(
+    mkWriteTh([['bedroom','ห้องนอน'],['ruler','ไม้บรรทัด'],['teacher','ครู'],['lamp','โคมไฟ'],['living room','ห้องนั่งเล่น'],['notebook','สมุด'],['rug','พรม'],['desk','โต๊ะเรียน'],['bathroom','ห้องน้ำ'],['plant','ต้นไม้'],['computer','คอมพิวเตอร์'],['poster','โปสเตอร์']]),
+    [['pen','ปากกา','p_n'],['pencil case','กล่องดินสอ','penc_l c_se'],['bottle','ขวด','bo__le'],['highlighter','ปากกาเน้นข้อความ','hi_hli_hter'],['drawing book','สมุดวาดภาพ','dr_wing b__k'],
+     ['mom','แม่','m_m'],['grandpa','ปู่ / ตา','grand_a'],['aunt','ป้า / น้า / อา (หญิง)','a_nt'],['uncle','ลุง / น้า / อา (ชาย)','un_le'],['daughter','ลูกสาว','d_ught_r'],['son','ลูกชาย','s_n']].map(x=>mkWFill(...x)),
+    WS_PASS.ploy.q.map((_,i)=>mkRead(WS_PASS.ploy,i)),
+    [mkG('There ___ a computer on the desk.',['is','are'],'is'),mkPick('There are two plants in the hallway.',['There is two plant in the hallway.','There are two plant in the hallway.'],'plant'),
+     mkPick('There are five notebooks in my school bag.',['There is five notebook in my school bag.','There are five notebook in my school bag.'],'notebook'),mkG('There ___ a teacher in the classroom.',['is','are'],'is'),
+     mkG('My mom ___ a pen.',['has','have'],'has'),mkG('Nora and Cole ___ rulers.',['has','have'],'have'),mkG('We ___ a big living room.',['has','have'],'have'),mkG('He ___ a highlighter.',['has','have'],'has'),
+     mkG('___ are pencil cases.',['This','That','These','Those'],'These','ใกล้หลายอัน'),mkG('___ is a poster.',['This','That','These','Those'],'That','ไกล 1 อัน'),mkG('___ are desks.',['This','That','These','Those'],'Those','ไกลหลายอัน')],
+    ['This is my house.','The skirt is red.','There are three ice creams.','I have a beautiful garden.','My mom is a teacher.','He has a pencil case.'].map(mkDict))},
+  {k:'ws3',t:'ชุดที่ 3',sub:'Unit 5–8 · 50 ข้อ',make:()=>[].concat(
+    mkWriteTh([['nose','จมูก'],['hand','มือ'],['ear','หู'],['hair','ผม'],['leg','ขา'],['mouth','ปาก'],['hat','หมวก'],['arm','แขน'],['head','หัว'],['foot','เท้า']]),
+    [['airplane','เครื่องบิน','airp_an_'],['board game','เกมกระดาน','b_ard gam_'],['robot','หุ่นยนต์','r_b_t'],['stuffed toy','ตุ๊กตานุ่มนิ่ม','stu__ed toy'],['building blocks','ตัวต่อ','bu_lding bl_cks'],
+     ['dollhouse','บ้านตุ๊กตา','do_lh_use'],['skateboard','สเก็ตบอร์ด','sk_tebo_rd'],['soccer ball','ลูกฟุตบอล','socc_r b_ll'],['piano','เปียโน','p_an_'],['funfair','งานรื่นเริง','f_nf_ir'],['children','เด็ก ๆ','ch_ldr_n']].map(x=>mkWFill(...x)),
+    [['dress','serds'],['shirt','trihs'],['shorts','sthros'],['kite','etik'],['boat','taob']].map(x=>fixTiles(mkWSLetters(...x))),
+    [['Sally can ___ a song.','sing'],['We ___ our hands.','clap'],['They ___ on the stage.','dance'],['Daisy and Kim are in a music ___.','band'],['My dad has a red ___.','car']]
+      .map(([s,a])=>mkBlank({s,a,o:['sing','clap','dance','band','car'].filter(x=>x!==a).slice(0,2).concat(a)})),
+    WS_PASS.toy.q.map((_,i)=>mkRead(WS_PASS.toy,i)),
+    [mkPick('I have a big kite.',['I have a kite big.'],'kite'),mkPick('She has long hair.',['She has hair long.'],'hair'),mkPick('He has two small hands.',['He has two hands small.'],'hand'),
+     mkG('She ___ a song.',['sing','sings'],'sings'),mkG('They ___ at the party.',['dance','dances'],'dance'),mkG('My brother ___ the piano.',['play','plays'],'plays')],
+    [()=>({q:'What is your name?',a:`My name is ${S.kidName}.`,d:['I am fine, thank you.','It is a book.']}),
+     ()=>({q:'How many people are there in your family?',a:`There are ${famWord()} people in my family.`,d:[`I am ${famWord()} people.`,`There is ${famWord()} people in my family.`]}),
+     ()=>({q:'What is this?',a:'This is my nose.',d:['This is my noses.','These is my nose.'],sc:{kind:'word',w:CORE.find(x=>x.w==='nose')}}),
+     ()=>({q:'How many eyes do you have?',a:'I have two eyes.',d:['I have two eye.','I has two eyes.'],sc:{kind:'word',w:CORE.find(x=>x.w==='eye')}}),
+     ()=>{ const w=rnd(SETBY.u7.words.filter(x=>x.w!=='building blocks')); return {q:'What is your favorite toy?',a:`My favorite toy is ${art(w.w)}.`,d:[`My favorite toy are ${art(w.w)}.`,`My favorite toy is ${w.w}.`],sc:{kind:'word',w}}; },
+     ()=>({q:'Do you like to dance?',a:'Yes, I do.',d:['Yes, I am.','Yes, it is.'],sc:{kind:'word',w:CORE.find(x=>x.w==='dance')}}),
+     ()=>{ const c=rnd(['blue','white','red','green','yellow','pink']); return {q:'What color is your shirt?',a:`It is ${c}.`,d:[`It ${c}.`,`Is it ${c}.`],sc:{kind:'word',w:CORE.find(x=>x.w==='shirt')}}; },
+     ()=>({q:'What is in your school bag?',a:'I have a pencil, a ruler, and a notebook.',d:['I has a pencil, a ruler, and a notebook.','I have pencil, ruler, and notebook.'],sc:{kind:'word',w:CORE.find(x=>x.w==='school bag')}})
+    ].map(f=>{ const r=f(), o=shuffle([r.a].concat(r.d)); return {type:'reply',q:r.q,say:r.q,sc:r.sc||null,opts:o.map(t=>({t})),a:o.indexOf(r.a),full:r.a}; }))}
+];
+ACT.wsstart=d=>{ const s=WS.find(x=>x.k===d.k);
+  startQuiz({title:'ใบงาน'+s.t.replace('ชุดที่',' ชุดที่'),sub:s.sub+' · ตรงกับใบงานที่พิมพ์ · เฉลยทันที',items:s.make(),section:'exam',back:'exam',rebuild:()=>ACT.wsstart(d)}); };
 
 
 /* ---- หน้าจอคำถามแบบใหม่ ---- */
-const SK_TYPES=['slisten','cmd','reply','sread','order','punct','rpic','instr','ynpic','spellord','gfix'];
-Object.assign(PROMPT_LABEL,{instr:'Listen. What does the teacher say?',ynpic:'Read and circle Yes or No',spellord:'Look and spell the word',gfix:'Which sentence is correct?',rpic:'Read and choose the picture',slisten:'Listen and choose the picture',cmd:'Listen and do',reply:'Listen and answer',
+const SK_TYPES=['slisten','cmd','reply','sread','order','punct','rpic','instr','ynpic','spellord','gfix','wfill','dict'];
+Object.assign(PROMPT_LABEL,{wfill:'Write the missing letters',dict:'Listen and write',instr:'Listen. What does the teacher say?',ynpic:'Read and circle Yes or No',spellord:'Look and spell the word',gfix:'Which sentence is correct?',rpic:'Read and choose the picture',slisten:'Listen and choose the picture',cmd:'Listen and do',reply:'Listen and answer',
   sread:'Read and answer',order:'Look and make the sentence',punct:'Which sentence is written correctly?'});
-Object.assign(PROMPT_TH,{instr:'ฟังคำสั่งครู แล้วเลือกความหมายที่ถูกต้อง',ynpic:'อ่านประโยค ดูภาพ ถ้าตรงกันตอบ Yes ไม่ตรงตอบ No',spellord:'แตะตัวอักษรเรียงเป็นคำให้ตรงกับภาพ',gfix:'เลือกประโยคที่ถูกต้อง · ระวังลืม is / a / has',rpic:'อ่านประโยค แล้วเลือกภาพที่ตรงกับประโยค',slisten:'ฟังประโยค แล้วเลือกภาพที่ตรงกับประโยค',cmd:'ฟังคำสั่งครู แล้วเลือกภาพท่าทางที่ถูกต้อง',
+Object.assign(PROMPT_TH,{wfill:'เลือกตัวอักษรที่หายไป ให้เป็นคำที่ถูกต้อง',dict:'ฟังประโยค แล้วแตะคำเรียงให้ถูก · ระวังคำที่สะกดผิดที่ปนมา',instr:'ฟังคำสั่งครู แล้วเลือกความหมายที่ถูกต้อง',ynpic:'อ่านประโยค ดูภาพ ถ้าตรงกันตอบ Yes ไม่ตรงตอบ No',spellord:'แตะตัวอักษรเรียงเป็นคำให้ตรงกับภาพ',gfix:'เลือกประโยคที่ถูกต้อง · ระวังลืม is / a / has',rpic:'อ่านประโยค แล้วเลือกภาพที่ตรงกับประโยค',slisten:'ฟังประโยค แล้วเลือกภาพที่ตรงกับประโยค',cmd:'ฟังคำสั่งครู แล้วเลือกภาพท่าทางที่ถูกต้อง',
   reply:'ฟังคำถามครู แล้วเลือกคำตอบที่เหมาะสม',sread:'อ่านประโยค แล้วตอบคำถาม',order:'แตะคำเรียงเป็นประโยคให้ตรงกับภาพ',
   punct:'ประโยคต้องขึ้นต้นด้วยตัวพิมพ์ใหญ่ และจบด้วยจุด (.)'});
-Object.assign(PRAISE,{instr:['Great listening!','เข้าใจคำสั่งครู'],ynpic:['You read carefully!','อ่านอย่างตั้งใจ'],spellord:['Careful spelling!','สะกดอย่างตั้งใจ'],gfix:['Careful writing!','สังเกตได้ดีมาก'],rpic:['You read carefully!','อ่านอย่างตั้งใจ'],slisten:['Great listening!','ตั้งใจฟังดีมาก'],cmd:['Great listening!','ฟังคำสั่งได้ดีมาก'],
+Object.assign(PRAISE,{wfill:['Careful spelling!','สะกดอย่างตั้งใจ'],dict:['Great listening!','ฟังและเขียนได้ถูกต้อง'],instr:['Great listening!','เข้าใจคำสั่งครู'],ynpic:['You read carefully!','อ่านอย่างตั้งใจ'],spellord:['Careful spelling!','สะกดอย่างตั้งใจ'],gfix:['Careful writing!','สังเกตได้ดีมาก'],rpic:['You read carefully!','อ่านอย่างตั้งใจ'],slisten:['Great listening!','ตั้งใจฟังดีมาก'],cmd:['Great listening!','ฟังคำสั่งได้ดีมาก'],
   reply:['Good answer!','ตอบได้เหมาะสม'],sread:['You read carefully!','อ่านอย่างตั้งใจ'],
   order:['Well built!','เรียงประโยคได้ถูกต้อง'],punct:['Careful writing!','สังเกตตัวใหญ่และจุดได้ดี']});
-Object.assign(SKILL_OF,{instr:'s4L',ynpic:'s4R',spellord:'s4W',gfix:'s4W',rpic:'s4R',slisten:'s4L',cmd:'s4S',reply:'s4S',sread:'s4R',order:'s4W',punct:'s4W'});
+Object.assign(SKILL_OF,{wfill:'s4W',dict:'s4W',instr:'s4L',ynpic:'s4R',spellord:'s4W',gfix:'s4W',rpic:'s4R',slisten:'s4L',cmd:'s4S',reply:'s4S',sread:'s4R',order:'s4W',punct:'s4W'});
 
 function skQuizView(){
   const q=S.quiz, it=q.items[q.i], pick=q.picks[q.i], answered=pick!==null, reveal=answered&&!q.exam;
@@ -3422,6 +3535,13 @@ function skQuizView(){
     opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
       <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1" style="font-size:${xs?19:22}px">${esc(o.t)}</span></button>`).join('')}</div>`;
   }
+  if(it.type==='wfill'){ let k=0;
+    const pat=[...it.pattern].map(c=>{ if(c===' ') return '&nbsp;&nbsp;'; if(c!=='_') return esc(c); const ch=reveal?it.ans[k]:(answered?it.opts[pick].t[k]:'_'); k++;
+      return `<span class="wfb" style="color:${reveal?(pick===it.a?'var(--ok)':'var(--bad)'):'var(--orange-d)'}">${esc(ch)}</span>`; }).join('');
+    prompt=`<div class="col g10 center">${it.shown&&hasPic(it.shown)?pic(it.shown,xs?90:120):''}<div class="thai" style="font-size:18px;color:var(--ink2)">${esc(it.th)}</div>
+      <div class="qword" style="font-family:var(--f-word);font-size:${xs?32:50}px;font-weight:600;letter-spacing:3px;text-align:center">${pat}</div></div>`;
+    opts=`<div data-rg="3" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">${it.opts.map((o,i)=>`<button class="qopt ${cls(i)}" data-act="qzpick" data-i="${i}" style="font-family:var(--f-word);font-size:${xs?28:36}px;font-weight:600;letter-spacing:4px">${esc(o.t)}</button>`).join('')}</div>`;
+  }
   if(it.type==='instr'){
     prompt=`<div class="col g8 center">${listenBig(it.say)}${reveal?`<div class="qsent" style="font-size:24px;font-weight:600">${esc(it.en)}</div>`:'<div class="hint">แตะเพื่อฟังอีกครั้ง</div>'}</div>`;
     opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}"><span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1 thai" style="font-size:${xs?19:22}px">${esc(o.t)}</span></button>`).join('')}</div>`;
@@ -3435,10 +3555,10 @@ function skQuizView(){
     opts=`<div class="col g10">${it.opts.map((o,i)=>`<button class="opt" data-act="qzpick" data-i="${i}" style="${optStyle(i,cls(i))}">
       <span class="badge" style="background:${reveal&&i===it.a?'var(--ok)':'var(--line2)'}">${'abc'[i]}</span><span class="f1 qsent" style="font-size:${xs?20:24}px;font-family:var(--f-word)">${esc(o.t)}</span></button>`).join('')}</div>`;
   }
-  if(it.type==='order'||it.type==='spellord'){
+  if(it.type==='order'||it.type==='spellord'||it.type==='dict'){
     const done=it.built.length===it.tiles.length, used=new Set(it.built);
     const col=reveal?(pick===it.a?'var(--ok)':'var(--bad)'):'var(--ink)';
-    prompt=`<div class="col g12 center" style="width:100%">${skScene(it.sc,xs?110:LAYOUT==='lg'?180:150)}
+    prompt=`<div class="col g12 center" style="width:100%">${it.type==='dict'?listenBig(it.say)+(reveal?'':'<div class="hint">แตะเพื่อฟังอีกครั้ง</div>'):skScene(it.sc,xs?110:LAYOUT==='lg'?180:150)}
       <div class="sbuild" style="border-color:${answered?col:'var(--line2)'}">${it.built.length?it.built.map(i=>`<span class="stile on" style="color:${col}">${esc(it.tiles[i].t)}</span>`).join(''):'<span class="hint">แตะคำด้านล่างตามลำดับ</span>'}</div>
       ${reveal&&pick!==it.a?`<div class="qsent" style="font-size:22px;color:var(--ok);font-weight:600">✔ ${esc(it.ans)}</div>`:''}</div>`;
     opts=`<div class="row g10 center" style="flex-wrap:wrap">${it.tiles.map((t,i)=>`<button class="stile" data-act="ordtap" data-i="${i}" ${used.has(i)||(answered&&!q.exam)?'disabled':''} style="${used.has(i)?'opacity:.25':''}">${esc(t.t)}</button>`).join('')}
@@ -3447,11 +3567,11 @@ function skQuizView(){
   let fb='';
   if(reveal){
     const ok=pick===it.a, second=ok&&tried.length>0, pr=praiseFor(it.type);
-    const isOrd=it.type==='order'||it.type==='spellord', ct=isOrd?it.ans:it.opts[it.a].t;
+    const isOrd=it.type==='order'||it.type==='spellord'||it.type==='dict', ct=isOrd?it.ans:it.opts[it.a].t;
     fb=`<div class="msg" style="color:${ok?'var(--ok)':'var(--bad)'}">${ok?(second?'✔ You got it! <span class="thai hint">ถูกต้องในครั้งที่สอง — ตั้งใจดีมาก</span>':'✔ '+pr[0]+' <span class="thai hint">'+pr[1]+'</span>')
       :'✘ Not quite. '+(isOrd?'':'The answer is “'+esc(ct)+'” ')+'<span class="thai hint">ดูคำตอบที่ถูกแล้วลองจำไว้นะ</span>'}</div>`;
   } else if(tried.length && !q.exam){
-    fb=`<div class="msg" style="color:var(--gold-d)">↺ Try again! <span class="thai hint">${(it.type==='order'||it.type==='spellord')?'ลำดับยังไม่ถูก ลองเรียงใหม่':'ยังไม่ถูก ลองอีกครั้ง — ตัวเลือกที่ผิดถูกปิดไว้แล้ว'}</span></div>`;
+    fb=`<div class="msg" style="color:var(--gold-d)">↺ Try again! <span class="thai hint">${(it.type==='order'||it.type==='spellord'||it.type==='dict')?'ลำดับยังไม่ถูก ลองเรียงใหม่':'ยังไม่ถูก ลองอีกครั้ง — ตัวเลือกที่ผิดถูกปิดไว้แล้ว'}</span></div>`;
   }
   const nextBtn=`<button class="btn ${answered?'':'ghost'}" data-act="qznext" ${answered?'':'disabled style="opacity:.45"'}>${q.i===n-1?'Finish ✓':'Next ▶'}</button>`;
   return head+`<div class="card f1 col g12" style="justify-content:space-between;padding:${xs?'14px 14px':'18px 26px'};min-height:0">
@@ -3485,8 +3605,8 @@ ACT.sksay=d=>{
 ACT.ordtap=d=>{
   const q=S.quiz, it=q.items[q.i], i=+d.i;
   if(it.built.includes(i)) return; if(q.picks[q.i]!==null && !q.exam) return;
-  it.built.push(i); if(it.joiner!=='') Voice.utter(it.tiles[i].t==='.'?'full stop':it.tiles[i].t, Math.max(.5,S.rate));
-  if(it.built.length<it.tiles.length){ if(q.exam) q.picks[q.i]=null; render(); return; }
+  it.built.push(i); if(it.joiner!==''&&!it.silent) Voice.utter(it.tiles[i].t==='.'?'full stop':it.tiles[i].t, Math.max(.5,S.rate));
+  if(it.built.length<(it.need||it.tiles.length)){ if(q.exam) q.picks[q.i]=null; render(); return; }
   const made=it.built.map(k=>it.tiles[k].t).join(it.joiner==null?' ':it.joiner).replace(' .','.'), ok=made===it.ans;
   it.opts[1].t=made;
   if(q.exam){ q.picks[q.i]=ok?0:1; render(); return; }
@@ -4978,6 +5098,7 @@ function openFromHash(){
     if(k==='grammar'){ if(v&&GRAMMAR.find(g=>g.key===v)) S.gram=v; go('grammar'); return true; }
     if(k==='spell'&&SETBY[v]){ ACT.unitspell({k:v}); return true; }
     if(k==='mock'){ ACT.examstart(); return true; }
+    if(k==='ws'&&WS.find(x=>x.k===v)){ ACT.wsstart({k:v}); return true; }
     if(k==='skills'){ if(v==='test') ACT.s4test(); else if(v==='quick') ACT.s4test({k:'quick'}); else if(SETBY[v]&&UNITS.includes(SETBY[v])) ACT.s4unit({k:v}); else if(SK4.find(d=>d.k===v)) ACT.s4drill({k:v}); else go('exam'); return true; }
     if(k==='memory'&&SETBY[v]){ startMemory(v,'vocab','unit'); return true; }
     if(VIEWS[k]&&!['quiz','spell','memory','unit'].includes(k)){ go(k); return true; }
