@@ -1,7 +1,7 @@
 /* Service worker — ให้แอปเปิดได้แบบออฟไลน์หลังเปิดครั้งแรก (เมื่อเสิร์ฟผ่าน GitHub Pages / https)
    กลยุทธ์: network-first สำหรับหน้า HTML (ได้เวอร์ชันใหม่เสมอเมื่อมีเน็ต) · cache-first สำหรับไฟล์อื่น
    เปลี่ยน VERSION ทุกครั้งที่ปรับไฟล์ เพื่อล้างแคชเก่า */
-const VERSION = 'milin-v9';
+const VERSION = 'milin-v10';
 const ASSETS = [
   './',
   './index.html',
